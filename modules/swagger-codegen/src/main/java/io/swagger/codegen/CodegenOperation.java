@@ -1,6 +1,8 @@
 package io.swagger.codegen;
 
 import io.swagger.models.ExternalDocs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -116,7 +118,8 @@ public class CodegenOperation {
      * @return true if act as Restful show method, false otherwise
      */
     public boolean isRestfulShow() {
-        return "GET".equals(httpMethod) && isMemberPath();
+        //return "GET".equals(httpMethod) && isMemberPath();
+        return "GET".equalsIgnoreCase(httpMethod);
     }
 
     /**
@@ -125,7 +128,8 @@ public class CodegenOperation {
      * @return true if act as Restful create method, false otherwise
      */
     public boolean isRestfulCreate() {
-        return "POST".equals(httpMethod) && "".equals(pathWithoutBaseName());
+        // return "POST".equals(httpMethod) && "".equals(pathWithoutBaseName());
+        return "POST".equalsIgnoreCase(httpMethod);
     }
 
     /**
@@ -134,7 +138,8 @@ public class CodegenOperation {
      * @return true if act as Restful update method, false otherwise
      */
     public boolean isRestfulUpdate() {
-        return Arrays.asList("PUT", "PATCH").contains(httpMethod) && isMemberPath();
+        //return Arrays.asList("PUT", "PATCH").contains(httpMethod) && isMemberPath();
+        return Arrays.asList("PUT", "PATCH").contains(httpMethod.toUpperCase());
     }
 
     /**
@@ -143,7 +148,8 @@ public class CodegenOperation {
      * @return true if act as Restful destroy method, false otherwise
      */
     public boolean isRestfulDestroy() {
-        return "DELETE".equals(httpMethod) && isMemberPath();
+        return "DELETE".equalsIgnoreCase(httpMethod);
+        //return "DELETE".equals(httpMethod) && isMemberPath();
     }
 
     /**
@@ -171,7 +177,6 @@ public class CodegenOperation {
      */
     private boolean isMemberPath() {
         if (pathParams.size() != 1) return false;
-
         String id = pathParams.get(0).baseName;
         return ("/{" + id + "}").equals(pathWithoutBaseName());
     }
