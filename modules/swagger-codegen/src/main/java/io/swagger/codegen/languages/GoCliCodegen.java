@@ -32,9 +32,14 @@ public class GoCliCodegen extends GoClientCodegen {
         super();
 
         outputFolder = "generated-code/go-cli";
+        modelTemplateFiles.clear();
+        apiTemplateFiles.clear();
+
         //modelTemplateFiles.put("model.mustache", ".go");
         apiTemplateFiles.put("create.mustache", ".go");
 
+        modelDocTemplateFiles.clear();
+        apiDocTemplateFiles.clear();
         //modelDocTemplateFiles.put("model_doc.mustache", ".md");
         //apiDocTemplateFiles.put("api_doc.mustache", ".md");
 
