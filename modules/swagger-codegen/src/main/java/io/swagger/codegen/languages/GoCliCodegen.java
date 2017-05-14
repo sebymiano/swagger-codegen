@@ -37,6 +37,7 @@ public class GoCliCodegen extends GoClientCodegen {
 
         //modelTemplateFiles.put("model.mustache", ".go");
         apiTemplateFiles.put("create.mustache", ".go");
+        apiTemplateFiles.put("delete.mustache", ".go");
 
         modelDocTemplateFiles.clear();
         apiDocTemplateFiles.clear();
@@ -59,6 +60,8 @@ public class GoCliCodegen extends GoClientCodegen {
         super.processOpts();
 
         supportingFiles.clear();
+        supportingFiles.add(new SupportingFile("main.mustache", "", "main.go"));
+        supportingFiles.add(new SupportingFile("root.mustache", "cmd", "root.go"));
     }
 
     @Override

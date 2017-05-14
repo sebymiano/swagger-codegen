@@ -12,7 +12,7 @@ package cmd
     {{#operation}}
     {{! If there is not a create method available for that operation
     we do not create the command }}
-        {{#isRestfulCreate}}
+        {{#isRestfulDestroy}}
             {{#vendorExtensions.x-cliParam}}
                 var {{commandName}} = &cobra.Command {
                 Use:      "{{commandUse}}",
@@ -28,16 +28,16 @@ package cmd
                 {{/pathParams}}
 
                 {{! TODO: This is the main method where we make the request}}
-                fmt.Printf("POST {{path}}"{{#pathParams}}, {{paramName}}{{/pathParams}})
+                fmt.Printf("DELETE {{path}}"{{#pathParams}}, {{paramName}}{{/pathParams}})
                 },
                 }
             {{/vendorExtensions.x-cliParam}}
-        {{/isRestfulCreate}}
+        {{/isRestfulDestroy}}
     {{/operation}}
 
     func init() {
     {{#operation}}
-        {{#isRestfulCreate}}
+        {{#isRestfulDestroy}}
             {{#vendorExtensions.x-cliParam}}
 
                 {{parentCommand}}.AddCommand({{commandName}})
@@ -47,7 +47,7 @@ package cmd
                 {{/pathParams}}
 
             {{/vendorExtensions.x-cliParam}}
-        {{/isRestfulCreate}}
+        {{/isRestfulDestroy}}
     {{/operation}}
     }
 

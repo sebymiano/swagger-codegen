@@ -1,0 +1,18 @@
+{{>partial_header}}
+
+package main
+
+{{#imports}}
+    import ({{/imports}}{{#imports}}
+    "{{import}}"{{/imports}}{{#imports}}
+    )
+{{/imports}}
+{{#model}}
+    {{#description}}
+        // {{{description}}}
+    {{/description}}
+{{/model}}
+
+func main() {
+    cmd.Execute()
+}
