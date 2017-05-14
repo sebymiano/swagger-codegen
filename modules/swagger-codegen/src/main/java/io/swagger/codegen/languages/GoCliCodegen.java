@@ -31,13 +31,13 @@ public class GoCliCodegen extends GoClientCodegen {
     public GoCliCodegen(){
         super();
 
-        outputFolder = "generated-code/go-cli";
+        outputFolder = "generated-code/go-cli/cmd";
         modelTemplateFiles.clear();
         apiTemplateFiles.clear();
 
         //modelTemplateFiles.put("model.mustache", ".go");
-        apiTemplateFiles.put("create.mustache", ".go");
-        apiTemplateFiles.put("delete.mustache", ".go");
+        apiTemplateFiles.put("create.mustache", "_create.go");
+        apiTemplateFiles.put("delete.mustache", "_delete.go");
 
         modelDocTemplateFiles.clear();
         apiDocTemplateFiles.clear();
@@ -60,8 +60,8 @@ public class GoCliCodegen extends GoClientCodegen {
         super.processOpts();
 
         supportingFiles.clear();
-        supportingFiles.add(new SupportingFile("main.mustache", "", "main.go"));
-        supportingFiles.add(new SupportingFile("root.mustache", "cmd", "root.go"));
+        supportingFiles.add(new SupportingFile("main.mustache", "..", "main.go"));
+        supportingFiles.add(new SupportingFile("root.mustache", "", "root.go"));
     }
 
     @Override
@@ -71,6 +71,17 @@ public class GoCliCodegen extends GoClientCodegen {
 
         // e.g. PetApi.go => pet_api.go
         return underscore(name) + "_api";
+    }
+
+    @Override
+    public String apiFilename(String templateName, String tag) {
+        String suffix = apiTemplateFiles().get(templateName);
+        return apiFileFolder() + '/' + toApiFilename(tag) + suffix;
+    }
+
+    @Override
+    public String apiFileFolder() {
+        return outputFolder + File.separator;
     }
 
     @Override
