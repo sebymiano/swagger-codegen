@@ -1,0 +1,45 @@
+{{>partial_header}}
+
+package cmd
+
+{{#operations}}
+{{#operation}}
+import (
+  {{#imports}}"{{{import}}}"{{/imports}}
+
+  "github.com/sebymiano/cobra"
+)
+
+{{! If there is not a create method available for that operation
+we do not create the command }}
+{{#isRestfulCreate}}
+{{#vendorExtensions.x-cliParam}}
+var {{commandName}} = &cobra.Command {
+  Use:      "{{commandUse}}",
+  Short:    "{{summary}}",
+  {{#exampleUse}} Example:    "{{exampleUse}}" {{/exampleUse}}
+  Run: func(cmd *cobra.Command, args []string) {
+      {{#hasPathParams}}
+      i := 0
+      {{/hasPathParams}}
+
+      {{#pathParams}}
+      {{paramName}} := args[i++]
+      {{/pathParams}}
+
+      {{! TODO: This is the main method where we make the request}}
+      fmt.Printf("POST {{path}}"{{#pathParams}}, {{paramName}}{{/pathParams}})
+  },
+}
+
+func init() {
+  {{parentCommand}}.AddCommand({{commandName}})
+
+  {{#pathParams}}
+  {{commandName}}.AddParameter("{{paramName}}")
+  {{/pathParams}}
+}
+{{/vendorExtensions.x-cliParam}}
+{{/isRestfulCreate}}
+{{#operation}}
+{{/operations}}
