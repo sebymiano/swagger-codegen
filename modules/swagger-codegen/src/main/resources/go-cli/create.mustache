@@ -1,6 +1,6 @@
 {{>partial_header}}
 
-package cmd
+package swagger
 
 {{#operations}}
 
@@ -8,7 +8,6 @@ import (
   {{#imports}}
   "{{{import}}}"
   {{/imports}}
-  "fmt"
   "github.com/sebymiano/cobra"
 )
 
@@ -20,14 +19,15 @@ we do not create the command }}
 var {{commandName}} = &cobra.Command {
   Use:      "{{commandUse}}",
   Short:    "{{summary}}",
-  {{#exampleUse}}Example:  "{{exampleUse}}" {{/exampleUse}},
+  {{#exampleUse}}Example:  "{{{exampleUse}}}" {{/exampleUse}},
   Run: func(cmd *cobra.Command, args []string) {
     {{#hasPathParams}}
     i := 0
     {{/hasPathParams}}
 
     {{#pathParams}}
-    {{paramName}} := args[i++]
+    {{paramName}} := args[i]
+    i++
     {{/pathParams}}
 
     {{! TODO: This is the main method where we make the request}}
