@@ -14,7 +14,7 @@ import (
 {{#operation}}
 {{! If there is not a create method available for that operation
 we do not create the command }}
-{{#isRestfulDestroy}}
+{{#isRestfulShow}}
 {{#vendorExtensions.x-cliParam}}
 var {{commandName}} = &cobra.Command {
   Use:      "{{commandUse}}",
@@ -32,17 +32,17 @@ var {{commandName}} = &cobra.Command {
     {{/pathParams}}
 
     {{! TODO: This is the main method where we make the request}}
-    fmt.Printf("DELETE {{pathToPrint}}"{{#pathParams}}, {{paramName}}{{/pathParams}})
+    fmt.Printf("GET {{pathToPrint}}"{{#pathParams}}, {{paramName}}{{/pathParams}})
   },
 }
 
 {{/vendorExtensions.x-cliParam}}
-{{/isRestfulDestroy}}
+{{/isRestfulShow}}
 {{/operation}}
 
 func init() {
 {{#operation}}
-{{#isRestfulDestroy}}
+{{#isRestfulShow}}
 {{#vendorExtensions.x-cliParam}}
 {{parentCommand}}.AddCommand({{commandName}})
 {{#paramKeys}}
@@ -50,7 +50,7 @@ func init() {
 {{/paramKeys}}
 
 {{/vendorExtensions.x-cliParam}}
-{{/isRestfulDestroy}}
+{{/isRestfulShow}}
 {{/operation}}
 }
 

@@ -6,6 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 public class GoCliCodegen extends GoClientCodegen {
     static Logger LOGGER = LoggerFactory.getLogger(GoCliCodegen.class);
@@ -38,6 +42,8 @@ public class GoCliCodegen extends GoClientCodegen {
         //modelTemplateFiles.put("model.mustache", ".go");
         apiTemplateFiles.put("create.mustache", "_create.go");
         apiTemplateFiles.put("delete.mustache", "_delete.go");
+        apiTemplateFiles.put("retrieve.mustache", "_retrieve.go");
+        apiTemplateFiles.put("update.mustache", "_update.go");
 
         modelDocTemplateFiles.clear();
         apiDocTemplateFiles.clear();
@@ -90,5 +96,62 @@ public class GoCliCodegen extends GoClientCodegen {
 
     public void setPackageVersion(String packageVersion) {
         this.packageVersion = packageVersion;
+    }
+
+    @Override
+    public Map<String, Object> postProcessOperations(Map<String, Object> objs) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> objectMap = (Map<String, Object>) objs.get("operations");
+        @SuppressWarnings("unchecked")
+        List<CodegenOperation> operations = (List<CodegenOperation>) objectMap.get("operation");
+        for (CodegenOperation operation : operations) {
+            // http method verb conversion (e.g. PUT => Put)
+            operation.httpMethod = camelize(operation.httpMethod.toLowerCase());
+        }
+
+        // remove model imports to avoid error
+        List<Map<String, String>> imports = (List<Map<String, String>>) objs.get("imports");
+        if (imports == null)
+            return objs;
+
+        Iterator<Map<String, String>> iterator = imports.iterator();
+        while (iterator.hasNext()) {
+            String _import = iterator.next().get("import");
+            if (_import.startsWith(apiPackage()))
+                iterator.remove();
+        }
+        // if the return type is not primitive, import encoding/json
+        //for (CodegenOperation operation : operations) {
+        //    if(operation.returnBaseType != null && needToImport(operation.returnBaseType)) {
+        //        imports.add(createMapping("import", "encoding/json"));
+        //        break; //just need to import once
+        //    }
+        //}
+
+        // this will only import "fmt" if there are items in pathParams
+        for (CodegenOperation operation : operations) {
+            if(operation.pathParams != null && operation.pathParams.size() > 0) {
+                imports.add(createMapping("import", "fmt"));
+                break; //just need to import once
+            }
+        }
+
+
+        // recursively add import for mapping one type to multiple imports
+        List<Map<String, String>> recursiveImports = (List<Map<String, String>>) objs.get("imports");
+        if (recursiveImports == null)
+            return objs;
+
+        ListIterator<Map<String, String>> listIterator = imports.listIterator();
+        while (listIterator.hasNext()) {
+            String _import = listIterator.next().get("import");
+            // if the import package happens to be found in the importMapping (key)
+            // add the corresponding import package to the list
+            if (importMapping.containsKey(_import)) {
+                listIterator.add(createMapping("import", importMapping.get(_import)));
+            }
+        }
+
+        return objs;
     }
 }

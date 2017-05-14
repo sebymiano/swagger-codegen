@@ -20,7 +20,7 @@ var {{commandName}} = &cobra.Command {
   Use:      "{{commandUse}}",
   Short:    "{{summary}}",
   {{#totParams}}Args:     cobra.ExactArgs({{totParams}}),{{/totParams}}
-  {{#exampleUse}}Example:  "{{{exampleUse}}}" {{/exampleUse}},
+  {{#exampleUse}}Example:  "{{{exampleUse}}}", {{/exampleUse}}
   Run: func(cmd *cobra.Command, args []string) {
     {{#hasPathParams}}
     i := -1
@@ -32,7 +32,7 @@ var {{commandName}} = &cobra.Command {
     {{/pathParams}}
 
     {{! TODO: This is the main method where we make the request}}
-    fmt.Printf("POST {{path}}"{{#pathParams}}, {{paramName}}{{/pathParams}})
+    fmt.Printf("POST {{pathToPrint}}"{{#pathParams}}, {{paramName}}{{/pathParams}})
   },
 }
 
