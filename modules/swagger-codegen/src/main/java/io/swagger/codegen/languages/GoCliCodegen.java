@@ -28,7 +28,7 @@ public class GoCliCodegen extends GoClientCodegen {
         return "Generates a Go CLI library (beta).";
     }
 
-    public GoCliCodegen(){
+    public GoCliCodegen() {
         super();
 
         outputFolder = "generated-code/go-cli/cmd";
@@ -56,6 +56,11 @@ public class GoCliCodegen extends GoClientCodegen {
     }
 
     @Override
+    public void setOutputDir(String dir) {
+        this.outputFolder = dir + '/' + outputFolder;
+    }
+
+    @Override
     public void processOpts() {
         super.processOpts();
 
@@ -71,12 +76,6 @@ public class GoCliCodegen extends GoClientCodegen {
 
         // e.g. PetApi.go => pet_api.go
         return underscore(name) + "_api";
-    }
-
-    @Override
-    public String apiFilename(String templateName, String tag) {
-        String suffix = apiTemplateFiles().get(templateName);
-        return apiFileFolder() + '/' + toApiFilename(tag) + suffix;
     }
 
     @Override
