@@ -70,15 +70,6 @@ public class GoCliCodegen extends GoClientCodegen {
     }
 
     @Override
-    public String toApiFilename(String name) {
-        // replace - with _ e.g. created-at => created_at
-        name = name.replaceAll("-", "_"); // FIXME: a parameter should not be assigned. Also declare the methods parameters as 'final'.
-
-        // e.g. PetApi.go => pet_api.go
-        return underscore(name) + "_api";
-    }
-
-    @Override
     public String apiFileFolder() {
         return outputFolder + File.separator;
     }

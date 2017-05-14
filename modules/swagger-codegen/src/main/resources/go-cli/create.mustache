@@ -17,7 +17,7 @@ package cmd
                 var {{commandName}} = &cobra.Command {
                 Use:      "{{commandUse}}",
                 Short:    "{{summary}}",
-                {{#exampleUse}}Example:    "{{exampleUse}}" {{/exampleUse}}
+                {{#exampleUse}}Example:  "{{exampleUse}}" {{/exampleUse}}
                 Run: func(cmd *cobra.Command, args []string) {
                 {{#hasPathParams}}
                     i := 0

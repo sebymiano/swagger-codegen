@@ -4,13 +4,14 @@ package cmd
 
 import (
   {{#imports}}"{{{import}}}"{{/imports}}
+  "fmt"
   "github.com/sebymiano/cobra"
 )
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-  Use: "{{appName}}"
-  Short: "{{appDescription}}"
+  Use:    "{{appName}}"
+  Short:  "{{appDescription}}"
 }
 
 // Execute adds all child commands to the root command sets flags appropriately.
