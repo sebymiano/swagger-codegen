@@ -1,10 +1,11 @@
 {{>partial_header}}
 
-package swagger
+package cmd
 
 import (
   {{#imports}}"{{{import}}}"{{/imports}}
   "fmt"
+  "os"
   "github.com/sebymiano/cobra"
 )
 

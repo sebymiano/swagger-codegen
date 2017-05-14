@@ -1,10 +1,11 @@
 {{>partial_header}}
 
-package swagger
+package main
 
 {{#imports}}
     import ({{/imports}}{{#imports}}
     "{{import}}"{{/imports}}{{#imports}}
+    import "github.com/sebymiano/go-cli/cmd"
     )
 {{/imports}}
 {{#model}}
