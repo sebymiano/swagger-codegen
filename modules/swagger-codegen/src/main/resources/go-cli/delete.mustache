@@ -32,7 +32,7 @@ var {{commandName}} = &cobra.Command {
     {{/pathParams}}
 
     {{! TODO: This is the main method where we make the request}}
-    fmt.Printf("DELETE {{pathToPrint}}"{{#pathParams}}, {{paramName}}{{/pathParams}})
+    fmt.Printf("DELETE {{pathToPrint}}\n"{{#pathParams}}, {{paramName}}{{/pathParams}})
   },
 }
 
