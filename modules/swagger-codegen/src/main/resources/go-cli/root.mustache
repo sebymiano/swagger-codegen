@@ -42,4 +42,9 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize()
+
+    rootCmd.AddCommand(createCmd)
+    rootCmd.AddCommand(deleteCmd)
+    rootCmd.AddCommand(updateCmd)
+    rootCmd.AddCommand(readCmd)
 }
