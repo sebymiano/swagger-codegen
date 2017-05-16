@@ -41,6 +41,14 @@ var {{commandName}} = &cobra.Command {
       return
     }
     {{/isString}}
+    {{#isInteger}}
+    {{paramName}}, err1 := cmd.Flags().GetInt("value")
+    if err1 != nil {
+      fmt.Println("Error!!!")
+      fmt.Println(cmd.UsageString())
+      return
+    }
+    {{/isInteger}}
     {{/bodyParam}}
 
     {{! TODO: This is the main method where we make the request}}
@@ -51,6 +59,10 @@ var {{commandName}} = &cobra.Command {
     fmt.Printf("\n")
     fmt.Println("Value ", {{paramName}})
     {{/isString}}
+    {{#isInteger}}
+    fmt.Printf("\n")
+    fmt.Println("Value ", {{paramName}})
+    {{/isInteger}}
     {{/bodyParam}}
   },
 }
@@ -72,6 +84,9 @@ func init() {
     {{#isString}}
 {{commandName}}.Flags().String("value", "{{example}}", "{{description}}")
     {{/isString}}
+    {{#isInteger}}
+{{commandName}}.Flags().Int("value", {{example}}, "{{description}}")
+    {{/isInteger}}
   {{/bodyParam}}
 
     {{/vendorExtensions.x-cliParam}}

@@ -49,6 +49,11 @@ func init() {
 {{commandName}}.AddParameter("{{key}}")
 {{/paramKeys}}
 
+{{#primitiveFlagParam}}
+{{!TODO: For now, I support only primite string types}}
+{{commandName}}.Flags().String("{{name}}", "{{defaultValue}}", "{{description}}")
+{{/primitiveFlagParam}}
+
 {{/vendorExtensions.x-cliParam}}
 {{/isRestfulCreate}}
 {{/operation}}
