@@ -14,8 +14,11 @@ import java.util.Map;
 public class GoCliCodegen extends GoClientCodegen {
     static Logger LOGGER = LoggerFactory.getLogger(GoCliCodegen.class);
 
+    public static final String GO_CLI_IMPORT_PATH = "goCliImportPath";
+
     protected String packageName = "swagger";
     protected String packageVersion = "1.0.0";
+    protected String goCliImportPath = "go-cli";
 
     @Override
     public CodegenType getTag() {
@@ -35,7 +38,7 @@ public class GoCliCodegen extends GoClientCodegen {
     public GoCliCodegen() {
         super();
 
-        outputFolder = "generated-code/go-cli/cmd";
+        outputFolder = "go-cli/cmd";
         modelTemplateFiles.clear();
         apiTemplateFiles.clear();
 
@@ -55,6 +58,7 @@ public class GoCliCodegen extends GoClientCodegen {
         cliOptions.clear();
         cliOptions.add(new CliOption(CodegenConstants.PACKAGE_NAME, "Go-cli package name (convention: lowercase).")
                 .defaultValue("swagger"));
+        cliOptions.add(new CliOption(GO_CLI_IMPORT_PATH, "The path of the go-cli package under $GOPATH, without the final /"));
         cliOptions.add(new CliOption(CodegenConstants.PACKAGE_VERSION, "Go-cli package version.")
                 .defaultValue("1.0.0"));
         cliOptions.add(new CliOption(CodegenConstants.HIDE_GENERATION_TIMESTAMP, "hides the timestamp when files were generated")
@@ -69,6 +73,12 @@ public class GoCliCodegen extends GoClientCodegen {
     @Override
     public void processOpts() {
         super.processOpts();
+
+        if (additionalProperties.containsKey(GO_CLI_IMPORT_PATH)) {
+            this.goCliImportPath = additionalProperties.get(GO_CLI_IMPORT_PATH).toString();
+        }
+
+        additionalProperties.put(GO_CLI_IMPORT_PATH, this.goCliImportPath);
 
         supportingFiles.clear();
         supportingFiles.add(new SupportingFile("main.mustache", "..", "main.go"));
