@@ -83,6 +83,8 @@ public class GoCliCodegen extends GoClientCodegen {
         supportingFiles.clear();
         supportingFiles.add(new SupportingFile("main.mustache", "..", "main.go"));
         supportingFiles.add(new SupportingFile("root.mustache", "", "root.go"));
+        //supportingFiles.add(new SupportingFile("autocomplete.mustache", "..", "autocomplete.go"));
+
     }
 
     @Override
