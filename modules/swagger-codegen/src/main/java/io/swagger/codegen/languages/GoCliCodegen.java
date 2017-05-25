@@ -1,6 +1,7 @@
 package io.swagger.codegen.languages;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.codegen.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +16,12 @@ public class GoCliCodegen extends GoClientCodegen {
     static Logger LOGGER = LoggerFactory.getLogger(GoCliCodegen.class);
 
     public static final String GO_CLI_IMPORT_PATH = "goCliImportPath";
+    public static final String GO_CLI_GEN_AUTOCOMPLETE = "goCliAutocomplete";
 
     protected String packageName = "swagger";
     protected String packageVersion = "1.0.0";
     protected String goCliImportPath = "go-cli";
+    protected Boolean goCliAutocomplete = Boolean.FALSE;
 
     @Override
     public CodegenType getTag() {
@@ -58,7 +61,10 @@ public class GoCliCodegen extends GoClientCodegen {
         cliOptions.clear();
         cliOptions.add(new CliOption(CodegenConstants.PACKAGE_NAME, "Go-cli package name (convention: lowercase).")
                 .defaultValue("swagger"));
-        cliOptions.add(new CliOption(GO_CLI_IMPORT_PATH, "The path of the go-cli package under $GOPATH, without the final /"));
+        cliOptions.add(new CliOption(GO_CLI_IMPORT_PATH, "The path of the go-cli package " +
+                "under $GOPATH, without the final /"));
+        cliOptions.add(new CliOption(GO_CLI_GEN_AUTOCOMPLETE, "If set generates a file called " +
+                "autocomplete.go for the autocomplete bash script", "boolean").defaultValue("false"));
         cliOptions.add(new CliOption(CodegenConstants.PACKAGE_VERSION, "Go-cli package version.")
                 .defaultValue("1.0.0"));
         cliOptions.add(new CliOption(CodegenConstants.HIDE_GENERATION_TIMESTAMP, "hides the timestamp when files were generated")
@@ -78,13 +84,20 @@ public class GoCliCodegen extends GoClientCodegen {
             this.goCliImportPath = additionalProperties.get(GO_CLI_IMPORT_PATH).toString();
         }
 
+        if (additionalProperties.containsKey(GO_CLI_GEN_AUTOCOMPLETE)) {
+            this.goCliAutocomplete = (Boolean)additionalProperties.get(GO_CLI_GEN_AUTOCOMPLETE);
+        }
+
         additionalProperties.put(GO_CLI_IMPORT_PATH, this.goCliImportPath);
+        additionalProperties.put(GO_CLI_GEN_AUTOCOMPLETE, this.goCliAutocomplete);
 
         supportingFiles.clear();
         supportingFiles.add(new SupportingFile("main.mustache", "..", "main.go"));
         supportingFiles.add(new SupportingFile("root.mustache", "", "root.go"));
-        //supportingFiles.add(new SupportingFile("autocomplete.mustache", "..", "autocomplete.go"));
 
+        if(this.goCliAutocomplete){
+            supportingFiles.add(new SupportingFile("autocomplete.mustache", "..", "autocomplete.go"));
+        }
     }
 
     @Override
