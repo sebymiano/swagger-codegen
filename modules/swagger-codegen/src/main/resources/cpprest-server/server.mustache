@@ -1,0 +1,14 @@
+#include "pistache/endpoint.h"
+#include "pistache/http.h"
+#include "pistache/router.h"
+#include "rest_server_impl.h"
+
+int main() {
+    Net::Address addr(Net::Ipv4::any(), Net::Port(8080));
+
+    RestServerImpl server(addr);
+    server.init(2);
+    server.start();
+
+    server.shutdown();
+}
