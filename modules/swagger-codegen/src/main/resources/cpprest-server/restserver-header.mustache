@@ -7,7 +7,6 @@
 #include <pistache/http.h>
 #include <pistache/router.h>
 #include <spdlog/spdlog.h>
-#include "model/BridgeSchema.h"
 
 class RestServer {
 public:
@@ -16,27 +15,37 @@ public:
     void start();
     void shutdown();
 
-    const std::string base = "/v1";
+
+    const std::string base = "{{basePathWithoutHost}}";
 
     virtual ~RestServer() {};
 
 private:
     void setupRoutes();
 
-    void create_bridge_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
-    void read_bridge_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
-    void update_bridge_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
-    void delete_bridge_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
+    {{#operations}}
+    {{#operation}}
+    void {{operationIdLowerCase}}(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
+    {{/operation}}
+    {{/operations}}
 
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
     Net::Rest::Router router;
 
     std::shared_ptr<spdlog::logger> l;
 
-    virtual void createBridgeByID(const std::string name, const io::swagger::client::model::BridgeSchema &bridge, Net::Http::ResponseWriter &response) = 0;
-    virtual void readBridgeByID(const std::string name, Net::Http::ResponseWriter &response) = 0;
-    virtual void updateBridgeByID(const std::string name, const io::swagger::client::model::BridgeSchema &bridge, Net::Http::ResponseWriter &response) = 0;
-    virtual void deleteBridgeByID(const std::string name, Net::Http::ResponseWriter &response) = 0;
+    {{#operations}}
+    {{#operation}}
+    /// <summary>
+    /// {{summary}}
+    /// </summary>
+    /// <remarks>
+    /// {{notes}}
+    /// </remarks>
+    {{#allParams}}/// <param name="{{paramName}}">{{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}</param>{{/allParams}}
+    virtual void {{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response) = 0;
+    {{/operation}}
+    {{/operations}}
 
 };
 

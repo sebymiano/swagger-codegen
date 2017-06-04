@@ -29,7 +29,7 @@ public class CppRestServerCodegen extends DefaultCodegen implements CodegenConfi
     public CppRestServerCodegen() {
         super();
 
-        apiPackage = "io.swagger.client.api";
+        apiPackage = "io.swagger.server.api";
 
         modelTemplateFiles.put("model-header.mustache", ".h");
         modelTemplateFiles.put("model-source.mustache", ".cpp");
