@@ -30,8 +30,27 @@ void {{classname}}::shutdown() {
     httpEndpoint->shutdown();
 }
 
+void {{classname}}::setupRoutes() {
+    using namespace Net::Rest;
+
+    {{#operation}}
+    {{#isRestfulCreate}}
+    Routes::Post(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}, this));
+    {{/isRestfulCreate}}
+    {{#isRestfulUpdate}}
+    Routes::Put(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}, this));
+    {{/isRestfulUpdate}}
+    {{#isRestfulShow}}
+    Routes::Get(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}, this));
+    {{/isRestfulShow}}
+    {{#isRestfulDestroy}}
+    Routes::Delete(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}, this));
+    {{/isRestfulDestroy}}
+    {{/operation}}
+}
+
 {{#operation}}
-void {{operationIdSnakeCase}}(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+void {{classname}}::{{operationIdSnakeCase}}(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     {{#hasPathParams}}
     // Getting the path params
     {{#pathParams}}
