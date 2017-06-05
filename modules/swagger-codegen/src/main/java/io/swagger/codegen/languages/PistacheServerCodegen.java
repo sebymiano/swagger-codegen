@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class CppRestServerCodegen extends DefaultCodegen implements CodegenConfig {
+public class PistacheServerCodegen extends DefaultCodegen implements CodegenConfig {
     @Override
     public CodegenType getTag() {
         return CodegenType.SERVER;
@@ -18,15 +18,15 @@ public class CppRestServerCodegen extends DefaultCodegen implements CodegenConfi
 
     @Override
     public String getName() {
-        return "cpprest-server";
+        return "pistache-server";
     }
 
     @Override
     public String getHelp() {
-        return "Generates a C++ API server.";
+        return "Generates a C++ API server (based on Pistache)";
     }
 
-    public CppRestServerCodegen() {
+    public PistacheServerCodegen() {
         super();
 
         apiPackage = "io.swagger.server.api";
@@ -37,7 +37,7 @@ public class CppRestServerCodegen extends DefaultCodegen implements CodegenConfi
         apiTemplateFiles.put("api-header.mustache", ".h");
         apiTemplateFiles.put("api-source.mustache", ".cpp");
 
-        embeddedTemplateDir = templateDir = "cpprest-server";
+        embeddedTemplateDir = templateDir = "pistache-server";
 
         cliOptions.clear();
 

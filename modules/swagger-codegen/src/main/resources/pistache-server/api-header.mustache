@@ -1,40 +1,47 @@
 {{>licenseInfo}}
+{{#operations}}/*
+ * {{classname}}.h
+ *
+ * {{description}}
+ */
 
-#ifndef _REST_SERVER_H
-#define _REST_SERVER_H
+#ifndef {{classname}}_H_
+#define {{classname}}_H_
 
+{{{defaultInclude}}}
 #include <pistache/endpoint.h>
 #include <pistache/http.h>
 #include <pistache/router.h>
-#include <spdlog/spdlog.h>
 
-class RestServer {
+{{#imports}}{{{import}}}
+{{/imports}}
+
+{{#apiNamespaceDeclarations}}
+namespace {{this}} {
+{{/apiNamespaceDeclarations}}
+
+using namespace {{modelNamespace}};
+
+class {{declspec}} {{classname}} {
 public:
-    RestServer(Net::Address addr);
+    {{classname}}(Net::Address addr);
+    virtual ~{{classname}}() {};
     void init(size_t thr);
     void start();
     void shutdown();
 
-
     const std::string base = "{{basePathWithoutHost}}";
-
-    virtual ~RestServer() {};
 
 private:
     void setupRoutes();
 
-    {{#operations}}
     {{#operation}}
-    void {{operationIdLowerCase}}(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
+    void {{operationIdSnakeCase}}(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     {{/operation}}
-    {{/operations}}
 
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
     Net::Rest::Router router;
 
-    std::shared_ptr<spdlog::logger> l;
-
-    {{#operations}}
     {{#operation}}
     /// <summary>
     /// {{summary}}
@@ -45,9 +52,13 @@ private:
     {{#allParams}}/// <param name="{{paramName}}">{{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}</param>{{/allParams}}
     virtual void {{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response) = 0;
     {{/operation}}
-    {{/operations}}
 
 };
 
+{{#apiNamespaceDeclarations}}
+}
+{{/apiNamespaceDeclarations}}
 
-#endif
+#endif /* {{classname}}_H_ */
+
+{{/operations}}

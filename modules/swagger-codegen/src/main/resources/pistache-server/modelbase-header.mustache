@@ -1,0 +1,55 @@
+{{>licenseInfo}}
+/*
+ * ModelBase.h
+ *
+ * This is the base class for all model classes
+ */
+
+#ifndef ModelBase_H_
+#define ModelBase_H_
+
+{{{defaultInclude}}}
+#include <cpprest/details/basic_types.h>
+#include <cpprest/json.h>
+
+{{#modelNamespaceDeclarations}}
+namespace {{this}} {
+{{/modelNamespaceDeclarations}}
+
+class {{declspec}} ModelBase
+{
+public:
+    ModelBase();
+    virtual ~ModelBase();
+
+    virtual void validate() = 0;
+
+    virtual web::json::value toJson() const = 0;
+    virtual void fromJson(web::json::value& json) = 0;
+
+    static web::json::value toJson( const utility::string_t& value );
+    static web::json::value toJson( const utility::datetime& value );
+    static web::json::value toJson( std::shared_ptr<ModelBase> value );
+    static web::json::value toJson( int32_t value );
+    static web::json::value toJson( int64_t value );
+    static web::json::value toJson( double value );
+    static web::json::value toJson( bool value );
+
+    static int64_t int64_tFromJson(web::json::value& val);
+    static int32_t int32_tFromJson(web::json::value& val);
+    static float floatFromJson(web::json::value& val);
+    static utility::string_t stringFromJson(web::json::value& val);
+    static utility::datetime dateFromJson(web::json::value& val);
+    static double doubleFromJson(web::json::value& val);
+    static bool boolFromJson(web::json::value& val);
+
+    static utility::string_t toBase64( utility::string_t value );
+    static utility::string_t toBase64( std::shared_ptr<std::istream> value );
+    static std::shared_ptr<std::istream> fromBase64( const utility::string_t& encoded );
+};
+
+{{#modelNamespaceDeclarations}}
+}
+{{/modelNamespaceDeclarations}}
+
+#endif /* ModelBase_H_ */

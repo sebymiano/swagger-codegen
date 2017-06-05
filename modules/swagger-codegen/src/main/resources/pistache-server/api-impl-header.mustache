@@ -1,0 +1,40 @@
+{{>licenseInfo}}
+
+{{#operations}}/*
+* {{classname}}Impl.h
+*
+* {{description}}
+*/
+
+#ifndef {{classname}}_IMPL_H_
+#define {{classname}}_IMPL_H_
+
+{{{defaultInclude}}}
+#include <pistache/endpoint.h>
+#include <pistache/http.h>
+#include <pistache/router.h>
+
+{{#imports}}{{{import}}}
+{{/imports}}
+
+{{#apiNamespaceDeclarations}}
+    namespace {{this}} {
+{{/apiNamespaceDeclarations}}
+
+using namespace {{modelNamespace}};
+
+class {{classname}}Impl : public {{classname}} {
+public:
+    {{classname}}Impl(Net::Address addr);
+    ~{{classname}}Impl() { };
+
+    {{#operation}}
+    void {{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response);
+    {{/operation}}
+
+};
+
+{{/operations}}
+
+
+#endif

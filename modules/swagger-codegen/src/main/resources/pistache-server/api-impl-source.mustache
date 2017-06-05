@@ -1,0 +1,22 @@
+{{>licenseInfo}}
+{{#operations}}
+
+#include "{{classname}}Impl.h"
+
+{{#apiNamespaceDeclarations}}
+    namespace {{this}} {
+{{/apiNamespaceDeclarations}}
+
+using namespace {{modelNamespace}};
+
+{{classname}}Impl::{{classname}}Impl(Net::Address addr)
+    : {{classname}}(addr)
+    { }
+
+{{#operation}}
+void {{classname}}Impl::{{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response) {
+    response.send(Net::Http::Code::Ok, "Do some magic");
+}
+{{/operation}}
+
+{{/operations}}

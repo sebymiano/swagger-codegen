@@ -1,0 +1,67 @@
+{{>licenseInfo}}
+{{#operations}}
+
+#include "{{classname}}.h"
+
+{{#apiNamespaceDeclarations}}
+namespace {{this}} {
+{{/apiNamespaceDeclarations}}
+
+using namespace {{modelNamespace}};
+
+{{classname}}::{{classname}}(Net::Address addr)
+    : httpEndpoint(std::make_shared<Net::Http::Endpoint>(addr))
+{ };
+
+void {{classname}}::init(size_t thr = 2) {
+    auto opts = Net::Http::Endpoint::options()
+        .threads(thr)
+        .flags(Net::Tcp::Options::InstallSignalHandler);
+    httpEndpoint->init(opts);
+    setupRoutes();
+}
+
+void {{classname}}::start() {
+    httpEndpoint->setHandler(router.handler());
+    httpEndpoint->serve();
+}
+
+void {{classname}}::shutdown() {
+    httpEndpoint->shutdown();
+}
+
+{{#operation}}
+void {{operationIdSnakeCase}}(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    {{#hasPathParams}}
+    // Getting the path params
+    {{#pathParams}}
+    auto {{paramName}} = request.param(":{{paramName}}").as<{{dataType}}>();
+    {{/pathParams}}
+    {{/hasPathParams}}
+
+    {{#hasBodyParams}}
+    {{baseType}} {{paramName}};
+    {{/hasBodyParams}}
+
+    try {
+    {{#hasBodyParams}}
+    web::json::value request_body = web::json::value::parse(request.body());
+    {{paramName}}.fromJson(request_body);
+    {{/hasBodyParams}}
+
+    this->{{operationId}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, response);
+
+    } catch (std::runtime_error & e) {
+      //send a 400 error
+      response.send(Net::Http::Code::Bad_Request, e.what());
+      return;
+    }
+
+}
+{{/operation}}
+
+{{#apiNamespaceDeclarations}}
+}
+{{/apiNamespaceDeclarations}}
+
+{{/operations}}
