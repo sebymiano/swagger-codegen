@@ -8,9 +8,12 @@ import io.swagger.models.Response;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.*;
 
+import javax.validation.constraints.Null;
 import java.util.*;
 
 public class PistacheServerCodegen extends DefaultCodegen implements CodegenConfig {
+    protected String implFolder = "impl";
+
     @Override
     public CodegenType getTag() {
         return CodegenType.SERVER;
@@ -30,6 +33,7 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
         super();
 
         apiPackage = "io.swagger.server.api";
+        modelPackage = "io.swagger.server.model";
 
         modelTemplateFiles.put("model-header.mustache", ".h");
         modelTemplateFiles.put("model-source.mustache", ".cpp");
@@ -38,6 +42,7 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
         apiTemplateFiles.put("api-source.mustache", ".cpp");
         apiTemplateFiles.put("api-impl-header.mustache", ".h");
         apiTemplateFiles.put("api-impl-source.mustache", ".cpp");
+        apiTemplateFiles.put("main-api-server.mustache", ".cpp");
 
         embeddedTemplateDir = templateDir = "pistache-server";
 
@@ -47,8 +52,6 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
 
         supportingFiles.add(new SupportingFile("modelbase-header.mustache", "model", "ModelBase.h"));
         supportingFiles.add(new SupportingFile("modelbase-source.mustache", "model", "ModelBase.cpp"));
-        supportingFiles.add(new SupportingFile("server.mustache", "", "server.cpp"));
-
 
         languageSpecificPrimitives = new HashSet<String>(
                 Arrays.asList("int", "char", "bool", "long", "float", "double", "int32_t", "int64_t"));
@@ -145,15 +148,56 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
             }
         }
 
-        String pathForPistache = path.replaceAll("\\{(.*?)}$", ":$1");
+        String pathForPistache = path.replaceAll("\\{(.*?)}", ":$1");
         op.vendorExtensions.put("x-codegen-pistache-path", pathForPistache);
 
         return op;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Object> postProcessOperations(Map<String, Object> objs) {
+        Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
+        String classname = (String) operations.get("classname");
+        operations.put("classnameSnakeUpperCase", DefaultCodegen.underscore(classname).toUpperCase());
+
+        List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
+        for (CodegenOperation op : operationList) {
+            if (op.bodyParam != null) {
+                if (op.bodyParam.vendorExtensions == null) {
+                    op.bodyParam.vendorExtensions = new HashMap<>();
+                }
+
+                op.bodyParam.vendorExtensions.put("x-codegen-pistache-isStringOrDate", op.bodyParam.isString || op.bodyParam.isDate);
+            }
+        }
+
+        return objs;
+    }
+
     @Override
     public String toModelFilename(String name) {
         return initialCaps(name);
+    }
+
+    @Override
+    public String apiFilename(String templateName, String tag) {
+        String result = super.apiFilename(templateName, tag);
+
+        if ( templateName.endsWith("impl-header.mustache") ) {
+            int ix = result.lastIndexOf('/');
+            result = result.substring(0, ix) + result.substring(ix, result.length() - 2) + "Impl.h";
+            result = result.replace(apiFileFolder(), implFileFolder());
+        } else if ( templateName.endsWith("impl-source.mustache") ) {
+            int ix = result.lastIndexOf('/');
+            result = result.substring(0, ix) + result.substring(ix, result.length() - 4) + "Impl.cpp";
+            result = result.replace(apiFileFolder(), implFileFolder());
+        } else if ( templateName.endsWith("api-server.mustache") ) {
+            int ix = result.lastIndexOf('/');
+            result = result.substring(0, ix) + result.substring(ix, result.length() - 4) + "MainServer.cpp";
+            result = result.replace(apiFileFolder(), outputFolder);
+        }
+        return result;
     }
 
     @Override
@@ -258,6 +302,10 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
     @Override
     public String apiFileFolder() {
         return outputFolder + "/api";
+    }
+
+    private String implFileFolder() {
+        return outputFolder + "/" + implFolder;
     }
 
     /**

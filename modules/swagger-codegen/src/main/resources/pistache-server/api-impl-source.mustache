@@ -4,7 +4,7 @@
 #include "{{classname}}Impl.h"
 
 {{#apiNamespaceDeclarations}}
-    namespace {{this}} {
+namespace {{this}} {
 {{/apiNamespaceDeclarations}}
 
 using namespace {{modelNamespace}};
@@ -14,7 +14,7 @@ using namespace {{modelNamespace}};
     { }
 
 {{#operation}}
-void {{classname}}Impl::{{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{^required}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response) {
+void {{classname}}Impl::{{operationId}}({{#allParams}}{{{dataType}}} {{#isBodyParam}}{{#isPrimitiveType}}&{{/isPrimitiveType}}{{/isBodyParam}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
 {{/operation}}
