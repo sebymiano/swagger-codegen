@@ -32,7 +32,7 @@ public:
     ~{{classname}}Impl() { };
 
     {{#operation}}
-    void {{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response);
+    void {{operationId}}({{#allParams}}const {{{dataType}}} {{^isPrimitiveType}}&{{/isPrimitiveType}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response);
     {{/operation}}
 
 };

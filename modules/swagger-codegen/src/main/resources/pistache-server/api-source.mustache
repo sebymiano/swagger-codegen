@@ -67,8 +67,8 @@ void {{classname}}::{{operationIdSnakeCase}}(const Net::Rest::Request &request, 
     auto {{paramName}} = request.param(":{{paramName}}").as<{{dataType}}>();
     {{/pathParams}}
     {{/hasPathParams}}
-
     {{#hasBodyParam}}
+    // Getting the body param
     {{#bodyParam}}
     {{^isPrimitiveType}}
     auto {{paramName}} = std::make_shared<{{baseType}}>(); {{/isPrimitiveType}}

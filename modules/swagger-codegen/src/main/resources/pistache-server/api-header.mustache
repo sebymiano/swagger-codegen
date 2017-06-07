@@ -52,7 +52,7 @@ private:
     {{#allParams}}
     /// <param name="{{paramName}}">{{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}</param>
     {{/allParams}}
-    virtual void {{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response) = 0;
+    virtual void {{operationId}}({{#allParams}}const {{{dataType}}} {{^isPrimitiveType}}&{{/isPrimitiveType}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response) = 0;
     {{/operation}}
 
 };

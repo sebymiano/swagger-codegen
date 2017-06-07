@@ -52,6 +52,7 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
 
         supportingFiles.add(new SupportingFile("modelbase-header.mustache", "model", "ModelBase.h"));
         supportingFiles.add(new SupportingFile("modelbase-source.mustache", "model", "ModelBase.cpp"));
+        supportingFiles.add(new SupportingFile("cmake.mustache", "", "CMakeLists.txt"));
 
         languageSpecificPrimitives = new HashSet<String>(
                 Arrays.asList("int", "char", "bool", "long", "float", "double", "int32_t", "int64_t"));
