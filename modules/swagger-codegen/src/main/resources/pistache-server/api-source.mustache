@@ -35,32 +35,32 @@ void {{classname}}::setupRoutes() {
 
     {{#operation}}
     {{#isRestfulCreate}}
-    Routes::Post(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}, this));
+    Routes::Post(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
     {{/isRestfulCreate}}
     {{/operation}}
 
     {{#operation}}
     {{#isRestfulUpdate}}
-    Routes::Put(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}, this));
+    Routes::Put(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
     {{/isRestfulUpdate}}
     {{/operation}}
 
     {{#operation}}
     {{#isRestfulShow}}
-    Routes::Get(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}, this));
+    Routes::Get(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
     {{/isRestfulShow}}
     {{/operation}}
 
     {{#operation}}
     {{#isRestfulDestroy}}
-    Routes::Delete(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}, this));
+    Routes::Delete(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
     {{/isRestfulDestroy}}
     {{/operation}}
 }
 
 {{#operation}}
 {{#isRestful}}
-void {{classname}}::{{operationIdSnakeCase}}(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     {{#hasPathParams}}
     // Getting the path params
     {{#pathParams}}
@@ -71,7 +71,7 @@ void {{classname}}::{{operationIdSnakeCase}}(const Net::Rest::Request &request, 
     // Getting the body param
     {{#bodyParam}}
     {{^isPrimitiveType}}
-    auto {{paramName}} = std::make_shared<{{baseType}}>(); {{/isPrimitiveType}}
+    auto {{paramName}} = std::make_shared<{{baseType}}>();{{/isPrimitiveType}}
     {{#isPrimitiveType}}
     {{dataType}} {{paramName}};
     {{/isPrimitiveType}}
@@ -98,7 +98,7 @@ void {{classname}}::{{operationIdSnakeCase}}(const Net::Rest::Request &request, 
     {{/bodyParam}}
     {{/hasBodyParam}}
 
-      this->{{operationId}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, response);
+      this->{{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, response);
 
     } catch (std::runtime_error & e) {
       //send a 400 error

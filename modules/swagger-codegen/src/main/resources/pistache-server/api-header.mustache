@@ -36,7 +36,7 @@ private:
     void setupRoutes();
 
     {{#operation}}
-    void {{operationIdSnakeCase}}(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
+    void {{operationIdSnakeCase}}_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     {{/operation}}
 
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
@@ -52,7 +52,7 @@ private:
     {{#allParams}}
     /// <param name="{{paramName}}">{{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}</param>
     {{/allParams}}
-    virtual void {{operationId}}({{#allParams}}const {{{dataType}}} {{^isPrimitiveType}}&{{/isPrimitiveType}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response) = 0;
+    virtual void {{operationIdSnakeCase}}({{#allParams}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Net::Http::ResponseWriter &response) = 0;
     {{/operation}}
 
 };
