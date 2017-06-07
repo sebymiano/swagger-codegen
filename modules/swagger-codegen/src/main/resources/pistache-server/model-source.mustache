@@ -25,57 +25,57 @@ void {{classname}}::validate()
     // TODO: implement validation
 }
 
-web::json::value {{classname}}::toJson() const
+nlohmann::json {{classname}}::toJson() const
 {
-    web::json::value val = web::json::value::object();
+    nlohmann::json val = nlohmann::json::object();
 
     {{#vars}}{{#isPrimitiveType}}{{^isListContainer}}{{^required}}if(m_{{name}}IsSet)
     {
-        val[U("{{baseName}}")] = ModelBase::toJson(m_{{name}});
+        val["{{baseName}}"] = m_{{name}};
     }
-    {{/required}}{{#required}}val[U("{{baseName}}")] = ModelBase::toJson(m_{{name}});
+    {{/required}}{{#required}}val["{{baseName}}"] = m_{{name}};
     {{/required}}{{/isListContainer}}{{/isPrimitiveType}}{{#isListContainer}}{
-        std::vector<web::json::value> jsonArray;
+        nlohmann::json jsonArray;
         for( auto& item : m_{{name}} )
         {
             jsonArray.push_back(ModelBase::toJson(item));
         }
-        {{#required}}val[U("{{baseName}}")] = web::json::value::array(jsonArray);
+        {{#required}}val["{{baseName}}"] = jsonArray;
         {{/required}}{{^required}}
         if(jsonArray.size() > 0)
         {
-            val[U("{{baseName}}")] = web::json::value::array(jsonArray);
+            val["{{baseName}}"] = jsonArray;
         }
         {{/required}}
     }
     {{/isListContainer}}{{^isListContainer}}{{^isPrimitiveType}}{{^required}}if(m_{{name}}IsSet)
     {
-        val[U("{{baseName}}")] = ModelBase::toJson(m_{{name}});
+        val["{{baseName}}"] = ModelBase::toJson(m_{{name}});
     }
-    {{/required}}{{#required}}val[U("{{baseName}}")] = ModelBase::toJson(m_{{name}});
+    {{/required}}{{#required}}val["{{baseName}}"] = ModelBase::toJson(m_{{name}});
     {{/required}}{{/isPrimitiveType}}{{/isListContainer}}{{/vars}}
 
     return val;
 }
 
-void {{classname}}::fromJson(web::json::value& val)
+void {{classname}}::fromJson(nlohmann::json& val)
 {
-    {{#vars}}{{#isPrimitiveType}}{{^isListContainer}}{{^required}}if(val.has_field(U("{{baseName}}")))
+    {{#vars}}{{#isPrimitiveType}}{{^isListContainer}}{{^required}}if(val.find("{{baseName}}") != val.end())
     {
-        {{setter}}(ModelBase::{{baseType}}FromJson(val[U("{{baseName}}")]));
+        {{setter}}(val.at("{{baseName}}"));
     }
-    {{/required}}{{#required}}{{setter}}(ModelBase::{{baseType}}FromJson(val[U("{{baseName}}")]));
+    {{/required}}{{#required}}{{setter}}(val.at("{{baseName}}"));
     {{/required}}{{/isListContainer}}{{/isPrimitiveType}}{{#isListContainer}}{
         m_{{name}}.clear();
-        std::vector<web::json::value> jsonArray;
-        {{^required}}if(val.has_field(U("{{baseName}}")))
+        nlohmann::json jsonArray;
+        {{^required}}if(val.find("{{baseName}}") != val.end())
         {
         {{/required}}
-        for( auto& item : val[U("{{baseName}}")].as_array() )
+        for( auto& item : val["{{baseName}}"] )
         {
-            {{#isPrimitiveType}}m_{{name}}.push_back(ModelBase::{{items.baseType}}FromJson(item));
-            {{/isPrimitiveType}}{{^isPrimitiveType}}{{#items.isString}}m_{{name}}.push_back(ModelBase::stringFromJson(item));
-            {{/items.isString}}{{^items.isString}}{{#items.isDateTime}}m_{{name}}.push_back(ModelBase::dateFromJson(item));
+            {{#isPrimitiveType}}m_{{name}}.push_back(item);
+            {{/isPrimitiveType}}{{^isPrimitiveType}}{{#items.isString}}m_{{name}}.push_back(item);
+            {{/items.isString}}{{^items.isString}}{{#items.isDateTime}}m_{{name}}.push_back(item);
             {{/items.isDateTime}}{{^items.isDateTime}}
             if(item.is_null())
             {
@@ -93,25 +93,21 @@ void {{classname}}::fromJson(web::json::value& val)
         }
         {{/required}}
     }
-    {{/isListContainer}}{{^isListContainer}}{{^isPrimitiveType}}{{^required}}if(val.has_field(U("{{baseName}}")))
+    {{/isListContainer}}{{^isListContainer}}{{^isPrimitiveType}}{{^required}}if(val.find("{{baseName}}") != val.end())
     {
-        {{#isString}}{{setter}}(ModelBase::stringFromJson(val[U("{{baseName}}")]));
-        {{/isString}}{{^isString}}{{#isDateTime}}{{setter}}(ModelBase::dateFromJson(val[U("{{baseName}}")]));
-        {{/isDateTime}}{{^isDateTime}}if(!val[U("{{baseName}}")].is_null())
+        {{#isString}}{{setter}}(val.at("{{baseName}}"));
+        {{/isString}}{{^isString}}{{#isDateTime}}{{setter}}(val.at("{{baseName}}"));
+        {{/isDateTime}}{{^isDateTime}}if(!val["{{baseName}}"].is_null())
         {
             {{{datatype}}} newItem({{{defaultValue}}});
-            newItem->fromJson(val[U("{{baseName}}")]);
+            newItem->fromJson(val["{{baseName}}"]);
             {{setter}}( newItem );
         }
         {{/isDateTime}}{{/isString}}
     }
-    {{/required}}{{#required}}{{#isString}}{{setter}}(ModelBase::stringFromJson(val[U("{{baseName}}")]));
-    {{/isString}}{{^isString}}{{#isDateTime}}{{setter}}(ModelBase::dateFromJson(val[U("{{baseName}}")]));
-    {{/isDateTime}}{{^isDateTime}}{{#vendorExtensions.x-codegen-file}}{{setter}}(ModelBase::fileFromJson(val[U("{{baseName}}")]));
-    {{/vendorExtensions.x-codegen-file}}{{^vendorExtensions.x-codegen-file}}{{{datatype}}} new{{name}}({{{defaultValue}}});
-    new{{name}}->fromJson(val[U("{{baseName}}")]);
-    {{setter}}( newItem );
-    {{/vendorExtensions.x-codegen-file}}{{/isDateTime}}{{/isString}}{{/required}}{{/isPrimitiveType}}{{/isListContainer}}{{/vars}}
+    {{/required}}{{#required}}{{#isString}}{{setter}}(val.at("{{baseName}}"));
+    {{/isString}}{{^isString}}{{#isDateTime}}{{setter}}(val.at("{{baseName}}"));
+    {{/isDateTime}}{{/isString}}{{/required}}{{/isPrimitiveType}}{{/isListContainer}}{{/vars}}
 }
 
 

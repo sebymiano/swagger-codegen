@@ -71,7 +71,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     // Getting the body param
     {{#bodyParam}}
     {{^isPrimitiveType}}
-    auto {{paramName}} = std::make_shared<{{baseType}}>();{{/isPrimitiveType}}
+    {{baseType}} {{paramName}};{{/isPrimitiveType}}
     {{#isPrimitiveType}}
     {{dataType}} {{paramName}};
     {{/isPrimitiveType}}
@@ -81,19 +81,11 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     try {
     {{#hasBodyParam}}
     {{#bodyParam}}
-      web::json::value request_body = web::json::value::parse(request.body());
+      nlohmann::json request_body = nlohmann::json::parse(request.body());
     {{^isPrimitiveType}}
-      {{paramName}}->fromJson(request_body); {{/isPrimitiveType}}
+      {{paramName}}.fromJson(request_body); {{/isPrimitiveType}}
     {{#isPrimitiveType}}
-    {{#isString}}
-      {{paramName}} = ModelBase::stringFromJson(request_body);
-    {{/isString}}
-    {{#isDate}}
-      {{paramName}} = ModelBase::dateFromJson(request_body);
-    {{/isDate}}
-    {{^vendorExtensions.x-codegen-pistache-isStringOrDate}}
-      {{paramName}} = ModelBase::{{{dataType}}}FromJson(request_body);
-    {{/vendorExtensions.x-codegen-pistache-isStringOrDate}}
+      {{paramName}} = request_body;
     {{/isPrimitiveType}}
     {{/bodyParam}}
     {{/hasBodyParam}}

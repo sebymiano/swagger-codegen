@@ -58,28 +58,25 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
                 Arrays.asList("int", "char", "bool", "long", "float", "double", "int32_t", "int64_t"));
 
         typeMapping = new HashMap<String, String>();
-        typeMapping.put("date", "utility::datetime");
-        typeMapping.put("DateTime", "utility::datetime");
-        typeMapping.put("string", "utility::string_t");
+        typeMapping.put("date", "std::string");
+        typeMapping.put("DateTime", "std::string");
+        typeMapping.put("string", "std::string");
         typeMapping.put("integer", "int32_t");
         typeMapping.put("long", "int64_t");
         typeMapping.put("boolean", "bool");
         typeMapping.put("array", "std::vector");
         typeMapping.put("map", "std::map");
-        typeMapping.put("file", "HttpContent");
+        typeMapping.put("file", "std::string");
         typeMapping.put("object", "Object");
         typeMapping.put("binary", "std::string");
         typeMapping.put("number", "double");
-        typeMapping.put("UUID", "utility::string_t");
+        typeMapping.put("UUID", "std::string");
 
         super.importMapping = new HashMap<String, String>();
         importMapping.put("std::vector", "#include <vector>");
         importMapping.put("std::map", "#include <map>");
         importMapping.put("std::string", "#include <string>");
         importMapping.put("Object", "#include \"Object.h\"");
-        importMapping.put("utility::string_t", "#include <cpprest/details/basic_types.h>");
-        importMapping.put("utility::datetime", "#include <cpprest/details/basic_types.h>");
-
     }
 
     @Override
@@ -226,7 +223,7 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
         if (p instanceof MapProperty) {
             MapProperty mp = (MapProperty) p;
             Property inner = mp.getAdditionalProperties();
-            return getSwaggerType(p) + "<utility::string_t, " + getTypeDeclaration(inner) + ">";
+            return getSwaggerType(p) + "<std::string, " + getTypeDeclaration(inner) + ">";
         }
         if (p instanceof StringProperty || p instanceof DateProperty
                 || p instanceof DateTimeProperty || p instanceof FileProperty
@@ -240,13 +237,13 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
     @Override
     public String toDefaultValue(Property p) {
         if (p instanceof StringProperty) {
-            return "U(\"\")";
+            return "\"\"";
         } else if (p instanceof BooleanProperty) {
             return "false";
         } else if (p instanceof DateProperty) {
-            return "utility::datetime()";
+            return "\"\"";
         } else if (p instanceof DateTimeProperty) {
-            return "utility::datetime()";
+            return "\"\"";
         } else if (p instanceof DoubleProperty) {
             return "0.0";
         } else if (p instanceof FloatProperty) {
@@ -260,7 +257,7 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
         } else if (p instanceof MapProperty) {
             MapProperty ap = (MapProperty) p;
             String inner = getSwaggerType(ap.getAdditionalProperties());
-            return "std::map<utility::string_t, " + inner + ">()";
+            return "std::map<std::string, " + inner + ">()";
         } else if (p instanceof ArrayProperty) {
             ArrayProperty ap = (ArrayProperty) p;
             String inner = getSwaggerType(ap.getItems());

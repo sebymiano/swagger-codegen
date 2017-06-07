@@ -9,8 +9,9 @@
 #define ModelBase_H_
 
 {{{defaultInclude}}}
-#include <cpprest/details/basic_types.h>
-#include <cpprest/json.h>
+#include "json.hpp"
+#include <ctime>
+#include <string>
 
 {{#modelNamespaceDeclarations}}
 namespace {{this}} {
@@ -24,28 +25,17 @@ public:
 
     virtual void validate() = 0;
 
-    virtual web::json::value toJson() const = 0;
-    virtual void fromJson(web::json::value& json) = 0;
+    virtual nlohmann::json toJson() const = 0;
+    virtual void fromJson(nlohmann::json& json) = 0;
 
-    static web::json::value toJson( const utility::string_t& value );
-    static web::json::value toJson( const utility::datetime& value );
-    static web::json::value toJson( std::shared_ptr<ModelBase> value );
-    static web::json::value toJson( int32_t value );
-    static web::json::value toJson( int64_t value );
-    static web::json::value toJson( double value );
-    static web::json::value toJson( bool value );
+    static std::string toJson( const std::string& value );
+    static std::string toJson( const std::tme_t& value );
+    static int32_t toJson( int32_t value );
+    static int64_t toJson( int64_t value );
+    static double toJson( double value );
+    static bool toJson( bool value );
+    static nlohmann::json toJson( std::shared_ptr<ModelBase> content );
 
-    static int64_t int64_tFromJson(web::json::value& val);
-    static int32_t int32_tFromJson(web::json::value& val);
-    static float floatFromJson(web::json::value& val);
-    static utility::string_t stringFromJson(web::json::value& val);
-    static utility::datetime dateFromJson(web::json::value& val);
-    static double doubleFromJson(web::json::value& val);
-    static bool boolFromJson(web::json::value& val);
-
-    static utility::string_t toBase64( utility::string_t value );
-    static utility::string_t toBase64( std::shared_ptr<std::istream> value );
-    static std::shared_ptr<std::istream> fromBase64( const utility::string_t& encoded );
 };
 
 {{#modelNamespaceDeclarations}}
