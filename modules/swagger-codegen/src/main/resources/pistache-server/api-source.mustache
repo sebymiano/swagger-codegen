@@ -85,6 +85,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{^isPrimitiveType}}
       {{paramName}}.fromJson(request_body); {{/isPrimitiveType}}
     {{#isPrimitiveType}}
+      // The conversion is done automatically by the json library
       {{paramName}} = request_body;
     {{/isPrimitiveType}}
     {{/bodyParam}}

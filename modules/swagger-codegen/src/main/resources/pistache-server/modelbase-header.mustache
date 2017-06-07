@@ -29,7 +29,7 @@ public:
     virtual void fromJson(nlohmann::json& json) = 0;
 
     static std::string toJson( const std::string& value );
-    static std::string toJson( const std::tme_t& value );
+    static std::string toJson( const std::time_t& value );
     static int32_t toJson( int32_t value );
     static int64_t toJson( int64_t value );
     static double toJson( double value );
