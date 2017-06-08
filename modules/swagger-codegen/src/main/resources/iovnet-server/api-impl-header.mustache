@@ -1,0 +1,48 @@
+{{>licenseInfo}}
+
+{{#operations}}/*
+* {{classname}}Impl.h
+*
+* {{description}}
+*/
+
+#ifndef {{classnameSnakeUpperCase}}_IMPL_H_
+#define {{classnameSnakeUpperCase}}_IMPL_H_
+
+#include <{{classname}}.h>
+#include <iovnet/datapath_driver.h>
+#include <iovnet/manager.h>
+
+{{{defaultInclude}}}
+#include <memory>
+
+{{#imports}}{{{import}}}
+{{/imports}}
+
+{{#apiNamespaceDeclarations}}
+namespace {{this}} {
+{{/apiNamespaceDeclarations}}
+
+using namespace {{modelNamespace}};
+
+class {{classname}}Impl : public {{apiNamespace}}::{{classname}},
+    public Manager<{{classname}}> {
+public:
+    {{classname}}Impl(DatapathDriver *dp_driver);
+    ~{{classname}}Impl() { };
+    void http_handle(const Iovnet::HttpHandleRequest &request, Iovnet::HttpHandleResponse &response) override;
+
+    {{#operation}}
+    void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Iovnet::HttpHandleResponse &response);
+    {{/operation}}
+
+};
+
+{{#apiNamespaceDeclarations}}
+}
+{{/apiNamespaceDeclarations}}
+
+{{/operations}}
+
+
+#endif

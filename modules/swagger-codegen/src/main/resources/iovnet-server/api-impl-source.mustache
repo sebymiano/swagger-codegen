@@ -1,0 +1,30 @@
+{{>licenseInfo}}
+{{#operations}}
+
+#include "{{classname}}Impl.h"
+
+{{#apiNamespaceDeclarations}}
+namespace {{this}} {
+{{/apiNamespaceDeclarations}}
+
+using namespace {{modelNamespace}};
+
+{{classname}}Impl::{{classname}}Impl(DatapathDriver *dp_driver)
+    : Manager<{{classname}}>(dp_driver) {}
+    { }
+
+void {{classname}}Impl::http_handle(const Iovnet::HttpHandleRequest &request, Iovnet::HttpHandleResponse &response) {
+    router.route(request, response);
+}
+
+{{#operation}}
+void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Iovnet::HttpHandleResponse &response) {
+    response.send(Iovnet::Http::Code::Ok, "Do some magic");
+}
+{{/operation}}
+
+{{#apiNamespaceDeclarations}}
+}
+{{/apiNamespaceDeclarations}}
+
+{{/operations}}
