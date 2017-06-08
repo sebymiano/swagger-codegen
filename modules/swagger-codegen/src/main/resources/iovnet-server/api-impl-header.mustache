@@ -9,12 +9,13 @@
 #ifndef {{classnameSnakeUpperCase}}_IMPL_H_
 #define {{classnameSnakeUpperCase}}_IMPL_H_
 
-#include <{{classname}}.h>
+#include "{{classname}}.h"
 #include <iovnet/datapath_driver.h>
 #include <iovnet/manager.h>
 
 {{{defaultInclude}}}
 #include <memory>
+#include "{{classVarName}}.h"
 
 {{#imports}}{{{import}}}
 {{/imports}}
@@ -26,7 +27,7 @@ namespace {{this}} {
 using namespace {{modelNamespace}};
 
 class {{classname}}Impl : public {{apiNamespace}}::{{classname}},
-    public Manager<{{classname}}> {
+    public Manager<{{baseName}}> {
 public:
     {{classname}}Impl(DatapathDriver *dp_driver);
     ~{{classname}}Impl() { };

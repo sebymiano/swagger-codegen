@@ -9,7 +9,7 @@
 #define {{classname}}_H_
 
 {{{defaultInclude}}}
-#include <router.h>
+#include <iovnet/router.h>
 
 {{#imports}}{{{import}}}
 {{/imports}}
@@ -27,7 +27,7 @@ public:
 
     const std::string base = "{{basePathWithoutHost}}";
 
-private:
+protected:
     void setupRoutes();
 
     {{#operation}}

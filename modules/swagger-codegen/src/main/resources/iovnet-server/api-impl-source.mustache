@@ -10,7 +10,7 @@ namespace {{this}} {
 using namespace {{modelNamespace}};
 
 {{classname}}Impl::{{classname}}Impl(DatapathDriver *dp_driver)
-    : Manager<{{classname}}>(dp_driver) {}
+    : Manager<{{baseName}}>(dp_driver)
     { }
 
 void {{classname}}Impl::http_handle(const Iovnet::HttpHandleRequest &request, Iovnet::HttpHandleResponse &response) {
