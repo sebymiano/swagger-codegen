@@ -14,7 +14,10 @@ using namespace {{modelNamespace}};
     { }
 
 void {{classname}}Impl::http_handle(const Iovnet::HttpHandleRequest &request, Iovnet::HttpHandleResponse &response) {
-    router.route(request, response);
+    auto s = router.route(request, response);
+    if (s == Iovnet::Rest::Router::Status::NotFound) {
+      response.set_code(Iovnet::Http::Code::Not_Found);
+    }
 }
 
 {{#operation}}
