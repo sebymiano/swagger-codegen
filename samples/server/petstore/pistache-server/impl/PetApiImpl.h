@@ -50,7 +50,7 @@ public:
     void get_pet_by_id(const int64_t &petId, Net::Http::ResponseWriter &response);
     void update_pet(const Pet &body, Net::Http::ResponseWriter &response);
     void update_pet_with_form(const int64_t &petId, const std::string &name, const std::string &status, Net::Http::ResponseWriter &response);
-    void upload_file(const int64_t &petId, const std::string &additionalMetadata, const  &file, Net::Http::ResponseWriter &response);
+    void upload_file(const int64_t &petId, const std::string &additionalMetadata, , Net::Http::ResponseWriter &response);
 
 };
 

@@ -174,7 +174,7 @@ void PetApi::upload_file_handler(const Net::Rest::Request &request, Net::Http::R
 
     try {
 
-      this->upload_file(petId, additionalMetadata, file, response);
+      this->upload_file(petId, additionalMetadata, , response);
 
     } catch (std::runtime_error & e) {
       //send a 400 error

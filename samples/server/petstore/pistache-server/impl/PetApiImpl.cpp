@@ -44,7 +44,7 @@ void PetApiImpl::update_pet(const Pet &body, Net::Http::ResponseWriter &response
 void PetApiImpl::update_pet_with_form(const int64_t &petId, const std::string &name, const std::string &status, Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void PetApiImpl::upload_file(const int64_t &petId, const std::string &additionalMetadata, const  &file, Net::Http::ResponseWriter &response) {
+void PetApiImpl::upload_file(const int64_t &petId, const std::string &additionalMetadata, , Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
 

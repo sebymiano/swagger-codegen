@@ -127,7 +127,7 @@ private:
     /// <param name="petId">ID of pet to update</param>
     /// <param name="additionalMetadata">Additional data to pass to server (optional)</param>
     /// <param name="file">file to upload (optional)</param>
-    virtual void upload_file(const int64_t &petId, const std::string &additionalMetadata, const  &file, Net::Http::ResponseWriter &response) = 0;
+    virtual void upload_file(const int64_t &petId, const std::string &additionalMetadata, , Net::Http::ResponseWriter &response) = 0;
 
 };
 
