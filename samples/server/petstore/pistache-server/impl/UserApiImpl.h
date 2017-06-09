@@ -49,7 +49,7 @@ public:
     void delete_user(const std::string &username, Net::Http::ResponseWriter &response);
     void get_user_by_name(const std::string &username, Net::Http::ResponseWriter &response);
     void login_user(const std::string &username, const std::string &password, Net::Http::ResponseWriter &response);
-    void logout_user(, Net::Http::ResponseWriter &response);
+    void logout_user(Net::Http::ResponseWriter &response);
     void update_user(const std::string &username, const User &body, Net::Http::ResponseWriter &response);
 
 };

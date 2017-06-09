@@ -91,7 +91,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{/bodyParam}}
     {{/hasBodyParam}}
 
-      this->{{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, response);
+      this->{{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}{{#hasParams}}, {{/hasParams}}response);
 
     } catch (std::runtime_error & e) {
       //send a 400 error

@@ -72,7 +72,7 @@ void StoreApi::get_inventory_handler(const Net::Rest::Request &request, Net::Htt
 
     try {
 
-      this->get_inventory(, response);
+      this->get_inventory(response);
 
     } catch (std::runtime_error & e) {
       //send a 400 error

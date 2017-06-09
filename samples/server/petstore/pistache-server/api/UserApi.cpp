@@ -160,7 +160,7 @@ void UserApi::logout_user_handler(const Net::Rest::Request &request, Net::Http::
 
     try {
 
-      this->logout_user(, response);
+      this->logout_user(response);
 
     } catch (std::runtime_error & e) {
       //send a 400 error

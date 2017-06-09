@@ -69,7 +69,7 @@ private:
     /// <remarks>
     /// Returns a map of status codes to quantities
     /// </remarks>
-    virtual void get_inventory(, Net::Http::ResponseWriter &response) = 0;
+    virtual void get_inventory(Net::Http::ResponseWriter &response) = 0;
     /// <summary>
     /// Find purchase order by ID
     /// </summary>

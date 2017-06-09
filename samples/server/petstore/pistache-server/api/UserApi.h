@@ -114,7 +114,7 @@ private:
     /// <remarks>
     /// 
     /// </remarks>
-    virtual void logout_user(, Net::Http::ResponseWriter &response) = 0;
+    virtual void logout_user(Net::Http::ResponseWriter &response) = 0;
     /// <summary>
     /// Updated user
     /// </summary>
