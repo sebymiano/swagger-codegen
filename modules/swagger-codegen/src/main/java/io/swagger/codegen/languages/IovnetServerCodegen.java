@@ -140,6 +140,19 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
         String classname = (String) operations.get("classname");
         operations.put("classnameSnakeUpperCase", DefaultCodegen.underscore(classname).toUpperCase());
+        operations.put("classnameSnakeLowerCase", DefaultCodegen.underscore(classname).toLowerCase());
+
+        return objs;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Object> postProcessSupportingFileData(Map<String, Object> objs){
+        Map<String, Object> apiInfo = (Map<String, Object>) objs.get("apiInfo");
+        List<Map<String, Object>> apis = (List<Map<String, Object>>)apiInfo.get("apis");
+        String classname = (String) apis.get(0).get("classname");
+
+        objs.put("firstClassnameSnakeLowerCase", DefaultCodegen.underscore(classname).toLowerCase());
 
         return objs;
     }

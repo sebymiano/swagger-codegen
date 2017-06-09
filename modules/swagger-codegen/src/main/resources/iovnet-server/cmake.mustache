@@ -11,10 +11,10 @@ ${MODEL_SOURCES}
 ${API_SOURCES}
 ${API_IMPL_SOURCES})
 
-add_library(hello_world_api STATIC ${SERVER_SOURCES})
-set_property(TARGET hello_world_api PROPERTY POSITION_INDEPENDENT_CODE ON)
+add_library({{firstClassnameSnakeLowerCase}} STATIC ${SERVER_SOURCES})
+set_property(TARGET {{firstClassnameSnakeLowerCase}} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-target_link_libraries(hello_world_api
+target_link_libraries({{firstClassnameSnakeLowerCase}}
 iovnet_dev
 crossguid
 uuid)
