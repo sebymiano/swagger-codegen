@@ -22,7 +22,7 @@ The main folder contains also a file with a main that can be used to start the s
 Of course, is you should customize this file based on your needs
 
 ## Installation
-First of all, you need to download and install the libraries listed [here](##libraries-required).
+First of all, you need to download and install the libraries listed [here](#libraries-required).
 
 Once the libraries are installed, in order to compile and run the server please follow the steps below:
 ```bash
