@@ -38,9 +38,10 @@ cd build
 ```
 
 ## Libraries required
-[pistache](http://pistache.io/quickstart)
-[JSON for Modern C++](https://github.com/nlohmann/json/#integration)
+- [pistache](http://pistache.io/quickstart)
+- [JSON for Modern C++](https://github.com/nlohmann/json/#integration)
 
 ## Namespaces
 io::swagger::server::api
+
 io::swagger::server::model
