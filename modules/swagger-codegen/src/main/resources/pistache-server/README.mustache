@@ -22,7 +22,9 @@ The main folder contains also a file with a main that can be used to start the s
 Of course, is you should customize this file based on your needs
 
 ## Installation
-In order to compile and run the server please follow the steps below:
+First of all, you need to download and install the libraries listed [here](##libraries-required).
+
+Once the libraries are installed, in order to compile and run the server please follow the steps below:
 ```bash
 mkdir build
 cd build
@@ -39,7 +41,8 @@ cd build
 
 ## Libraries required
 - [pistache](http://pistache.io/quickstart)
-- [JSON for Modern C++](https://github.com/nlohmann/json/#integration)
+- [JSON for Modern C++](https://github.com/nlohmann/json/#integration): Please download the json.hpp file and
+put it under the model folder
 
 ## Namespaces
 io::swagger::server::api
