@@ -43,10 +43,10 @@ public:
     StoreApiImpl(Net::Address addr);
     ~StoreApiImpl() { };
 
-    void delete_order(const std::string &orderId, Net::Http::ResponseWriter &response);
-    void get_inventory(Net::Http::ResponseWriter &response);
-    void get_order_by_id(const int64_t &orderId, Net::Http::ResponseWriter &response);
-    void place_order(const Order &body, Net::Http::ResponseWriter &response);
+    void delete_order(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void get_inventory(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void get_order_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void place_order(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
 
 };
 

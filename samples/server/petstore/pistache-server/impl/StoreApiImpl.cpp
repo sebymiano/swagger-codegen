@@ -23,16 +23,16 @@ StoreApiImpl::StoreApiImpl(Net::Address addr)
     : StoreApi(addr)
     { }
 
-void StoreApiImpl::delete_order(const std::string &orderId, Net::Http::ResponseWriter &response) {
+void StoreApiImpl::delete_order(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void StoreApiImpl::get_inventory(Net::Http::ResponseWriter &response) {
+void StoreApiImpl::get_inventory(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void StoreApiImpl::get_order_by_id(const int64_t &orderId, Net::Http::ResponseWriter &response) {
+void StoreApiImpl::get_order_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void StoreApiImpl::place_order(const Order &body, Net::Http::ResponseWriter &response) {
+void StoreApiImpl::place_order(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
 

@@ -59,71 +59,70 @@ private:
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
     Net::Rest::Router router;
 
+
     /// <summary>
     /// Create user
     /// </summary>
     /// <remarks>
     /// This can only be done by the logged in user.
     /// </remarks>
-    /// <param name="body">Created user object</param>
-    virtual void create_user(const User &body, Net::Http::ResponseWriter &response) = 0;
+    virtual void create_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Creates list of users with given input array
     /// </summary>
     /// <remarks>
     /// 
     /// </remarks>
-    /// <param name="body">List of user object</param>
-    virtual void create_users_with_array_input(const User &body, Net::Http::ResponseWriter &response) = 0;
+    virtual void create_users_with_array_input(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Creates list of users with given input array
     /// </summary>
     /// <remarks>
     /// 
     /// </remarks>
-    /// <param name="body">List of user object</param>
-    virtual void create_users_with_list_input(const User &body, Net::Http::ResponseWriter &response) = 0;
+    virtual void create_users_with_list_input(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Delete user
     /// </summary>
     /// <remarks>
     /// This can only be done by the logged in user.
     /// </remarks>
-    /// <param name="username">The name that needs to be deleted</param>
-    virtual void delete_user(const std::string &username, Net::Http::ResponseWriter &response) = 0;
+    virtual void delete_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Get user by user name
     /// </summary>
     /// <remarks>
     /// 
     /// </remarks>
-    /// <param name="username">The name that needs to be fetched. Use user1 for testing. </param>
-    virtual void get_user_by_name(const std::string &username, Net::Http::ResponseWriter &response) = 0;
+    virtual void get_user_by_name(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Logs user into the system
     /// </summary>
     /// <remarks>
     /// 
     /// </remarks>
-    /// <param name="username">The user name for login</param>
-    /// <param name="password">The password for login in clear text</param>
-    virtual void login_user(const Optional<std::string> &username, const Optional<std::string> &password, Net::Http::ResponseWriter &response) = 0;
+    virtual void login_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Logs out current logged in user session
     /// </summary>
     /// <remarks>
     /// 
     /// </remarks>
-    virtual void logout_user(Net::Http::ResponseWriter &response) = 0;
+    virtual void logout_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Updated user
     /// </summary>
     /// <remarks>
     /// This can only be done by the logged in user.
     /// </remarks>
-    /// <param name="username">name that need to be deleted</param>
-    /// <param name="body">Updated user object</param>
-    virtual void update_user(const std::string &username, const User &body, Net::Http::ResponseWriter &response) = 0;
+    virtual void update_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
 
 };
 

@@ -26,25 +26,25 @@ PetApiImpl::PetApiImpl(Net::Address addr)
 void PetApiImpl::add_pet(const Pet &body, Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void PetApiImpl::delete_pet(const int64_t &petId, const std::string &apiKey, Net::Http::ResponseWriter &response) {
+void PetApiImpl::delete_pet(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void PetApiImpl::find_pets_by_status(const std::string &status, Net::Http::ResponseWriter &response) {
+void PetApiImpl::find_pets_by_status(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void PetApiImpl::find_pets_by_tags(const std::string &tags, Net::Http::ResponseWriter &response) {
+void PetApiImpl::find_pets_by_tags(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void PetApiImpl::get_pet_by_id(const int64_t &petId, Net::Http::ResponseWriter &response) {
+void PetApiImpl::get_pet_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
 void PetApiImpl::update_pet(const Pet &body, Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void PetApiImpl::update_pet_with_form(const int64_t &petId, const std::string &name, const std::string &status, Net::Http::ResponseWriter &response) {
+void PetApiImpl::update_pet_with_form(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void PetApiImpl::upload_file(const int64_t &petId, const std::string &additionalMetadata, , Net::Http::ResponseWriter &response) {
+void PetApiImpl::upload_file(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
 

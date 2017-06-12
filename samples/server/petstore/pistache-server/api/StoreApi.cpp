@@ -58,9 +58,7 @@ void StoreApi::delete_order_handler(const Net::Rest::Request &request, Net::Http
 
 
     try {
-
-      this->delete_order(orderId, response);
-
+      this->delete_order(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -73,9 +71,7 @@ void StoreApi::get_inventory_handler(const Net::Rest::Request &request, Net::Htt
 
 
     try {
-
-      this->get_inventory(response);
-
+      this->get_inventory(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -90,9 +86,7 @@ void StoreApi::get_order_by_id_handler(const Net::Rest::Request &request, Net::H
 
 
     try {
-
-      this->get_order_by_id(orderId, response);
-
+      this->get_order_by_id(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -109,9 +103,7 @@ void StoreApi::place_order_handler(const Net::Rest::Request &request, Net::Http:
     try {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
       body.fromJson(request_body); 
-
-      this->place_order(body, response);
-
+      this->place_order(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());

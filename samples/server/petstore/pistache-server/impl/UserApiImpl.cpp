@@ -23,28 +23,28 @@ UserApiImpl::UserApiImpl(Net::Address addr)
     : UserApi(addr)
     { }
 
-void UserApiImpl::create_user(const User &body, Net::Http::ResponseWriter &response) {
+void UserApiImpl::create_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void UserApiImpl::create_users_with_array_input(const User &body, Net::Http::ResponseWriter &response) {
+void UserApiImpl::create_users_with_array_input(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void UserApiImpl::create_users_with_list_input(const User &body, Net::Http::ResponseWriter &response) {
+void UserApiImpl::create_users_with_list_input(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void UserApiImpl::delete_user(const std::string &username, Net::Http::ResponseWriter &response) {
+void UserApiImpl::delete_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void UserApiImpl::get_user_by_name(const std::string &username, Net::Http::ResponseWriter &response) {
+void UserApiImpl::get_user_by_name(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void UserApiImpl::login_user(const Optional<std::string> &username, const Optional<std::string> &password, Net::Http::ResponseWriter &response) {
+void UserApiImpl::login_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void UserApiImpl::logout_user(Net::Http::ResponseWriter &response) {
+void UserApiImpl::logout_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void UserApiImpl::update_user(const std::string &username, const User &body, Net::Http::ResponseWriter &response) {
+void UserApiImpl::update_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response){
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
 

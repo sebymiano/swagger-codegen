@@ -64,9 +64,7 @@ void PetApi::add_pet_handler(const Net::Rest::Request &request, Net::Http::Respo
     try {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
       body.fromJson(request_body); 
-
       this->add_pet(body, response);
-
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -81,9 +79,7 @@ void PetApi::delete_pet_handler(const Net::Rest::Request &request, Net::Http::Re
 
 
     try {
-
-      this->delete_pet(petId, apiKey, response);
-
+      this->delete_pet(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -98,9 +94,7 @@ void PetApi::find_pets_by_status_handler(const Net::Rest::Request &request, Net:
     auto status = request.query().get("status");
 
     try {
-
-      this->find_pets_by_status(status, response);
-
+      this->find_pets_by_status(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -115,9 +109,7 @@ void PetApi::find_pets_by_tags_handler(const Net::Rest::Request &request, Net::H
     auto tags = request.query().get("tags");
 
     try {
-
-      this->find_pets_by_tags(tags, response);
-
+      this->find_pets_by_tags(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -132,9 +124,7 @@ void PetApi::get_pet_by_id_handler(const Net::Rest::Request &request, Net::Http:
 
 
     try {
-
-      this->get_pet_by_id(petId, response);
-
+      this->get_pet_by_id(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -151,9 +141,7 @@ void PetApi::update_pet_handler(const Net::Rest::Request &request, Net::Http::Re
     try {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
       body.fromJson(request_body); 
-
       this->update_pet(body, response);
-
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -168,9 +156,7 @@ void PetApi::update_pet_with_form_handler(const Net::Rest::Request &request, Net
 
 
     try {
-
-      this->update_pet_with_form(petId, name, status, response);
-
+      this->update_pet_with_form(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -185,9 +171,7 @@ void PetApi::upload_file_handler(const Net::Rest::Request &request, Net::Http::R
 
 
     try {
-
-      this->upload_file(petId, additionalMetadata, , response);
-
+      this->upload_file(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());

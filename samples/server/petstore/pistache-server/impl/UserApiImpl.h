@@ -43,14 +43,14 @@ public:
     UserApiImpl(Net::Address addr);
     ~UserApiImpl() { };
 
-    void create_user(const User &body, Net::Http::ResponseWriter &response);
-    void create_users_with_array_input(const User &body, Net::Http::ResponseWriter &response);
-    void create_users_with_list_input(const User &body, Net::Http::ResponseWriter &response);
-    void delete_user(const std::string &username, Net::Http::ResponseWriter &response);
-    void get_user_by_name(const std::string &username, Net::Http::ResponseWriter &response);
-    void login_user(const Optional<std::string> &username, const Optional<std::string> &password, Net::Http::ResponseWriter &response);
-    void logout_user(Net::Http::ResponseWriter &response);
-    void update_user(const std::string &username, const User &body, Net::Http::ResponseWriter &response);
+    void create_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void create_users_with_array_input(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void create_users_with_list_input(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void delete_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void get_user_by_name(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void login_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void logout_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void update_user(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
 
 };
 

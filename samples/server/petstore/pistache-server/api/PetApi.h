@@ -59,6 +59,7 @@ private:
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
     Net::Rest::Router router;
 
+
     /// <summary>
     /// Add a new pet to the store
     /// </summary>
@@ -67,39 +68,39 @@ private:
     /// </remarks>
     /// <param name="body">Pet object that needs to be added to the store</param>
     virtual void add_pet(const Pet &body, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Deletes a pet
     /// </summary>
     /// <remarks>
     /// 
     /// </remarks>
-    /// <param name="petId">Pet id to delete</param>
-    /// <param name="apiKey"> (optional)</param>
-    virtual void delete_pet(const int64_t &petId, const std::string &apiKey, Net::Http::ResponseWriter &response) = 0;
+    virtual void delete_pet(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Finds Pets by status
     /// </summary>
     /// <remarks>
     /// Multiple status values can be provided with comma separated strings
     /// </remarks>
-    /// <param name="status">Status values that need to be considered for filter</param>
-    virtual void find_pets_by_status(const std::string &status, Net::Http::ResponseWriter &response) = 0;
+    virtual void find_pets_by_status(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Finds Pets by tags
     /// </summary>
     /// <remarks>
     /// Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
     /// </remarks>
-    /// <param name="tags">Tags to filter by</param>
-    virtual void find_pets_by_tags(const std::string &tags, Net::Http::ResponseWriter &response) = 0;
+    virtual void find_pets_by_tags(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Find pet by ID
     /// </summary>
     /// <remarks>
     /// Returns a single pet
     /// </remarks>
-    /// <param name="petId">ID of pet to return</param>
-    virtual void get_pet_by_id(const int64_t &petId, Net::Http::ResponseWriter &response) = 0;
+    virtual void get_pet_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Update an existing pet
     /// </summary>
@@ -108,26 +109,22 @@ private:
     /// </remarks>
     /// <param name="body">Pet object that needs to be added to the store</param>
     virtual void update_pet(const Pet &body, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Updates a pet in the store with form data
     /// </summary>
     /// <remarks>
     /// 
     /// </remarks>
-    /// <param name="petId">ID of pet that needs to be updated</param>
-    /// <param name="name">Updated name of the pet (optional)</param>
-    /// <param name="status">Updated status of the pet (optional)</param>
-    virtual void update_pet_with_form(const int64_t &petId, const std::string &name, const std::string &status, Net::Http::ResponseWriter &response) = 0;
+    virtual void update_pet_with_form(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// uploads an image
     /// </summary>
     /// <remarks>
     /// 
     /// </remarks>
-    /// <param name="petId">ID of pet to update</param>
-    /// <param name="additionalMetadata">Additional data to pass to server (optional)</param>
-    /// <param name="file">file to upload (optional)</param>
-    virtual void upload_file(const int64_t &petId, const std::string &additionalMetadata, , Net::Http::ResponseWriter &response) = 0;
+    virtual void upload_file(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
 
 };
 
