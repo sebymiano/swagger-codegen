@@ -60,6 +60,7 @@ void PetApi::add_pet_handler(const Net::Rest::Request &request, Net::Http::Respo
     // Getting the body param
     Pet body;
 
+
     try {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
       body.fromJson(request_body); 
@@ -78,6 +79,7 @@ void PetApi::delete_pet_handler(const Net::Rest::Request &request, Net::Http::Re
     // Getting the path params
     auto petId = request.param(":petId").as<int64_t>();
 
+
     try {
 
       this->delete_pet(petId, apiKey, response);
@@ -92,6 +94,9 @@ void PetApi::delete_pet_handler(const Net::Rest::Request &request, Net::Http::Re
 
 void PetApi::find_pets_by_status_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
 
+    // Getting the query param
+    auto status = request.query().get("status");
+
     try {
 
       this->find_pets_by_status(status, response);
@@ -105,6 +110,9 @@ void PetApi::find_pets_by_status_handler(const Net::Rest::Request &request, Net:
 }
 
 void PetApi::find_pets_by_tags_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+
+    // Getting the query param
+    auto tags = request.query().get("tags");
 
     try {
 
@@ -122,6 +130,7 @@ void PetApi::get_pet_by_id_handler(const Net::Rest::Request &request, Net::Http:
     // Getting the path params
     auto petId = request.param(":petId").as<int64_t>();
 
+
     try {
 
       this->get_pet_by_id(petId, response);
@@ -137,6 +146,7 @@ void PetApi::get_pet_by_id_handler(const Net::Rest::Request &request, Net::Http:
 void PetApi::update_pet_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the body param
     Pet body;
+
 
     try {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
@@ -156,6 +166,7 @@ void PetApi::update_pet_with_form_handler(const Net::Rest::Request &request, Net
     // Getting the path params
     auto petId = request.param(":petId").as<int64_t>();
 
+
     try {
 
       this->update_pet_with_form(petId, name, status, response);
@@ -171,6 +182,7 @@ void PetApi::update_pet_with_form_handler(const Net::Rest::Request &request, Net
 void PetApi::upload_file_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the path params
     auto petId = request.param(":petId").as<int64_t>();
+
 
     try {
 

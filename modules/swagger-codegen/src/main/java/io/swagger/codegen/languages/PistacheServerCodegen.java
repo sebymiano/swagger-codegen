@@ -170,16 +170,18 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
 
                 op.bodyParam.vendorExtensions.put("x-codegen-pistache-isStringOrDate", op.bodyParam.isString || op.bodyParam.isDate);
             }
-            for( Map<String, String> consume : op.consumes) {
-                if (consume.get("mediaType") != null && consume.get("mediaType").equals("application/json")){
-                    consumeJson = true;
+            if(op.consumes != null) {
+                for (Map<String, String> consume : op.consumes) {
+                    if (consume.get("mediaType") != null && consume.get("mediaType").equals("application/json")) {
+                        consumeJson = true;
+                    }
                 }
-            }
 
-            if(op.vendorExtensions == null) {
-                op.vendorExtensions = new HashMap<>();
-            } else {
-                op.vendorExtensions.put("x-codegen-pistache-consumesJson", consumeJson);
+                if (op.vendorExtensions == null) {
+                    op.vendorExtensions = new HashMap<>();
+                } else {
+                    op.vendorExtensions.put("x-codegen-pistache-consumesJson", consumeJson);
+                }
             }
 
         }

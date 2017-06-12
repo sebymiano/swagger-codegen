@@ -107,7 +107,7 @@ private:
     /// </remarks>
     /// <param name="username">The user name for login</param>
     /// <param name="password">The password for login in clear text</param>
-    virtual void login_user(const std::string &username, const std::string &password, Net::Http::ResponseWriter &response) = 0;
+    virtual void login_user(const Optional<std::string> &username, const Optional<std::string> &password, Net::Http::ResponseWriter &response) = 0;
     /// <summary>
     /// Logs out current logged in user session
     /// </summary>

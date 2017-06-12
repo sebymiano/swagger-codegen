@@ -38,7 +38,7 @@ void UserApiImpl::delete_user(const std::string &username, Net::Http::ResponseWr
 void UserApiImpl::get_user_by_name(const std::string &username, Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void UserApiImpl::login_user(const std::string &username, const std::string &password, Net::Http::ResponseWriter &response) {
+void UserApiImpl::login_user(const Optional<std::string> &username, const Optional<std::string> &password, Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
 void UserApiImpl::logout_user(Net::Http::ResponseWriter &response) {

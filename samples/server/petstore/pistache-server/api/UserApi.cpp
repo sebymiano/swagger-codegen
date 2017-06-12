@@ -60,6 +60,7 @@ void UserApi::create_user_handler(const Net::Rest::Request &request, Net::Http::
     // Getting the body param
     User body;
 
+
     try {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
       body.fromJson(request_body); 
@@ -77,6 +78,7 @@ void UserApi::create_user_handler(const Net::Rest::Request &request, Net::Http::
 void UserApi::create_users_with_array_input_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the body param
     User body;
+
 
     try {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
@@ -96,6 +98,7 @@ void UserApi::create_users_with_list_input_handler(const Net::Rest::Request &req
     // Getting the body param
     User body;
 
+
     try {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
       body.fromJson(request_body); 
@@ -114,6 +117,7 @@ void UserApi::delete_user_handler(const Net::Rest::Request &request, Net::Http::
     // Getting the path params
     auto username = request.param(":username").as<std::string>();
 
+
     try {
 
       this->delete_user(username, response);
@@ -130,6 +134,7 @@ void UserApi::get_user_by_name_handler(const Net::Rest::Request &request, Net::H
     // Getting the path params
     auto username = request.param(":username").as<std::string>();
 
+
     try {
 
       this->get_user_by_name(username, response);
@@ -144,6 +149,10 @@ void UserApi::get_user_by_name_handler(const Net::Rest::Request &request, Net::H
 
 void UserApi::login_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
 
+    // Getting the query param
+    auto username = request.query().get("username");
+    auto password = request.query().get("password");
+
     try {
 
       this->login_user(username, password, response);
@@ -157,6 +166,7 @@ void UserApi::login_user_handler(const Net::Rest::Request &request, Net::Http::R
 }
 
 void UserApi::logout_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+
 
     try {
 
@@ -175,6 +185,7 @@ void UserApi::update_user_handler(const Net::Rest::Request &request, Net::Http::
     auto username = request.param(":username").as<std::string>();
     // Getting the body param
     User body;
+
 
     try {
       nlohmann::json request_body = nlohmann::json::parse(request.body());

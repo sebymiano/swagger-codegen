@@ -78,6 +78,13 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{/bodyParam}}
     {{/hasBodyParam}}
 
+    {{#hasQueryParams}}
+    // Getting the query param
+    {{#queryParams}}
+    auto {{paramName}} = request.query().get("{{paramName}}");
+    {{/queryParams}}
+    {{/hasQueryParams}}
+
     try {
     {{#hasBodyParam}}
     {{#bodyParam}}

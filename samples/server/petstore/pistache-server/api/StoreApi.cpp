@@ -56,6 +56,7 @@ void StoreApi::delete_order_handler(const Net::Rest::Request &request, Net::Http
     // Getting the path params
     auto orderId = request.param(":orderId").as<std::string>();
 
+
     try {
 
       this->delete_order(orderId, response);
@@ -69,6 +70,7 @@ void StoreApi::delete_order_handler(const Net::Rest::Request &request, Net::Http
 }
 
 void StoreApi::get_inventory_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+
 
     try {
 
@@ -86,6 +88,7 @@ void StoreApi::get_order_by_id_handler(const Net::Rest::Request &request, Net::H
     // Getting the path params
     auto orderId = request.param(":orderId").as<int64_t>();
 
+
     try {
 
       this->get_order_by_id(orderId, response);
@@ -101,6 +104,7 @@ void StoreApi::get_order_by_id_handler(const Net::Rest::Request &request, Net::H
 void StoreApi::place_order_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the body param
     Order body;
+
 
     try {
       nlohmann::json request_body = nlohmann::json::parse(request.body());

@@ -32,7 +32,7 @@ public:
     ~{{classname}}Impl() { };
 
     {{#operation}}
-    void {{operationIdSnakeCase}}({{#allParams}}{{^isFile}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/isFile}}{{/allParams}}{{#hasParams}}, {{/hasParams}}Net::Http::ResponseWriter &response);
+    void {{operationIdSnakeCase}}({{#allParams}}{{^isFile}}const {{#isPrimitiveType}}{{#isQueryParam}}Optional<{{/isQueryParam}}{{{dataType}}}{{#isQueryParam}}>{{/isQueryParam}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/isFile}}{{/allParams}}{{#hasParams}}, {{/hasParams}}Net::Http::ResponseWriter &response);
     {{/operation}}
 
 };

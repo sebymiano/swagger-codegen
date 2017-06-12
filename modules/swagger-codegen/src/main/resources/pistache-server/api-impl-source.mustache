@@ -14,7 +14,7 @@ using namespace {{modelNamespace}};
     { }
 
 {{#operation}}
-void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}{{^isFile}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/isFile}}{{/allParams}}{{#hasParams}}, {{/hasParams}}Net::Http::ResponseWriter &response) {
+void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}{{^isFile}}const {{#isPrimitiveType}}{{#isQueryParam}}Optional<{{/isQueryParam}}{{{dataType}}}{{#isQueryParam}}>{{/isQueryParam}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/isFile}}{{/allParams}}{{#hasParams}}, {{/hasParams}}Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
 {{/operation}}
