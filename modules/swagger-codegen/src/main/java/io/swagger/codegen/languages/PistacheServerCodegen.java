@@ -163,6 +163,7 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
         List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
         for (CodegenOperation op : operationList) {
             boolean consumeJson = false;
+            boolean isParsingSupported = true;
             if (op.bodyParam != null) {
                 if (op.bodyParam.vendorExtensions == null) {
                     op.bodyParam.vendorExtensions = new HashMap<>();
@@ -176,13 +177,20 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
                         consumeJson = true;
                     }
                 }
-
-                if (op.vendorExtensions == null) {
-                    op.vendorExtensions = new HashMap<>();
-                } else {
-                    op.vendorExtensions.put("x-codegen-pistache-consumesJson", consumeJson);
-                }
             }
+            for(CodegenParameter param : op.allParams){
+                if (param.isFormParam) isParsingSupported=false;
+                if (param.isFile) isParsingSupported=false;
+                if (param.isCookieParam) isParsingSupported=false;
+            }
+
+            if (op.vendorExtensions == null) {
+                op.vendorExtensions = new HashMap<>();
+            } else {
+                op.vendorExtensions.put("x-codegen-pistache-consumesJson", consumeJson);
+                op.vendorExtensions.put("x-codegen-pistache-isParsingSupported", consumeJson && isParsingSupported);
+            }
+
 
         }
 

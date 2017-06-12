@@ -43,16 +43,22 @@ private:
     Net::Rest::Router router;
 
     {{#operation}}
+
     /// <summary>
     /// {{summary}}
     /// </summary>
     /// <remarks>
     /// {{notes}}
     /// </remarks>
+    {{#vendorExtensions.x-codegen-pistache-isParsingSupported}}
     {{#allParams}}
     /// <param name="{{paramName}}">{{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}</param>
     {{/allParams}}
     virtual void {{operationIdSnakeCase}}({{#allParams}}{{^isFile}}const {{#isPrimitiveType}}{{#isQueryParam}}Optional<{{/isQueryParam}}{{{dataType}}}{{#isQueryParam}}>{{/isQueryParam}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/isFile}}{{/allParams}}{{#hasParams}}, {{/hasParams}}Net::Http::ResponseWriter &response) = 0;
+    {{/vendorExtensions.x-codegen-pistache-isParsingSupported}}
+    {{^vendorExtensions.x-codegen-pistache-isParsingSupported}}
+    virtual void {{operationIdSnakeCase}}(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+    {{/vendorExtensions.x-codegen-pistache-isParsingSupported}}
     {{/operation}}
 
 };

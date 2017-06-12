@@ -97,9 +97,12 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{/isPrimitiveType}}
     {{/bodyParam}}
     {{/hasBodyParam}}
-
+    {{#vendorExtensions.x-codegen-pistache-isParsingSupported}}
       this->{{operationIdSnakeCase}}({{#allParams}}{{^isFile}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/isFile}}{{/allParams}}{{#hasParams}}, {{/hasParams}}response);
-
+    {{/vendorExtensions.x-codegen-pistache-isParsingSupported}}
+    {{^vendorExtensions.x-codegen-pistache-isParsingSupported}}
+      this->{{operationIdSnakeCase}}(request, response);
+    {{/vendorExtensions.x-codegen-pistache-isParsingSupported}}
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
