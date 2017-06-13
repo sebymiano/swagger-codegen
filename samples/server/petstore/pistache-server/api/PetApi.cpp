@@ -56,7 +56,7 @@ void PetApi::setupRoutes() {
     Routes::Delete(router, base + "/pet/:petId", Routes::bind(&PetApi::delete_pet_handler, this));
 
     // Default handler, called when a route is not found
-    router.addCustomHandler(Routes::bind(&PetApi::_default_handler, this));
+    router.addCustomHandler(Routes::bind(&PetApi::pet_api_default_handler, this));
 }
 
 void PetApi::add_pet_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
@@ -75,8 +75,8 @@ void PetApi::add_pet_handler(const Net::Rest::Request &request, Net::Http::Respo
     }
 
 }
-
 void PetApi::delete_pet_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    try {
       this->delete_pet(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -85,8 +85,8 @@ void PetApi::delete_pet_handler(const Net::Rest::Request &request, Net::Http::Re
     }
 
 }
-
 void PetApi::find_pets_by_status_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    try {
       this->find_pets_by_status(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -95,8 +95,8 @@ void PetApi::find_pets_by_status_handler(const Net::Rest::Request &request, Net:
     }
 
 }
-
 void PetApi::find_pets_by_tags_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    try {
       this->find_pets_by_tags(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -105,8 +105,8 @@ void PetApi::find_pets_by_tags_handler(const Net::Rest::Request &request, Net::H
     }
 
 }
-
 void PetApi::get_pet_by_id_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    try {
       this->get_pet_by_id(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -115,7 +115,6 @@ void PetApi::get_pet_by_id_handler(const Net::Rest::Request &request, Net::Http:
     }
 
 }
-
 void PetApi::update_pet_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
 
     // Getting the body param
@@ -132,8 +131,8 @@ void PetApi::update_pet_handler(const Net::Rest::Request &request, Net::Http::Re
     }
 
 }
-
 void PetApi::update_pet_with_form_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    try {
       this->update_pet_with_form(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -142,8 +141,8 @@ void PetApi::update_pet_with_form_handler(const Net::Rest::Request &request, Net
     }
 
 }
-
 void PetApi::upload_file_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    try {
       this->upload_file(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -153,8 +152,7 @@ void PetApi::upload_file_handler(const Net::Rest::Request &request, Net::Http::R
 
 }
 
-
-void _default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+void pet_api_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     response.send(Net::Http::Code::Not_Found, "The requested method does not exist");
 }
 

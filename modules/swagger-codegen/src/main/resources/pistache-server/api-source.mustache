@@ -82,9 +82,13 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{/hasBodyParam}}{{#hasQueryParams}}
     // Getting the query param
     {{#queryParams}}
-    auto {{paramName}} = request.query().get("{{paramName}}");
+    auto {{paramName}} = request.query().get("{{baseName}}");
     {{/queryParams}}
-    {{/hasQueryParams}}
+    {{/hasQueryParams}}{{#hasHeaderParams}}
+    {{#headerParams}}
+    auto {{paramName}} = request.headers().getRaw("{{baseName}}");
+    {{/headerParams}}
+    {{/hasHeaderParams}}
 
     try {
     {{#hasBodyParam}}
@@ -98,9 +102,10 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{/isPrimitiveType}}
     {{/bodyParam}}
     {{/hasBodyParam}}
-      this->{{operationIdSnakeCase}}({{#allParams}}{{^isFile}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/isFile}}{{/allParams}}{{#hasParams}}, {{/hasParams}}response);
+      this->{{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}{{#hasParams}}, {{/hasParams}}response);
     {{/vendorExtensions.x-codegen-pistache-isParsingSupported}}
     {{^vendorExtensions.x-codegen-pistache-isParsingSupported}}
+    try {
       this->{{operationIdSnakeCase}}(request, response);
     {{/vendorExtensions.x-codegen-pistache-isParsingSupported}}
     } catch (std::runtime_error & e) {
@@ -110,7 +115,6 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     }
 
 }
-
 {{/isRestful}}
 {{/operation}}
 

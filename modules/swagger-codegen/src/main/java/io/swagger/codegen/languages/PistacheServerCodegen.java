@@ -159,6 +159,7 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
         Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
         String classname = (String) operations.get("classname");
         operations.put("classnameSnakeUpperCase", DefaultCodegen.underscore(classname).toUpperCase());
+        operations.put("classnameSnakeLowerCase", DefaultCodegen.underscore(classname).toLowerCase());
 
         List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
         for (CodegenOperation op : operationList) {
@@ -182,14 +183,19 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
                 if (param.isFormParam) isParsingSupported=false;
                 if (param.isFile) isParsingSupported=false;
                 if (param.isCookieParam) isParsingSupported=false;
+
+                //TODO: This changes the info about the real type but it is needed to parse the header params
+                if (param.isHeaderParam){
+                    param.dataType = "std::string";
+                }
             }
 
             if (op.vendorExtensions == null) {
                 op.vendorExtensions = new HashMap<>();
-            } else {
-                op.vendorExtensions.put("x-codegen-pistache-consumesJson", consumeJson);
-                op.vendorExtensions.put("x-codegen-pistache-isParsingSupported", consumeJson && isParsingSupported);
             }
+            op.vendorExtensions.put("x-codegen-pistache-consumesJson", consumeJson);
+            op.vendorExtensions.put("x-codegen-pistache-isParsingSupported", consumeJson && isParsingSupported);
+
 
 
         }

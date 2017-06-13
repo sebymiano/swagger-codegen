@@ -55,7 +55,7 @@ private:
     void login_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     void logout_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     void update_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
-    void _default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
+    void user_api_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
 
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
     Net::Rest::Router router;

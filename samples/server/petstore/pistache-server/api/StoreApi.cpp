@@ -52,10 +52,11 @@ void StoreApi::setupRoutes() {
     Routes::Delete(router, base + "/store/order/:orderId", Routes::bind(&StoreApi::delete_order_handler, this));
 
     // Default handler, called when a route is not found
-    router.addCustomHandler(Routes::bind(&StoreApi::_default_handler, this));
+    router.addCustomHandler(Routes::bind(&StoreApi::store_api_default_handler, this));
 }
 
 void StoreApi::delete_order_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    try {
       this->delete_order(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -64,8 +65,8 @@ void StoreApi::delete_order_handler(const Net::Rest::Request &request, Net::Http
     }
 
 }
-
 void StoreApi::get_inventory_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    try {
       this->get_inventory(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -74,8 +75,8 @@ void StoreApi::get_inventory_handler(const Net::Rest::Request &request, Net::Htt
     }
 
 }
-
 void StoreApi::get_order_by_id_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    try {
       this->get_order_by_id(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -84,8 +85,8 @@ void StoreApi::get_order_by_id_handler(const Net::Rest::Request &request, Net::H
     }
 
 }
-
 void StoreApi::place_order_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    try {
       this->place_order(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -95,8 +96,7 @@ void StoreApi::place_order_handler(const Net::Rest::Request &request, Net::Http:
 
 }
 
-
-void _default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+void store_api_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     response.send(Net::Http::Code::Not_Found, "The requested method does not exist");
 }
 
