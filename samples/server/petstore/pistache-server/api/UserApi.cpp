@@ -60,8 +60,14 @@ void UserApi::setupRoutes() {
 }
 
 void UserApi::create_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->create_user(request, response);
+
+    // Getting the body param
+    User body;
+    
+    try {
+      nlohmann::json request_body = nlohmann::json::parse(request.body());
+      body.fromJson(request_body); 
+      this->create_user(body, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -70,8 +76,14 @@ void UserApi::create_user_handler(const Net::Rest::Request &request, Net::Http::
 
 }
 void UserApi::create_users_with_array_input_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->create_users_with_array_input(request, response);
+
+    // Getting the body param
+    User body;
+    
+    try {
+      nlohmann::json request_body = nlohmann::json::parse(request.body());
+      body.fromJson(request_body); 
+      this->create_users_with_array_input(body, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -80,8 +92,14 @@ void UserApi::create_users_with_array_input_handler(const Net::Rest::Request &re
 
 }
 void UserApi::create_users_with_list_input_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->create_users_with_list_input(request, response);
+
+    // Getting the body param
+    User body;
+    
+    try {
+      nlohmann::json request_body = nlohmann::json::parse(request.body());
+      body.fromJson(request_body); 
+      this->create_users_with_list_input(body, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -90,8 +108,10 @@ void UserApi::create_users_with_list_input_handler(const Net::Rest::Request &req
 
 }
 void UserApi::delete_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->delete_user(request, response);
+    // Getting the path params
+    auto username = request.param(":username").as<std::string>();
+    try {
+      this->delete_user(username, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -100,8 +120,10 @@ void UserApi::delete_user_handler(const Net::Rest::Request &request, Net::Http::
 
 }
 void UserApi::get_user_by_name_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->get_user_by_name(request, response);
+    // Getting the path params
+    auto username = request.param(":username").as<std::string>();
+    try {
+      this->get_user_by_name(username, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -110,8 +132,13 @@ void UserApi::get_user_by_name_handler(const Net::Rest::Request &request, Net::H
 
 }
 void UserApi::login_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->login_user(request, response);
+
+    // Getting the query params
+    auto username = request.query().get("username");
+        auto password = request.query().get("password");
+    
+    try {
+      this->login_user(username, password, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -120,8 +147,9 @@ void UserApi::login_user_handler(const Net::Rest::Request &request, Net::Http::R
 
 }
 void UserApi::logout_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->logout_user(request, response);
+
+    try {
+      this->logout_user(response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -130,8 +158,15 @@ void UserApi::logout_user_handler(const Net::Rest::Request &request, Net::Http::
 
 }
 void UserApi::update_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->update_user(request, response);
+    // Getting the path params
+    auto username = request.param(":username").as<std::string>();
+    // Getting the body param
+    User body;
+    
+    try {
+      nlohmann::json request_body = nlohmann::json::parse(request.body());
+      body.fromJson(request_body); 
+      this->update_user(username, body, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());

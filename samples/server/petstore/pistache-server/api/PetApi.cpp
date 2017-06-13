@@ -60,7 +60,7 @@ void PetApi::setupRoutes() {
 }
 
 void PetApi::add_pet_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    
+
     // Getting the body param
     Pet body;
     
@@ -76,8 +76,13 @@ void PetApi::add_pet_handler(const Net::Rest::Request &request, Net::Http::Respo
 
 }
 void PetApi::delete_pet_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->delete_pet(request, response);
+    // Getting the path params
+    auto petId = request.param(":petId").as<int64_t>();
+    // Getting the header params
+    auto apiKey = request.headers().getRaw("api_key");
+
+    try {
+      this->delete_pet(petId, apiKey, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -86,8 +91,12 @@ void PetApi::delete_pet_handler(const Net::Rest::Request &request, Net::Http::Re
 
 }
 void PetApi::find_pets_by_status_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->find_pets_by_status(request, response);
+
+    // Getting the query params
+    auto status = request.query().get("status");
+    
+    try {
+      this->find_pets_by_status(status, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -96,8 +105,12 @@ void PetApi::find_pets_by_status_handler(const Net::Rest::Request &request, Net:
 
 }
 void PetApi::find_pets_by_tags_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->find_pets_by_tags(request, response);
+
+    // Getting the query params
+    auto tags = request.query().get("tags");
+    
+    try {
+      this->find_pets_by_tags(tags, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -106,8 +119,10 @@ void PetApi::find_pets_by_tags_handler(const Net::Rest::Request &request, Net::H
 
 }
 void PetApi::get_pet_by_id_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->get_pet_by_id(request, response);
+    // Getting the path params
+    auto petId = request.param(":petId").as<int64_t>();
+    try {
+      this->get_pet_by_id(petId, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -116,7 +131,7 @@ void PetApi::get_pet_by_id_handler(const Net::Rest::Request &request, Net::Http:
 
 }
 void PetApi::update_pet_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    
+
     // Getting the body param
     Pet body;
     
@@ -132,7 +147,7 @@ void PetApi::update_pet_handler(const Net::Rest::Request &request, Net::Http::Re
 
 }
 void PetApi::update_pet_with_form_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
+    try {
       this->update_pet_with_form(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -142,7 +157,7 @@ void PetApi::update_pet_with_form_handler(const Net::Rest::Request &request, Net
 
 }
 void PetApi::upload_file_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
+    try {
       this->upload_file(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error

@@ -63,7 +63,8 @@ private:
     /// <remarks>
     /// For valid response try integer IDs with value &lt; 1000. Anything above 1000 or nonintegers will generate API errors
     /// </remarks>
-    virtual void delete_order(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+    /// <param name="orderId">ID of the order that needs to be deleted</param>
+    virtual void delete_order(const std::string &orderId, Net::Http::ResponseWriter &response) = 0;
 
     /// <summary>
     /// Returns pet inventories by status
@@ -71,7 +72,7 @@ private:
     /// <remarks>
     /// Returns a map of status codes to quantities
     /// </remarks>
-    virtual void get_inventory(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+    virtual void get_inventory(Net::Http::ResponseWriter &response) = 0;
 
     /// <summary>
     /// Find purchase order by ID
@@ -79,7 +80,8 @@ private:
     /// <remarks>
     /// For valid response try integer IDs with value &lt;&#x3D; 5 or &gt; 10. Other values will generated exceptions
     /// </remarks>
-    virtual void get_order_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+    /// <param name="orderId">ID of pet that needs to be fetched</param>
+    virtual void get_order_by_id(const int64_t &orderId, Net::Http::ResponseWriter &response) = 0;
 
     /// <summary>
     /// Place an order for a pet
@@ -87,7 +89,8 @@ private:
     /// <remarks>
     /// 
     /// </remarks>
-    virtual void place_order(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+    /// <param name="body">order placed for purchasing the pet</param>
+    virtual void place_order(const Order &body, Net::Http::ResponseWriter &response) = 0;
 
 };
 

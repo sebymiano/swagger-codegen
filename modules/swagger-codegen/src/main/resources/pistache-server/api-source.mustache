@@ -64,12 +64,12 @@ void {{classname}}::setupRoutes() {
 {{#operation}}
 {{#isRestful}}
 void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    {{#vendorExtensions.x-codegen-pistache-isParsingSupported}}{{#hasPathParams}}
+    {{#vendorExtensions.x-codegen-pistache-isParsingSupported}}
+    {{#hasPathParams}}
     // Getting the path params
     {{#pathParams}}
     auto {{paramName}} = request.param(":{{paramName}}").as<{{dataType}}>();
-    {{/pathParams}}
-    {{/hasPathParams}}{{#hasBodyParam}}
+    {{/pathParams}}{{/hasPathParams}}{{#hasBodyParam}}
     // Getting the body param
     {{#bodyParam}}
     {{^isPrimitiveType}}
@@ -77,13 +77,12 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{#isPrimitiveType}}
     {{dataType}} {{paramName}};
     {{/isPrimitiveType}}
-    {{/bodyParam}}
-    {{/hasBodyParam}}{{#hasQueryParams}}
-    // Getting the query param
+    {{/bodyParam}}{{/hasBodyParam}}{{#hasQueryParams}}
+    // Getting the query params
     {{#queryParams}}
     auto {{paramName}} = request.query().get("{{baseName}}");
-    {{/queryParams}}
-    {{/hasQueryParams}}{{#hasHeaderParams}}
+    {{/queryParams}}{{/hasQueryParams}}{{#hasHeaderParams}}
+    // Getting the header params
     {{#headerParams}}
     auto {{paramName}} = request.headers().getRaw("{{baseName}}");
     {{/headerParams}}

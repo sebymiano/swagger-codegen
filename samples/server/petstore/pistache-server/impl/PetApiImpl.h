@@ -44,10 +44,10 @@ public:
     ~PetApiImpl() { };
 
     void add_pet(const Pet &body, Net::Http::ResponseWriter &response);
-    void delete_pet(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
-    void find_pets_by_status(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
-    void find_pets_by_tags(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
-    void get_pet_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
+    void delete_pet(const int64_t &petId, const std::string &apiKey, Net::Http::ResponseWriter &response);
+    void find_pets_by_status(const std::string &status, Net::Http::ResponseWriter &response);
+    void find_pets_by_tags(const std::string &tags, Net::Http::ResponseWriter &response);
+    void get_pet_by_id(const int64_t &petId, Net::Http::ResponseWriter &response);
     void update_pet(const Pet &body, Net::Http::ResponseWriter &response);
     void update_pet_with_form(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);
     void upload_file(const Net::Rest::Request &request, Net::Http::ResponseWriter &response);

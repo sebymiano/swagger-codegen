@@ -76,7 +76,9 @@ private:
     /// <remarks>
     /// 
     /// </remarks>
-    virtual void delete_pet(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+    /// <param name="petId">Pet id to delete</param>
+    /// <param name="apiKey"> (optional)</param>
+    virtual void delete_pet(const int64_t &petId, const std::string &apiKey, Net::Http::ResponseWriter &response) = 0;
 
     /// <summary>
     /// Finds Pets by status
@@ -84,7 +86,8 @@ private:
     /// <remarks>
     /// Multiple status values can be provided with comma separated strings
     /// </remarks>
-    virtual void find_pets_by_status(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+    /// <param name="status">Status values that need to be considered for filter</param>
+    virtual void find_pets_by_status(const std::string &status, Net::Http::ResponseWriter &response) = 0;
 
     /// <summary>
     /// Finds Pets by tags
@@ -92,7 +95,8 @@ private:
     /// <remarks>
     /// Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.
     /// </remarks>
-    virtual void find_pets_by_tags(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+    /// <param name="tags">Tags to filter by</param>
+    virtual void find_pets_by_tags(const std::string &tags, Net::Http::ResponseWriter &response) = 0;
 
     /// <summary>
     /// Find pet by ID
@@ -100,7 +104,8 @@ private:
     /// <remarks>
     /// Returns a single pet
     /// </remarks>
-    virtual void get_pet_by_id(const Net::Rest::Request &request, Net::Http::ResponseWriter &response) = 0;
+    /// <param name="petId">ID of pet to return</param>
+    virtual void get_pet_by_id(const int64_t &petId, Net::Http::ResponseWriter &response) = 0;
 
     /// <summary>
     /// Update an existing pet

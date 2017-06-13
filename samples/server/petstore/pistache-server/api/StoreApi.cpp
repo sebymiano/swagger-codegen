@@ -56,8 +56,10 @@ void StoreApi::setupRoutes() {
 }
 
 void StoreApi::delete_order_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->delete_order(request, response);
+    // Getting the path params
+    auto orderId = request.param(":orderId").as<std::string>();
+    try {
+      this->delete_order(orderId, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -66,8 +68,9 @@ void StoreApi::delete_order_handler(const Net::Rest::Request &request, Net::Http
 
 }
 void StoreApi::get_inventory_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->get_inventory(request, response);
+
+    try {
+      this->get_inventory(response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -76,8 +79,10 @@ void StoreApi::get_inventory_handler(const Net::Rest::Request &request, Net::Htt
 
 }
 void StoreApi::get_order_by_id_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->get_order_by_id(request, response);
+    // Getting the path params
+    auto orderId = request.param(":orderId").as<int64_t>();
+    try {
+      this->get_order_by_id(orderId, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -86,8 +91,14 @@ void StoreApi::get_order_by_id_handler(const Net::Rest::Request &request, Net::H
 
 }
 void StoreApi::place_order_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-        try {
-      this->place_order(request, response);
+
+    // Getting the body param
+    Order body;
+    
+    try {
+      nlohmann::json request_body = nlohmann::json::parse(request.body());
+      body.fromJson(request_body); 
+      this->place_order(body, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());

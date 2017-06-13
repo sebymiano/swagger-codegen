@@ -194,7 +194,7 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
                 op.vendorExtensions = new HashMap<>();
             }
             op.vendorExtensions.put("x-codegen-pistache-consumesJson", consumeJson);
-            op.vendorExtensions.put("x-codegen-pistache-isParsingSupported", consumeJson && isParsingSupported);
+            op.vendorExtensions.put("x-codegen-pistache-isParsingSupported", isParsingSupported);
 
 
 
