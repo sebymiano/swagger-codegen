@@ -69,7 +69,8 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     // Getting the path params
     {{#pathParams}}
     auto {{paramName}} = request.param(":{{paramName}}").as<{{dataType}}>();
-    {{/pathParams}}{{/hasPathParams}}{{#hasBodyParam}}
+    {{/pathParams}}
+    {{/hasPathParams}}{{#hasBodyParam}}
     // Getting the body param
     {{#bodyParam}}
     {{^isPrimitiveType}}
@@ -77,11 +78,13 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{#isPrimitiveType}}
     {{dataType}} {{paramName}};
     {{/isPrimitiveType}}
-    {{/bodyParam}}{{/hasBodyParam}}{{#hasQueryParams}}
+    {{/bodyParam}}
+    {{/hasBodyParam}}{{#hasQueryParams}}
     // Getting the query params
     {{#queryParams}}
     auto {{paramName}} = request.query().get("{{baseName}}");
-    {{/queryParams}}{{/hasQueryParams}}{{#hasHeaderParams}}
+    {{/queryParams}}
+    {{/hasQueryParams}}{{#hasHeaderParams}}
     // Getting the header params
     {{#headerParams}}
     auto {{paramName}} = request.headers().tryGetRaw("{{baseName}}");
@@ -116,7 +119,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
 {{/isRestful}}
 {{/operation}}
 
-void {{classnameSnakeLowerCase}}_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+void {{classname}}::{{classnameSnakeLowerCase}}_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     response.send(Net::Http::Code::Not_Found, "The requested method does not exist");
 }
 

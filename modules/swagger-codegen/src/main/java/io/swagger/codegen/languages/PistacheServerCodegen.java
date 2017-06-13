@@ -186,11 +186,15 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
 
                 //TODO: This changes the info about the real type but it is needed to parse the header params
                 if (param.isHeaderParam) {
-                    param.dataType = "Optional<Raw>";
-                    param.baseType = "Optional<Raw>";
+                    param.dataType = "Optional<Net::Http::Header::Raw>";
+                    param.baseType = "Optional<Net::Http::Header::Raw>";
                 } else if(param.isQueryParam){
-                    param.dataType = "Optional<" + param.baseType + ">";
-                    param.baseType = "Optional<" + param.baseType + ">";
+                    if(param.isPrimitiveType) {
+                        param.dataType = "Optional<" + param.dataType + ">";
+                    } else {
+                        param.dataType = "Optional<" + param.baseType + ">";
+                        param.baseType = "Optional<" + param.baseType + ">";
+                    }
                 }
             }
 

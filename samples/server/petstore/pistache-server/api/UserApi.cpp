@@ -137,7 +137,7 @@ void UserApi::login_user_handler(const Net::Rest::Request &request, Net::Http::R
 
     // Getting the query params
     auto username = request.query().get("username");
-        auto password = request.query().get("password");
+    auto password = request.query().get("password");
     
     try {
       this->login_user(username, password, response);
@@ -178,7 +178,7 @@ void UserApi::update_user_handler(const Net::Rest::Request &request, Net::Http::
 
 }
 
-void user_api_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+void UserApi::user_api_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     response.send(Net::Http::Code::Not_Found, "The requested method does not exist");
 }
 
