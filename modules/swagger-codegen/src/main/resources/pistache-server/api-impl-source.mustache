@@ -15,7 +15,7 @@ using namespace {{modelNamespace}};
 
 {{#operation}}
 {{#vendorExtensions.x-codegen-pistache-isParsingSupported}}
-void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{#isQueryParam}}Optional<{{/isQueryParam}}{{{dataType}}}{{#isQueryParam}}>{{/isQueryParam}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{#isQueryParam}}Optional<{{/isQueryParam}}{{{baseType}}}{{#isQueryParam}}>{{/isQueryParam}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}{{#hasParams}}, {{/hasParams}}Net::Http::ResponseWriter &response) {
+void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}{{#hasParams}}, {{/hasParams}}Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
 {{/vendorExtensions.x-codegen-pistache-isParsingSupported}}

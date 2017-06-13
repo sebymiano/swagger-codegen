@@ -26,7 +26,7 @@ PetApiImpl::PetApiImpl(Net::Address addr)
 void PetApiImpl::add_pet(const Pet &body, Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
-void PetApiImpl::delete_pet(const int64_t &petId, const std::string &apiKey, Net::Http::ResponseWriter &response) {
+void PetApiImpl::delete_pet(const int64_t &petId, const Optional<Raw> &apiKey, Net::Http::ResponseWriter &response) {
     response.send(Net::Http::Code::Ok, "Do some magic");
 }
 void PetApiImpl::find_pets_by_status(const Optional<std::string> &status, Net::Http::ResponseWriter &response) {

@@ -80,7 +80,7 @@ void PetApi::delete_pet_handler(const Net::Rest::Request &request, Net::Http::Re
     auto petId = request.param(":petId").as<int64_t>();
     
     // Getting the header params
-    auto apiKey = request.headers().getRaw("api_key");
+    auto apiKey = request.headers().tryGetRaw("api_key");
 
     try {
       this->delete_pet(petId, apiKey, response);

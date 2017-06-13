@@ -185,8 +185,12 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
                 if (param.isCookieParam) isParsingSupported=false;
 
                 //TODO: This changes the info about the real type but it is needed to parse the header params
-                if (param.isHeaderParam){
-                    param.dataType = "std::string";
+                if (param.isHeaderParam) {
+                    param.dataType = "Optional<Raw>";
+                    param.baseType = "Optional<Raw>";
+                } else if(param.isQueryParam){
+                    param.dataType = "Optional<" + param.baseType + ">";
+                    param.baseType = "Optional<" + param.baseType + ">";
                 }
             }
 

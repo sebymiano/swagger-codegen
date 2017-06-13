@@ -84,7 +84,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{/queryParams}}{{/hasQueryParams}}{{#hasHeaderParams}}
     // Getting the header params
     {{#headerParams}}
-    auto {{paramName}} = request.headers().getRaw("{{baseName}}");
+    auto {{paramName}} = request.headers().tryGetRaw("{{baseName}}");
     {{/headerParams}}
     {{/hasHeaderParams}}
 

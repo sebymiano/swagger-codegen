@@ -78,7 +78,7 @@ private:
     /// </remarks>
     /// <param name="petId">Pet id to delete</param>
     /// <param name="apiKey"> (optional)</param>
-    virtual void delete_pet(const int64_t &petId, const std::string &apiKey, Net::Http::ResponseWriter &response) = 0;
+    virtual void delete_pet(const int64_t &petId, const Optional<Raw> &apiKey, Net::Http::ResponseWriter &response) = 0;
 
     /// <summary>
     /// Finds Pets by status
