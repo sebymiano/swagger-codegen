@@ -54,16 +54,12 @@ void UserApi::setupRoutes() {
     Routes::Get(router, base + "/user/logout", Routes::bind(&UserApi::logout_user_handler, this));
 
     Routes::Delete(router, base + "/user/:username", Routes::bind(&UserApi::delete_user_handler, this));
+
+    // Default handler, called when a route is not found
+    router.addCustomHandler(Routes::bind(&UserApi::_default_handler, this));
 }
 
 void UserApi::create_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    // Getting the body param
-    User body;
-
-
-    try {
-      nlohmann::json request_body = nlohmann::json::parse(request.body());
-      body.fromJson(request_body); 
       this->create_user(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -74,13 +70,6 @@ void UserApi::create_user_handler(const Net::Rest::Request &request, Net::Http::
 }
 
 void UserApi::create_users_with_array_input_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    // Getting the body param
-    User body;
-
-
-    try {
-      nlohmann::json request_body = nlohmann::json::parse(request.body());
-      body.fromJson(request_body); 
       this->create_users_with_array_input(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -91,13 +80,6 @@ void UserApi::create_users_with_array_input_handler(const Net::Rest::Request &re
 }
 
 void UserApi::create_users_with_list_input_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    // Getting the body param
-    User body;
-
-
-    try {
-      nlohmann::json request_body = nlohmann::json::parse(request.body());
-      body.fromJson(request_body); 
       this->create_users_with_list_input(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -108,11 +90,6 @@ void UserApi::create_users_with_list_input_handler(const Net::Rest::Request &req
 }
 
 void UserApi::delete_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    // Getting the path params
-    auto username = request.param(":username").as<std::string>();
-
-
-    try {
       this->delete_user(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -123,11 +100,6 @@ void UserApi::delete_user_handler(const Net::Rest::Request &request, Net::Http::
 }
 
 void UserApi::get_user_by_name_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    // Getting the path params
-    auto username = request.param(":username").as<std::string>();
-
-
-    try {
       this->get_user_by_name(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -138,12 +110,6 @@ void UserApi::get_user_by_name_handler(const Net::Rest::Request &request, Net::H
 }
 
 void UserApi::login_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-
-    // Getting the query param
-    auto username = request.query().get("username");
-    auto password = request.query().get("password");
-
-    try {
       this->login_user(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -154,9 +120,6 @@ void UserApi::login_user_handler(const Net::Rest::Request &request, Net::Http::R
 }
 
 void UserApi::logout_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-
-
-    try {
       this->logout_user(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -167,15 +130,6 @@ void UserApi::logout_user_handler(const Net::Rest::Request &request, Net::Http::
 }
 
 void UserApi::update_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    // Getting the path params
-    auto username = request.param(":username").as<std::string>();
-    // Getting the body param
-    User body;
-
-
-    try {
-      nlohmann::json request_body = nlohmann::json::parse(request.body());
-      body.fromJson(request_body); 
       this->update_user(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -185,6 +139,10 @@ void UserApi::update_user_handler(const Net::Rest::Request &request, Net::Http::
 
 }
 
+
+void _default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    response.send(Net::Http::Code::Not_Found, "The requested method does not exist");
+}
 
 }
 }

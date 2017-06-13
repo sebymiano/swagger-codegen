@@ -55,6 +55,7 @@ private:
     void update_pet_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     void update_pet_with_form_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     void upload_file_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
+    void _default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
 
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
     Net::Rest::Router router;

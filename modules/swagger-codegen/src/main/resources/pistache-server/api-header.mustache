@@ -38,6 +38,7 @@ private:
     {{#operation}}
     void {{operationIdSnakeCase}}_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     {{/operation}}
+    void {{classnameSnakeLowerCase}}_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
 
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
     Net::Rest::Router router;

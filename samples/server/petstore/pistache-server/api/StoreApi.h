@@ -51,6 +51,7 @@ private:
     void get_inventory_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     void get_order_by_id_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     void place_order_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
+    void _default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
 
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
     Net::Rest::Router router;

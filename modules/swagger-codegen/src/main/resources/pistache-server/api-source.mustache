@@ -56,18 +56,21 @@ void {{classname}}::setupRoutes() {
     Routes::Delete(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
     {{/isRestfulDestroy}}
     {{/operation}}
+
+    // Default handler, called when a route is not found
+    router.addCustomHandler(Routes::bind(&{{classname}}::{{classnameSnakeLowerCase}}_default_handler, this));
 }
 
 {{#operation}}
 {{#isRestful}}
 void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    {{#vendorExtensions.x-codegen-pistache-isParsingSupported}}
     {{#hasPathParams}}
     // Getting the path params
     {{#pathParams}}
     auto {{paramName}} = request.param(":{{paramName}}").as<{{dataType}}>();
     {{/pathParams}}
-    {{/hasPathParams}}
-    {{#hasBodyParam}}
+    {{/hasPathParams}}{{#hasBodyParam}}
     // Getting the body param
     {{#bodyParam}}
     {{^isPrimitiveType}}
@@ -76,9 +79,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{dataType}} {{paramName}};
     {{/isPrimitiveType}}
     {{/bodyParam}}
-    {{/hasBodyParam}}
-
-    {{#hasQueryParams}}
+    {{/hasBodyParam}}{{#hasQueryParams}}
     // Getting the query param
     {{#queryParams}}
     auto {{paramName}} = request.query().get("{{paramName}}");
@@ -97,7 +98,6 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{/isPrimitiveType}}
     {{/bodyParam}}
     {{/hasBodyParam}}
-    {{#vendorExtensions.x-codegen-pistache-isParsingSupported}}
       this->{{operationIdSnakeCase}}({{#allParams}}{{^isFile}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/isFile}}{{/allParams}}{{#hasParams}}, {{/hasParams}}response);
     {{/vendorExtensions.x-codegen-pistache-isParsingSupported}}
     {{^vendorExtensions.x-codegen-pistache-isParsingSupported}}
@@ -113,6 +113,10 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
 
 {{/isRestful}}
 {{/operation}}
+
+void {{classnameSnakeLowerCase}}_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    response.send(Net::Http::Code::Not_Found, "The requested method does not exist");
+}
 
 {{#apiNamespaceDeclarations}}
 }
