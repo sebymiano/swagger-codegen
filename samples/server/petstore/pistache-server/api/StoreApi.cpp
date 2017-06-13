@@ -56,7 +56,7 @@ void StoreApi::setupRoutes() {
 }
 
 void StoreApi::delete_order_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->delete_order(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -66,7 +66,7 @@ void StoreApi::delete_order_handler(const Net::Rest::Request &request, Net::Http
 
 }
 void StoreApi::get_inventory_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->get_inventory(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -76,7 +76,7 @@ void StoreApi::get_inventory_handler(const Net::Rest::Request &request, Net::Htt
 
 }
 void StoreApi::get_order_by_id_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->get_order_by_id(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -86,7 +86,7 @@ void StoreApi::get_order_by_id_handler(const Net::Rest::Request &request, Net::H
 
 }
 void StoreApi::place_order_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->place_order(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error

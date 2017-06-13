@@ -60,7 +60,7 @@ void UserApi::setupRoutes() {
 }
 
 void UserApi::create_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->create_user(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -70,7 +70,7 @@ void UserApi::create_user_handler(const Net::Rest::Request &request, Net::Http::
 
 }
 void UserApi::create_users_with_array_input_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->create_users_with_array_input(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -80,7 +80,7 @@ void UserApi::create_users_with_array_input_handler(const Net::Rest::Request &re
 
 }
 void UserApi::create_users_with_list_input_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->create_users_with_list_input(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -90,7 +90,7 @@ void UserApi::create_users_with_list_input_handler(const Net::Rest::Request &req
 
 }
 void UserApi::delete_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->delete_user(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -100,7 +100,7 @@ void UserApi::delete_user_handler(const Net::Rest::Request &request, Net::Http::
 
 }
 void UserApi::get_user_by_name_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->get_user_by_name(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -110,7 +110,7 @@ void UserApi::get_user_by_name_handler(const Net::Rest::Request &request, Net::H
 
 }
 void UserApi::login_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->login_user(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -120,7 +120,7 @@ void UserApi::login_user_handler(const Net::Rest::Request &request, Net::Http::R
 
 }
 void UserApi::logout_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->logout_user(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
@@ -130,7 +130,7 @@ void UserApi::logout_user_handler(const Net::Rest::Request &request, Net::Http::
 
 }
 void UserApi::update_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    try {
+        try {
       this->update_user(request, response);
     } catch (std::runtime_error & e) {
       //send a 400 error

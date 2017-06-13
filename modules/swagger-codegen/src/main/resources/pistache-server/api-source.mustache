@@ -64,8 +64,7 @@ void {{classname}}::setupRoutes() {
 {{#operation}}
 {{#isRestful}}
 void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
-    {{#vendorExtensions.x-codegen-pistache-isParsingSupported}}
-    {{#hasPathParams}}
+    {{#vendorExtensions.x-codegen-pistache-isParsingSupported}}{{#hasPathParams}}
     // Getting the path params
     {{#pathParams}}
     auto {{paramName}} = request.param(":{{paramName}}").as<{{dataType}}>();
