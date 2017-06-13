@@ -1,8 +1,6 @@
 package io.swagger.codegen;
 
 import io.swagger.models.ExternalDocs;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
