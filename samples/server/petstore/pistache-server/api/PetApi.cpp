@@ -78,6 +78,7 @@ void PetApi::add_pet_handler(const Net::Rest::Request &request, Net::Http::Respo
 void PetApi::delete_pet_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the path params
     auto petId = request.param(":petId").as<int64_t>();
+    
     // Getting the header params
     auto apiKey = request.headers().getRaw("api_key");
 
@@ -121,6 +122,7 @@ void PetApi::find_pets_by_tags_handler(const Net::Rest::Request &request, Net::H
 void PetApi::get_pet_by_id_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the path params
     auto petId = request.param(":petId").as<int64_t>();
+    
     try {
       this->get_pet_by_id(petId, response);
     } catch (std::runtime_error & e) {

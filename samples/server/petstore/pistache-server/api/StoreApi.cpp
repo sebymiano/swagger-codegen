@@ -58,6 +58,7 @@ void StoreApi::setupRoutes() {
 void StoreApi::delete_order_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the path params
     auto orderId = request.param(":orderId").as<std::string>();
+    
     try {
       this->delete_order(orderId, response);
     } catch (std::runtime_error & e) {
@@ -81,6 +82,7 @@ void StoreApi::get_inventory_handler(const Net::Rest::Request &request, Net::Htt
 void StoreApi::get_order_by_id_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the path params
     auto orderId = request.param(":orderId").as<int64_t>();
+    
     try {
       this->get_order_by_id(orderId, response);
     } catch (std::runtime_error & e) {

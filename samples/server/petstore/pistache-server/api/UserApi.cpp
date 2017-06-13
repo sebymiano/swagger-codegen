@@ -110,6 +110,7 @@ void UserApi::create_users_with_list_input_handler(const Net::Rest::Request &req
 void UserApi::delete_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the path params
     auto username = request.param(":username").as<std::string>();
+    
     try {
       this->delete_user(username, response);
     } catch (std::runtime_error & e) {
@@ -122,6 +123,7 @@ void UserApi::delete_user_handler(const Net::Rest::Request &request, Net::Http::
 void UserApi::get_user_by_name_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the path params
     auto username = request.param(":username").as<std::string>();
+    
     try {
       this->get_user_by_name(username, response);
     } catch (std::runtime_error & e) {
@@ -160,6 +162,7 @@ void UserApi::logout_user_handler(const Net::Rest::Request &request, Net::Http::
 void UserApi::update_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
     // Getting the path params
     auto username = request.param(":username").as<std::string>();
+    
     // Getting the body param
     User body;
     
