@@ -21,8 +21,26 @@ void {{classname}}Impl::http_handle(const Iovnet::HttpHandleRequest &request, Io
 }
 
 {{#operation}}
+
+/**
+* @name    {{operationId}}
+* @brief   {{summary}}
+*
+* {{notes}}
+*
+* Corresponding URL: {{httpMethod}} {{path}}
+*
+{{#allParams}}
+* @param [in] {{paramName}} {{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}
+{{/allParams}}
+*
+* Responses:
+{{#responses}}
+* {{code}} {{message}} {{baseType}}
+{{/responses}}
+*/
 void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Iovnet::HttpHandleResponse &response) {
-    response.send(Iovnet::Http::Code::Ok, "Do some magic");
+    response.send(Iovnet::Http::Code::Not_Implemented, "Method not implemented\n");
 }
 {{/operation}}
 
