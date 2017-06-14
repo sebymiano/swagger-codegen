@@ -28,15 +28,15 @@ void {{classname}}Impl::http_handle(const Iovnet::HttpHandleRequest &request, Io
 *
 * {{notes}}
 *
-* Corresponding URL: {{httpMethod}} {{path}}
+* URL: {{httpMethod}} {{path}}
 *
 {{#allParams}}
-* @param [in] {{paramName}} {{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}
+* @param[in] {{paramName}} {{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}
 {{/allParams}}
 *
 * Responses:
 {{#responses}}
-* {{code}} {{message}} {{baseType}}
+* {{code}} {{message}} {{#baseType}}-> Return type: {{baseType}}{{/baseType}}
 {{/responses}}
 */
 void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Iovnet::HttpHandleResponse &response) {
