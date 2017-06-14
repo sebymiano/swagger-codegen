@@ -22,6 +22,7 @@
 #include <pistache/endpoint.h>
 #include <pistache/http.h>
 #include <pistache/router.h>
+#include <pistache/http_headers.h>
 
 #include "User.h"
 #include <string>
@@ -55,9 +56,11 @@ private:
     void login_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     void logout_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     void update_user_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
+    void user_api_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
 
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
     Net::Rest::Router router;
+
 
     /// <summary>
     /// Create user
@@ -67,6 +70,7 @@ private:
     /// </remarks>
     /// <param name="body">Created user object</param>
     virtual void create_user(const User &body, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Creates list of users with given input array
     /// </summary>
@@ -75,6 +79,7 @@ private:
     /// </remarks>
     /// <param name="body">List of user object</param>
     virtual void create_users_with_array_input(const User &body, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Creates list of users with given input array
     /// </summary>
@@ -83,6 +88,7 @@ private:
     /// </remarks>
     /// <param name="body">List of user object</param>
     virtual void create_users_with_list_input(const User &body, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Delete user
     /// </summary>
@@ -91,6 +97,7 @@ private:
     /// </remarks>
     /// <param name="username">The name that needs to be deleted</param>
     virtual void delete_user(const std::string &username, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Get user by user name
     /// </summary>
@@ -99,6 +106,7 @@ private:
     /// </remarks>
     /// <param name="username">The name that needs to be fetched. Use user1 for testing. </param>
     virtual void get_user_by_name(const std::string &username, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Logs user into the system
     /// </summary>
@@ -107,14 +115,16 @@ private:
     /// </remarks>
     /// <param name="username">The user name for login</param>
     /// <param name="password">The password for login in clear text</param>
-    virtual void login_user(const std::string &username, const std::string &password, Net::Http::ResponseWriter &response) = 0;
+    virtual void login_user(const Optional<std::string> &username, const Optional<std::string> &password, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Logs out current logged in user session
     /// </summary>
     /// <remarks>
     /// 
     /// </remarks>
-    virtual void logout_user(, Net::Http::ResponseWriter &response) = 0;
+    virtual void logout_user(Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Updated user
     /// </summary>

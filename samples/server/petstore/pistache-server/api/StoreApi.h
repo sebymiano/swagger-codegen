@@ -22,6 +22,7 @@
 #include <pistache/endpoint.h>
 #include <pistache/http.h>
 #include <pistache/router.h>
+#include <pistache/http_headers.h>
 
 #include "Order.h"
 #include <map>
@@ -51,9 +52,11 @@ private:
     void get_inventory_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     void get_order_by_id_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
     void place_order_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
+    void store_api_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response);
 
     std::shared_ptr<Net::Http::Endpoint> httpEndpoint;
     Net::Rest::Router router;
+
 
     /// <summary>
     /// Delete purchase order by ID
@@ -63,13 +66,15 @@ private:
     /// </remarks>
     /// <param name="orderId">ID of the order that needs to be deleted</param>
     virtual void delete_order(const std::string &orderId, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Returns pet inventories by status
     /// </summary>
     /// <remarks>
     /// Returns a map of status codes to quantities
     /// </remarks>
-    virtual void get_inventory(, Net::Http::ResponseWriter &response) = 0;
+    virtual void get_inventory(Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Find purchase order by ID
     /// </summary>
@@ -78,6 +83,7 @@ private:
     /// </remarks>
     /// <param name="orderId">ID of pet that needs to be fetched</param>
     virtual void get_order_by_id(const int64_t &orderId, Net::Http::ResponseWriter &response) = 0;
+
     /// <summary>
     /// Place an order for a pet
     /// </summary>

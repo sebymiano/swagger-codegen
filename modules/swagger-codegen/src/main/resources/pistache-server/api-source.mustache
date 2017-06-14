@@ -34,40 +34,22 @@ void {{classname}}::setupRoutes() {
     using namespace Net::Rest;
 
     {{#operation}}
-    {{#isRestfulCreate}}
-    Routes::Post(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
-    {{/isRestfulCreate}}
+    Routes::{{httpMethod}}(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
     {{/operation}}
 
-    {{#operation}}
-    {{#isRestfulUpdate}}
-    Routes::Put(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
-    {{/isRestfulUpdate}}
-    {{/operation}}
-
-    {{#operation}}
-    {{#isRestfulShow}}
-    Routes::Get(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
-    {{/isRestfulShow}}
-    {{/operation}}
-
-    {{#operation}}
-    {{#isRestfulDestroy}}
-    Routes::Delete(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
-    {{/isRestfulDestroy}}
-    {{/operation}}
+    // Default handler, called when a route is not found
+    router.addCustomHandler(Routes::bind(&{{classname}}::{{classnameSnakeLowerCase}}_default_handler, this));
 }
 
 {{#operation}}
-{{#isRestful}}
 void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    {{#vendorExtensions.x-codegen-pistache-isParsingSupported}}
     {{#hasPathParams}}
     // Getting the path params
     {{#pathParams}}
     auto {{paramName}} = request.param(":{{paramName}}").as<{{dataType}}>();
     {{/pathParams}}
-    {{/hasPathParams}}
-    {{#hasBodyParam}}
+    {{/hasPathParams}}{{#hasBodyParam}}
     // Getting the body param
     {{#bodyParam}}
     {{^isPrimitiveType}}
@@ -76,7 +58,17 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{dataType}} {{paramName}};
     {{/isPrimitiveType}}
     {{/bodyParam}}
-    {{/hasBodyParam}}
+    {{/hasBodyParam}}{{#hasQueryParams}}
+    // Getting the query params
+    {{#queryParams}}
+    auto {{paramName}} = request.query().get("{{baseName}}");
+    {{/queryParams}}
+    {{/hasQueryParams}}{{#hasHeaderParams}}
+    // Getting the header params
+    {{#headerParams}}
+    auto {{paramName}} = request.headers().tryGetRaw("{{baseName}}");
+    {{/headerParams}}
+    {{/hasHeaderParams}}
 
     try {
     {{#hasBodyParam}}
@@ -90,9 +82,12 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     {{/isPrimitiveType}}
     {{/bodyParam}}
     {{/hasBodyParam}}
-
-      this->{{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, response);
-
+      this->{{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}{{#hasParams}}, {{/hasParams}}response);
+    {{/vendorExtensions.x-codegen-pistache-isParsingSupported}}
+    {{^vendorExtensions.x-codegen-pistache-isParsingSupported}}
+    try {
+      this->{{operationIdSnakeCase}}(request, response);
+    {{/vendorExtensions.x-codegen-pistache-isParsingSupported}}
     } catch (std::runtime_error & e) {
       //send a 400 error
       response.send(Net::Http::Code::Bad_Request, e.what());
@@ -100,9 +95,11 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Net::Rest::Request &r
     }
 
 }
-
-{{/isRestful}}
 {{/operation}}
+
+void {{classname}}::{{classnameSnakeLowerCase}}_default_handler(const Net::Rest::Request &request, Net::Http::ResponseWriter response) {
+    response.send(Net::Http::Code::Not_Found, "The requested method does not exist");
+}
 
 {{#apiNamespaceDeclarations}}
 }

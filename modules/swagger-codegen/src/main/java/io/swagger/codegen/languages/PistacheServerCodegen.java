@@ -159,9 +159,12 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
         Map<String, Object> operations = (Map<String, Object>) objs.get("operations");
         String classname = (String) operations.get("classname");
         operations.put("classnameSnakeUpperCase", DefaultCodegen.underscore(classname).toUpperCase());
+        operations.put("classnameSnakeLowerCase", DefaultCodegen.underscore(classname).toLowerCase());
 
         List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
         for (CodegenOperation op : operationList) {
+            boolean consumeJson = false;
+            boolean isParsingSupported = true;
             if (op.bodyParam != null) {
                 if (op.bodyParam.vendorExtensions == null) {
                     op.bodyParam.vendorExtensions = new HashMap<>();
@@ -169,6 +172,43 @@ public class PistacheServerCodegen extends DefaultCodegen implements CodegenConf
 
                 op.bodyParam.vendorExtensions.put("x-codegen-pistache-isStringOrDate", op.bodyParam.isString || op.bodyParam.isDate);
             }
+            if(op.consumes != null) {
+                for (Map<String, String> consume : op.consumes) {
+                    if (consume.get("mediaType") != null && consume.get("mediaType").equals("application/json")) {
+                        consumeJson = true;
+                    }
+                }
+            }
+
+            op.httpMethod = op.httpMethod.substring(0, 1).toUpperCase() + op.httpMethod.substring(1).toLowerCase();
+
+            for(CodegenParameter param : op.allParams){
+                if (param.isFormParam) isParsingSupported=false;
+                if (param.isFile) isParsingSupported=false;
+                if (param.isCookieParam) isParsingSupported=false;
+
+                //TODO: This changes the info about the real type but it is needed to parse the header params
+                if (param.isHeaderParam) {
+                    param.dataType = "Optional<Net::Http::Header::Raw>";
+                    param.baseType = "Optional<Net::Http::Header::Raw>";
+                } else if(param.isQueryParam){
+                    if(param.isPrimitiveType) {
+                        param.dataType = "Optional<" + param.dataType + ">";
+                    } else {
+                        param.dataType = "Optional<" + param.baseType + ">";
+                        param.baseType = "Optional<" + param.baseType + ">";
+                    }
+                }
+            }
+
+            if (op.vendorExtensions == null) {
+                op.vendorExtensions = new HashMap<>();
+            }
+            op.vendorExtensions.put("x-codegen-pistache-consumesJson", consumeJson);
+            op.vendorExtensions.put("x-codegen-pistache-isParsingSupported", isParsingSupported);
+
+
+
         }
 
         return objs;
