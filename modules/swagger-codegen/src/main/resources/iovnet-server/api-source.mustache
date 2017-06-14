@@ -18,32 +18,11 @@ void {{classname}}::setupRoutes() {
     using namespace Iovnet::Rest;
 
     {{#operation}}
-    {{#isRestfulCreate}}
-    Routes::Post(router, base + "{{{vendorExtensions.x-codegen-iovnet-router-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
-    {{/isRestfulCreate}}
-    {{/operation}}
-
-    {{#operation}}
-    {{#isRestfulUpdate}}
-    Routes::Put(router, base + "{{{vendorExtensions.x-codegen-iovnet-router-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
-    {{/isRestfulUpdate}}
-    {{/operation}}
-
-    {{#operation}}
-    {{#isRestfulShow}}
-    Routes::Get(router, base + "{{{vendorExtensions.x-codegen-iovnet-router-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
-    {{/isRestfulShow}}
-    {{/operation}}
-
-    {{#operation}}
-    {{#isRestfulDestroy}}
-    Routes::Delete(router, base + "{{{vendorExtensions.x-codegen-iovnet-router-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
-    {{/isRestfulDestroy}}
+    Routes::{{httpMethod}}(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
     {{/operation}}
 }
 
 {{#operation}}
-{{#isRestful}}
 void {{classname}}::{{operationIdSnakeCase}}_handler(const Iovnet::Rest::Request &request, Iovnet::HttpHandleResponse &response) {
     {{#hasPathParams}}
     // Getting the path params
@@ -85,7 +64,6 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Iovnet::Rest::Request
 
 }
 
-{{/isRestful}}
 {{/operation}}
 
 {{#apiNamespaceDeclarations}}

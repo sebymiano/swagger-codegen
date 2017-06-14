@@ -142,6 +142,11 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         operations.put("classnameSnakeUpperCase", DefaultCodegen.underscore(classname).toUpperCase());
         operations.put("classnameSnakeLowerCase", DefaultCodegen.underscore(classname).toLowerCase());
 
+        List<CodegenOperation> operationList = (List<CodegenOperation>) operations.get("operation");
+        for (CodegenOperation op : operationList) {
+            op.httpMethod = op.httpMethod.substring(0, 1).toUpperCase() + op.httpMethod.substring(1).toLowerCase();
+        }
+
         return objs;
     }
 
