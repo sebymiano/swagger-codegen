@@ -9,14 +9,12 @@ namespace {{this}} {
 
 using namespace {{modelNamespace}};
 
-{{classname}}Impl::{{classname}}Impl(DatapathDriver *dp_driver)
-    : Manager<{{baseName}}>(dp_driver)
-    { }
+{{classname}}Impl::{{classname}}Impl(): Manager<{{baseName}}>() {}
 
-void {{classname}}Impl::http_handle(const Iovnet::HttpHandleRequest &request, Iovnet::HttpHandleResponse &response) {
-    auto s = router.route(request, response);
-    if (s == Iovnet::Rest::Router::Status::NotFound) {
-      response.set_code(Iovnet::Http::Code::Not_Found);
+void {{classname}}Impl::control_handler(const HttpHandleRequest &request, HttpHandleResponse &response) {
+    auto s = control_router.route(request, response);
+    if (s == Rest::Router::Status::NotFound) {
+      response.send(Http::Code::Not_Found);
     }
 }
 
@@ -39,8 +37,8 @@ void {{classname}}Impl::http_handle(const Iovnet::HttpHandleRequest &request, Io
 * {{code}} {{message}} {{#baseType}}-> Return type: {{baseType}}{{/baseType}}
 {{/responses}}
 */
-void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Iovnet::HttpHandleResponse &response) {
-    response.send(Iovnet::Http::Code::Not_Implemented, "Method not implemented\n");
+void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, HttpHandleResponse &response) {
+    response.send(Http::Code::Not_Implemented, "Method not implemented\n");
 }
 {{/operation}}
 

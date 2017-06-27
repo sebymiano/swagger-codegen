@@ -2,14 +2,14 @@
 {{#operations}}/*
  * {{classname}}.h
  *
- * {{description}}
+{{!! * {{description}}
  */
 
 #ifndef {{classname}}_H_
 #define {{classname}}_H_
 
 {{{defaultInclude}}}
-#include <iovnet/router.h>
+#include <iovnet/services/http_router.h>
 
 {{#imports}}{{{import}}}
 {{/imports}}
@@ -31,10 +31,10 @@ protected:
     void setupRoutes();
 
     {{#operation}}
-    void {{operationIdSnakeCase}}_handler(const Iovnet::Rest::Request &request, Iovnet::HttpHandleResponse &response);
+    void {{operationIdSnakeCase}}_handler(const iovnet::services::Rest::Request &request, iovnet::services::HttpHandleResponse &response);
     {{/operation}}
 
-    Iovnet::Rest::Router router;
+    iovnet::services::Rest::Router control_router;
 
     {{#operation}}
     /// <summary>
@@ -46,7 +46,7 @@ protected:
     {{#allParams}}
     /// <param name="{{paramName}}">{{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}</param>
     {{/allParams}}
-    virtual void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, Iovnet::HttpHandleResponse &response) = 0;
+    virtual void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, iovnet::services::HttpHandleResponse &response) = 0;
     {{/operation}}
 
 };
