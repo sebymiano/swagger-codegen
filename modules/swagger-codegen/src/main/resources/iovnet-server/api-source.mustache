@@ -18,7 +18,7 @@ void {{classname}}::setupRoutes() {
     using namespace Iovnet::Rest;
 
     {{#operation}}
-    Routes::{{httpMethod}}(router, base + "{{{vendorExtensions.x-codegen-pistache-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
+    Routes::{{httpMethod}}(router, base + "{{{vendorExtensions.x-codegen-iovnet-router-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
     {{/operation}}
 }
 
