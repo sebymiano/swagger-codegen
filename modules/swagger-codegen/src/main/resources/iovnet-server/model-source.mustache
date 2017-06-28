@@ -110,7 +110,7 @@ void {{classname}}::fromJson(nlohmann::json& val)
     {{/isDateTime}}{{/isString}}{{/required}}{{/isPrimitiveType}}{{/isListContainer}}{{/vars}}
 }
 
-std::string getHelpJsonString(){
+std::string {{classname}}::getHelpJsonString(){
     nlohmann::json val = nlohmann::json::object();
 
     {{#vars}}
