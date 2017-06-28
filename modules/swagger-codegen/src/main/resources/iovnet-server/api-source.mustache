@@ -51,7 +51,23 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     {{#bodyParam}}
       // if (help.compare("true") == 0) {
       if ((url.compare(url.length() - help_query.length(), help_query.length(), help_query)) == 0 ) {
+    {{^isPrimitiveType}}
         response.send(iovnet::service::Http::Code::Ok, {{paramName}}.getHelpJsonString());
+    {{/isPrimitiveType}}
+    {{#isPrimitiveType}}
+        nlohmann::json val = nlohmann::json::object();
+        val["{{baseName}}"]["baseName"] = "{{baseName}}";
+        val["{{baseName}}"]["isListContainer"] = {{isListContainer}};
+        val["{{baseName}}"]["required"] = {{required}};
+        val["{{baseName}}"]["description"] = "{{description}}";
+        val["{{baseName}}"]["isPrimitiveType"] = {{isPrimitiveType}};
+        val["{{baseName}}"]["defaultValue"] = "{{defaultValue}}";
+        val["{{baseName}}"]["example"] = "{{example}}";
+        val["{{baseName}}"]["isString"] = {{isString}};
+        val["{{baseName}}"]["isInteger"] = {{isInteger}};
+        val["{{baseName}}"]["isBoolean"] = {{isBoolean}};
+        response.send(iovnet::service::Http::Code::Ok, val.dump(4));
+    {{/isPrimitiveType}}
         return;
       } else {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
