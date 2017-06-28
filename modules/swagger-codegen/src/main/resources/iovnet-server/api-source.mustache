@@ -42,12 +42,15 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     {{/hasBodyParam}}
 
     // Getting the help query params
-    auto help = request.query().get("help").getOrElse("false");
+    // auto help = request.query().get("help").getOrElse("false");
+    std::string url = request.resource();
+    std::string help_query = "?help=true";
 
     try {
     {{#hasBodyParam}}
     {{#bodyParam}}
-      if (help.compare("true") == 0) {
+      // if (help.compare("true") == 0) {
+      if ((url.compare(url.length() - help_query.length(), help_query.length(), help_query)) == 0 ) {
         response.send(iovnet::service::Http::Code::Ok, {{paramName}}.getHelpJsonString());
         return;
       } else {
