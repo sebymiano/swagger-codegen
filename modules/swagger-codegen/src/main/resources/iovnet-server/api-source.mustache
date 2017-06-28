@@ -15,7 +15,7 @@ using namespace {{modelNamespace}};
 };
 
 void {{classname}}::setupRoutes() {
-    using namespace iovnet::services::Rest;
+    using namespace iovnet::service::Rest;
 
     {{#operation}}
     Routes::{{httpMethod}}(control_router, base + "{{{vendorExtensions.x-codegen-iovnet-router-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
@@ -23,7 +23,7 @@ void {{classname}}::setupRoutes() {
 }
 
 {{#operation}}
-void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::services::Rest::Request &request, iovnet::services::HttpHandleResponse &response) {
+void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest::Request &request, iovnet::service::HttpHandleResponse &response) {
     {{#hasPathParams}}
     // Getting the path params
     {{#pathParams}}
@@ -65,7 +65,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::services::Res
       {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, response);
     } catch (std::runtime_error & e) {
       //send a 400 error
-      response.send(iovnet::services::Http::Code::Bad_Request, e.what());
+      response.send(iovnet::service::Http::Code::Bad_Request, e.what());
       return;
     }
 }
