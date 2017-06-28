@@ -48,7 +48,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     {{#hasBodyParam}}
     {{#bodyParam}}
       if (help.compare("true") == 0) {
-        response.send(Iovnet::Http::Code::Ok, {{paramName}}.getHelpJsonString();
+        response.send(iovnet::service::Http::Code::Ok, {{paramName}}.getHelpJsonString());
         return;
       } else {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
