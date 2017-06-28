@@ -31,10 +31,10 @@ protected:
     void setupRoutes();
 
     {{#operation}}
-    void {{operationIdSnakeCase}}_handler(const iovnet::services::Rest::Request &request, iovnet::services::HttpHandleResponse &response);
+    void {{operationIdSnakeCase}}_handler(const iovnet::service::Rest::Request &request, iovnet::service::HttpHandleResponse &response);
     {{/operation}}
 
-    iovnet::services::Rest::Router control_router;
+    iovnet::service::Rest::Router control_router;
 
     {{#operation}}
     /// <summary>
@@ -46,7 +46,7 @@ protected:
     {{#allParams}}
     /// <param name="{{paramName}}">{{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}</param>
     {{/allParams}}
-    virtual void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, iovnet::services::HttpHandleResponse &response) = 0;
+    virtual void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, iovnet::service::HttpHandleResponse &response) = 0;
     {{/operation}}
 
 };
