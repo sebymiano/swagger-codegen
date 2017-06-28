@@ -110,6 +110,25 @@ void {{classname}}::fromJson(nlohmann::json& val)
     {{/isDateTime}}{{/isString}}{{/required}}{{/isPrimitiveType}}{{/isListContainer}}{{/vars}}
 }
 
+std::string getHelpJsonString(){
+    nlohmann::json val = nlohmann::json::object();
+
+    {{#vars}}
+    val["{{baseName}}"]["baseName"] = "{{baseName}}";
+    val["{{baseName}}"]["isListContainer"] = {{isListContainer}};
+    val["{{baseName}}"]["required"] = {{required}};
+    val["{{baseName}}"]["description"] = "{{description}}";
+    val["{{baseName}}"]["isPrimitiveType"] = {{isPrimitiveType}};
+    val["{{baseName}}"]["defaultValue"] = {{defaultValue}};
+    val["{{baseName}}"]["example"] = {{example}};
+    val["{{baseName}}"]["isString"] = {{isString}};
+    val["{{baseName}}"]["isInteger"] = {{isInteger}};
+    val["{{baseName}}"]["isBoolean"] = {{isBoolean}};
+    {{/vars}}
+
+    return val.dump(4);
+}
+
 
 {{#vars}}{{^isNotContainer}}{{{datatype}}}& {{classname}}::{{getter}}()
 {

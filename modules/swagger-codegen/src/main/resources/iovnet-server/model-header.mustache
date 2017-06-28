@@ -36,6 +36,7 @@ public:
     nlohmann::json toJson() const override;
     void fromJson(nlohmann::json& json) override;
 
+    std::string getHelpJsonString();
     /////////////////////////////////////////////
     /// {{classname}} members
 

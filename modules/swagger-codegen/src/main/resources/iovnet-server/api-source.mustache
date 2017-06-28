@@ -41,9 +41,16 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Iovnet::Rest::Request
     {{/bodyParam}}
     {{/hasBodyParam}}
 
+    // Getting the help query params
+    auto help = request.query().get("help").getOrElse("false");
+
     try {
     {{#hasBodyParam}}
     {{#bodyParam}}
+      if (help.compare("true") == 0) {
+        response.send(Iovnet::Http::Code::Ok, {{paramName}}.getHelpJsonString();
+        return;
+      } else {
       nlohmann::json request_body = nlohmann::json::parse(request.body());
     {{^isPrimitiveType}}
       {{paramName}}.fromJson(request_body); {{/isPrimitiveType}}
@@ -51,6 +58,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const Iovnet::Rest::Request
       // The conversion is done automatically by the json library
       {{paramName}} = request_body;
     {{/isPrimitiveType}}
+      }
     {{/bodyParam}}
     {{/hasBodyParam}}
 
