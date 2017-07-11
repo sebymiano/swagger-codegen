@@ -11,7 +11,8 @@
 {{{defaultInclude}}}
 #include "ModelBase.h"
 
-{{#imports}}{{{this}}}
+{{#imports}}
+{{{this}}}
 {{/imports}}
 
 {{#modelNamespaceDeclarations}}
@@ -21,8 +22,7 @@ namespace {{this}} {
 /// <summary>
 /// {{description}}
 /// </summary>
-class {{declspec}} {{classname}}
-    : public ModelBase
+class {{declspec}} {{classname}} : public ModelBase
 {
 public:
     {{classname}}();
@@ -36,7 +36,10 @@ public:
     nlohmann::json toJson() const override;
     void fromJson(nlohmann::json& json) override;
 
-    std::string getHelpJsonString();
+    static nlohmann::json getKeys();
+    static nlohmann::json getElements();
+    static nlohmann::json getWritableLeafs();
+    static nlohmann::json getComplexElements();
     /////////////////////////////////////////////
     /// {{classname}} members
 
@@ -44,14 +47,19 @@ public:
     /// <summary>
     /// {{description}}
     /// </summary>
-    {{^isNotContainer}}{{{datatype}}}& {{getter}}();
-    {{/isNotContainer}}{{#isNotContainer}}{{{datatype}}} {{getter}}() const;
+    {{^isNotContainer}}
+    {{{datatype}}}& {{getter}}();
+    {{/isNotContainer}}
+    {{#isNotContainer}}
+    {{{datatype}}} {{getter}}() const;
     void {{setter}}({{{datatype}}} value);
-    {{/isNotContainer}}{{^required}}bool {{baseName}}IsSet() const;
+    {{/isNotContainer}}
+    {{^required}}
+    bool {{baseName}}IsSet() const;
     void unset{{name}}();
     {{/required}}
-    {{/vars}}
 
+    {{/vars}}
 protected:
     {{#vars}}
     {{{datatype}}} m_{{name}};

@@ -10,6 +10,7 @@
 
 {{{defaultInclude}}}
 #include <iovnet/services/http_router.h>
+#include <vector>
 
 {{#imports}}{{{import}}}
 {{/imports}}
@@ -46,9 +47,15 @@ protected:
     {{#allParams}}
     /// <param name="{{paramName}}">{{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}</param>
     {{/allParams}}
-    virtual void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, iovnet::service::HttpHandleResponse &response) = 0;
+    virtual void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}, {{/allParams}} iovnet::service::HttpHandleResponse &response) = 0;
+    {{#vendorExtensions.x-is-list}}
+    {{#responses}}
+    {{^primitiveType}}
+    virtual std::vector<std::string> {{operationIdSnakeCase}}_get_list() = 0;
+    {{/primitiveType}}
+    {{/responses}}
+    {{/vendorExtensions.x-is-list}}
     {{/operation}}
-
 };
 
 {{#apiNamespaceDeclarations}}

@@ -14,6 +14,7 @@
 
 {{{defaultInclude}}}
 #include <memory>
+#include <map>
 #include "{{classVarName}}.h"
 
 {{#imports}}{{{import}}}
@@ -27,16 +28,26 @@ using namespace {{modelNamespace}};
 using namespace iovnet::service;
 
 class {{classname}}Impl : public {{apiNamespace}}::{{classname}},
-    public Manager<{{baseName}}> {
+    public ManagementInterface {
 public:
     {{classname}}Impl();
     ~{{classname}}Impl() { };
     void control_handler(const HttpHandleRequest &request, HttpHandleResponse &response) override;
 
     {{#operation}}
-    void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}, HttpHandleResponse &response);
+    void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}},{{/allParams}} HttpHandleResponse &response);
+    {{#vendorExtensions.x-is-list}}
+    {{#responses}}
+    {{^primitiveType}}
+    std::vector<std::string> {{operationIdSnakeCase}}_get_list();
+    {{/primitiveType}}
+    {{/responses}}
+    {{/vendorExtensions.x-is-list}}
     {{/operation}}
 
+private:
+    std::unordered_map<std::string, {{baseName}}> iomodules;
+    {{baseName}} &get_iomodule(const std::string &name);
 };
 
 {{#apiNamespaceDeclarations}}
@@ -44,6 +55,4 @@ public:
 {{/apiNamespaceDeclarations}}
 
 {{/operations}}
-
-
 #endif

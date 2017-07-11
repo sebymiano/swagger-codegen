@@ -6,6 +6,7 @@ import io.swagger.models.Model;
 import io.swagger.models.Operation;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.*;
+import io.swagger.codegen.utils.ModelUtils;
 
 import java.util.*;
 
@@ -52,7 +53,7 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         supportingFiles.add(new SupportingFile("cmake.mustache", "", "CMakeLists.txt"));
 
         languageSpecificPrimitives = new HashSet<String>(
-                Arrays.asList("int", "char", "bool", "long", "float", "double", "int32_t", "int64_t"));
+                Arrays.asList("int", "char", "bool", "long", "float", "double", "int32_t", "int64_t", "std::string"));
 
         typeMapping = new HashMap<String, String>();
         typeMapping.put("date", "std::string");
@@ -110,6 +111,7 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
     @Override
     public CodegenModel fromModel(String name, Model model, Map<String, Model> allDefinitions) {
         CodegenModel codegenModel = super.fromModel(name, model, allDefinitions);
+        //System.out.printf("--- processing model: %s\n", codegenModel.toString());
 
         Set<String> oldImports = codegenModel.imports;
         codegenModel.imports = new HashSet<>();
@@ -123,10 +125,41 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         return codegenModel;
     }
 
+    //@Override
+    //public Map<String, Object> postProcessAllModels(Map<String, Object> objs) {
+    //  //System.out.printf("--- post processing models\n");
+    //  for (Map.Entry<String, Object> entry : objs.entrySet()) {
+    //    String modelName = entry.getKey();
+    //    //System.out.println(modelName);
+    //    CodegenModel code = ModelUtils.getModelByName(modelName, objs);
+    //    for (CodegenProperty p : code.vars) {
+    //      if (p.isContainer) {
+    //        ArrayList<String> keys = (ArrayList<String>) p.vendorExtensions.get("x-key");
+    //        String key = keys.get(0);
+
+    //        //System.out.printf("%s is a list in %s\n", p.baseName, modelName);
+    //        //System.out.printf("Key of %s is %s\n", p.baseName, key);
+    //        //System.out.printf("%s is a list in %s\n", p.complexType, modelName);
+    //        CodegenModel code2 = ModelUtils.getModelByName(p.complexType, objs);
+    //        for (CodegenProperty p2 : code2.vars) {
+    //          if (p2.baseName.equals(key)) {
+    //            p2.vendorExtensions.put("is-key", true);
+    //          }
+    //        }
+    //      }
+    //    }
+    //  }
+    //  return super.postProcessAllModels(objs);
+    //}
+
     @Override
     public CodegenOperation fromOperation(String path, String httpMethod, Operation operation,
                                           Map<String, Model> definitions, Swagger swagger) {
         CodegenOperation op = super.fromOperation(path, httpMethod, operation, definitions, swagger);
+
+        if (op.operationId.contains("List")) {
+          op.vendorExtensions.put("x-is-list", true);
+        }
 
         String pathForRouter = path.replaceAll("\\{(.*?)}", ":$1");
         op.vendorExtensions.put("x-codegen-iovnet-router-path", pathForRouter);

@@ -110,25 +110,107 @@ void {{classname}}::fromJson(nlohmann::json& val)
     {{/isDateTime}}{{/isString}}{{/required}}{{/isPrimitiveType}}{{/isListContainer}}{{/vars}}
 }
 
-std::string {{classname}}::getHelpJsonString(){
+nlohmann::json {{classname}}::getKeys(){
     nlohmann::json val = nlohmann::json::object();
 
     {{#vars}}
-    val["{{baseName}}"]["baseName"] = "{{baseName}}";
-    val["{{baseName}}"]["isListContainer"] = {{isListContainer}};
-    val["{{baseName}}"]["required"] = {{required}};
+    {{#vendorExtensions.x-is-key}}
+    val["{{baseName}}"]["name"] = "{{baseName}}";
+    val["{{baseName}}"]["type"] = "key";
+    {{#isString}}
+    val["{{baseName}}"]["simpletype"] = "string";
+    {{/isString}}
+    {{#isInteger}}
+    val["{{baseName}}"]["simpletype"] = "integer";
+    {{/isInteger}}
+    {{#isBoolean}}
+    val["{{baseName}}"]["simpletype"] = "boolean";
+    {{/isBoolean}}
     val["{{baseName}}"]["description"] = "{{description}}";
-    val["{{baseName}}"]["isPrimitiveType"] = {{isPrimitiveType}};
-    val["{{baseName}}"]["defaultValue"] = "{{defaultValue}}";
     val["{{baseName}}"]["example"] = "{{example}}";
-    val["{{baseName}}"]["isString"] = {{isString}};
-    val["{{baseName}}"]["isInteger"] = {{isInteger}};
-    val["{{baseName}}"]["isBoolean"] = {{isBoolean}};
+    val["{{baseName}}"]["defaultValue"] = "{{defaultValue}}";
+    {{/vendorExtensions.x-is-key}}
     {{/vars}}
 
-    return val.dump(4);
+    return val;
 }
 
+nlohmann::json {{classname}}::getElements(){
+    nlohmann::json val = nlohmann::json::object();
+
+    {{#vars}}
+    {{^vendorExtensions.x-is-key}}
+    val["{{baseName}}"]["name"] = "{{baseName}}";
+    val["{{baseName}}"]["type"] = "leaf"; // Suppose that type is leaf
+    {{#isListContainer}}
+    val["{{baseName}}"]["type"] = "list";
+    {{/isListContainer}}
+    {{#isString}}
+    val["{{baseName}}"]["simpletype"] = "string";
+    {{/isString}}
+    {{#isInteger}}
+    val["{{baseName}}"]["simpletype"] = "integer";
+    {{/isInteger}}
+    {{#isBoolean}}
+    val["{{baseName}}"]["simpletype"] = "boolean";
+    {{/isBoolean}}
+    val["{{baseName}}"]["description"] = "{{description}}";
+    val["{{baseName}}"]["example"] = "{{example}}";
+    val["{{baseName}}"]["defaultValue"] = "{{defaultValue}}";
+    {{/vendorExtensions.x-is-key}}
+    {{/vars}}
+
+    return val;
+}
+
+nlohmann::json {{classname}}::getWritableLeafs(){
+    nlohmann::json val = nlohmann::json::object();
+
+    {{#vars}}
+    {{^vendorExtensions.x-is-key}}
+    {{^isReadOnly}}
+    {{#isPrimitiveType}}
+    val["{{baseName}}"]["name"] = "{{baseName}}";
+    {{#isString}}
+    val["{{baseName}}"]["simpletype"] = "string";
+    {{/isString}}
+    {{#isInteger}}
+    val["{{baseName}}"]["simpletype"] = "integer";
+    {{/isInteger}}
+    {{#isBoolean}}
+    val["{{baseName}}"]["simpletype"] = "boolean";
+    {{/isBoolean}}
+    val["{{baseName}}"]["description"] = "{{description}}";
+    val["{{baseName}}"]["example"] = "{{example}}";
+    val["{{baseName}}"]["defaultValue"] = "{{defaultValue}}";
+    {{/isPrimitiveType}}
+    {{/isReadOnly}}
+    {{/vendorExtensions.x-is-key}}
+    {{/vars}}
+
+    return val;
+}
+
+nlohmann::json {{classname}}::getComplexElements(){
+    nlohmann::json val = nlohmann::json::object();
+
+    {{#vars}}
+    {{^isPrimitiveType}}
+    val["{{baseName}}"]["name"] = "{{baseName}}";
+    {{#isListContainer}}
+    val["{{baseName}}"]["type"] = "list";
+    {{/isListContainer}}
+    {{^isListContainer}}
+    val["{{baseName}}"]["type"] = "complex";
+    {{/isListContainer}}
+    val["{{baseName}}"]["description"] = "{{description}}";
+    val["{{baseName}}"]["example"] = "{{example}}";
+    val["{{baseName}}"]["defaultValue"] = "{{defaultValue}}";
+    {{/isPrimitiveType}}
+    {{/vars}}
+
+    return val;
+}
 
 {{#vars}}{{^isNotContainer}}{{{datatype}}}& {{classname}}::{{getter}}()
 {
