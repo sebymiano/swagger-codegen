@@ -26,7 +26,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     {{#hasPathParams}}
     // Getting the path params
     {{#pathParams}}
-    auto {{paramName}} = request.param(":{{paramName}}").as<{{dataType}}>();
+    auto {{paramName}} = request.param(":{{baseName}}").as<{{dataType}}>();
     {{/pathParams}}
     {{/hasPathParams}}
     {{#hasBodyParam}}
