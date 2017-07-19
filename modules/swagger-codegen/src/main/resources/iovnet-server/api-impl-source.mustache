@@ -28,16 +28,24 @@ void {{classname}}Impl::control_handler(const HttpHandleRequest &request, HttpHa
     return iomodules.at(name);
   } catch (std::exception e) {
     std::cout << e.what() << std::endl;
-    throw std::runtime_error("no iomodule with name " + name);
+    throw std::runtime_error("IOModule " + name + " does not exist");
   }
 }
 
 void {{classname}}Impl::create_{{classVarName}}_by_id(
     const std::string &name, const {{baseName}}Schema &schema,
     HttpHandleResponse &response) {
-  iomodules.emplace(std::piecewise_construct, std::forward_as_tuple(name),
-                    std::forward_as_tuple(name));
-  {{baseName}} &m = get_iomodule(name);
+  if (iomodules.count(name) != 0) {
+    throw std::runtime_error("There is already an IOModule with name " + name);
+  }
+
+  std::unordered_map<std::string, {{baseName}}>::iterator iter;
+  bool inserted;
+
+  std::tie(iter, inserted) = iomodules.emplace(std::piecewise_construct,
+                                               std::forward_as_tuple(name),
+                                               std::forward_as_tuple(name));
+  {{baseName}} &m = iter->second;
   {{baseName}}Schema reply(schema);
   reply.setUuid(m.get_uuid().str());
   response.send(Http::Code::Ok, reply.toJson().dump(4));
@@ -45,6 +53,9 @@ void {{classname}}Impl::create_{{classVarName}}_by_id(
 
 void {{classname}}Impl::delete_{{classVarName}}_by_id(
     const std::string &name, HttpHandleResponse &response) {
+  if (iomodules.count(name) == 0) {
+    throw std::runtime_error("IOModule " + name + " does not exist");
+  }
   iomodules.erase(name);
   response.send(Http::Code::Ok);
 }
@@ -103,8 +114,7 @@ void {{classname}}Impl::create_{{classVarName}}_ports_by_id(
     const std::string &name, const std::string &portsName,
     const PortsSchema &ports, HttpHandleResponse &response) {
   {{baseName}} &m = get_iomodule(name);
-  m.add_port(portsName);
-  auto p = m.get_port(portsName);
+  auto p = m.add_port(portsName);
 
   // TODO: configure port
 
@@ -193,7 +203,7 @@ void {{classname}}Impl::update_{{classVarName}}_ports_status_by_id(
 *
 * Responses:
 {{#responses}}
-* {{code}} {{message}} {{#baseType}}-> Return type: {{baseType}}{{/baseType}}
+* {{code}} {{message}}{{#baseType}} -> Return type: {{baseType}}{{/baseType}}
 {{/responses}}
 */
 void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}, {{/allParams}} HttpHandleResponse &response) {
