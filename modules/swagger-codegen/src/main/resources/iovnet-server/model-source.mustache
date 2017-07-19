@@ -126,9 +126,8 @@ nlohmann::json {{classname}}::getKeys(){
     {{#isBoolean}}
     val["{{baseName}}"]["simpletype"] = "boolean";
     {{/isBoolean}}
-    val["{{baseName}}"]["description"] = "{{description}}";
-    val["{{baseName}}"]["example"] = "{{example}}";
-    val["{{baseName}}"]["defaultValue"] = "{{defaultValue}}";
+    val["{{baseName}}"]["description"] = R"IOVNET({{{description}}})IOVNET";
+    val["{{baseName}}"]["example"] = R"IOVNET({{{example}}})IOVNET";
     {{/vendorExtensions.x-is-key}}
     {{/vars}}
 
@@ -154,9 +153,9 @@ nlohmann::json {{classname}}::getElements(){
     {{#isBoolean}}
     val["{{baseName}}"]["simpletype"] = "boolean";
     {{/isBoolean}}
-    val["{{baseName}}"]["description"] = "{{description}}";
-    val["{{baseName}}"]["example"] = "{{example}}";
-    val["{{baseName}}"]["defaultValue"] = "{{defaultValue}}";
+    val["{{baseName}}"]["description"] = R"IOVNET({{{description}}})IOVNET";
+    val["{{baseName}}"]["example"] = R"IOVNET({{{example}}})IOVNET";
+    val["{{baseName}}"]["jsonSchema"] = nlohmann::json::parse(R"IOVNET({{{jsonSchema}}})IOVNET");
     {{/vendorExtensions.x-is-key}}
     {{/vars}}
 
@@ -180,9 +179,9 @@ nlohmann::json {{classname}}::getWritableLeafs(){
     {{#isBoolean}}
     val["{{baseName}}"]["simpletype"] = "boolean";
     {{/isBoolean}}
-    val["{{baseName}}"]["description"] = "{{description}}";
-    val["{{baseName}}"]["example"] = "{{example}}";
-    val["{{baseName}}"]["defaultValue"] = "{{defaultValue}}";
+    val["{{baseName}}"]["description"] = R"IOVNET({{{description}}})IOVNET";
+    val["{{baseName}}"]["example"] = R"IOVNET({{{example}}})IOVNET";
+    val["{{baseName}}"]["jsonSchema"] = nlohmann::json::parse(R"IOVNET({{{jsonSchema}}})IOVNET");
     {{/isPrimitiveType}}
     {{/isReadOnly}}
     {{/vendorExtensions.x-is-key}}
@@ -203,9 +202,8 @@ nlohmann::json {{classname}}::getComplexElements(){
     {{^isListContainer}}
     val["{{baseName}}"]["type"] = "complex";
     {{/isListContainer}}
-    val["{{baseName}}"]["description"] = "{{description}}";
-    val["{{baseName}}"]["example"] = "{{example}}";
-    val["{{baseName}}"]["defaultValue"] = "{{defaultValue}}";
+    val["{{baseName}}"]["description"] = R"IOVNET({{{description}}})IOVNET";
+    val["{{baseName}}"]["example"] = R"IOVNET({{{example}}})IOVNET";
     {{/isPrimitiveType}}
     {{/vars}}
 
