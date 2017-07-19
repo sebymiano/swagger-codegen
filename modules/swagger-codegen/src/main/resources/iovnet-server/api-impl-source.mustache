@@ -67,7 +67,7 @@ void {{classname}}Impl::read_{{classVarName}}_uuid_by_id(
 }
 
 void {{classname}}Impl::read_{{classVarName}}_list_by_id(HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented\n");
+  response.send(Http::Code::Not_Implemented, "Method not implemented");
 }
 
 std::vector<std::string> {{classname}}Impl::read_{{classVarName}}_list_by_id_get_list() {
@@ -84,23 +84,23 @@ std::vector<std::string> {{classname}}Impl::read_{{classVarName}}_list_by_id_get
 void {{classname}}Impl::create_{{classVarName}}_ports_list_by_id(
     const std::string &name, const PortsSchema &ports,
     HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented\n");
+  response.send(Http::Code::Not_Implemented, "Method not implemented");
 }
 
 void {{classname}}Impl::read_{{classVarName}}_ports_list_by_id(
     const std::string &name, HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented\n");
+  response.send(Http::Code::Not_Implemented, "Method not implemented");
 }
 
 void {{classname}}Impl::update_{{classVarName}}_ports_list_by_id(
     const std::string &name, const PortsSchema &ports,
     HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented\n");
+  response.send(Http::Code::Not_Implemented, "Method not implemented");
 }
 
 void {{classname}}Impl::delete_{{classVarName}}_ports_list_by_id(
     const std::string &name, HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented\n");
+  response.send(Http::Code::Not_Implemented, "Method not implemented");
 }
 
 std::vector<std::string> {{classname}}Impl::read_{{classVarName}}_ports_list_by_id_get_list() {
@@ -128,13 +128,13 @@ void {{classname}}Impl::create_{{classVarName}}_ports_by_id(
 void {{classname}}Impl::read_{{classVarName}}_ports_by_id(
     const std::string &name, const std::string &portsName,
   HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented\n");
+  response.send(Http::Code::Not_Implemented, "Method not implemented");
 }
 
 void {{classname}}Impl::update_{{classVarName}}_ports_by_id(
     const std::string &name, const std::string &portsName,
     const PortsSchema &ports, HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented\n");
+  response.send(Http::Code::Not_Implemented, "Method not implemented");
 }
 
 void {{classname}}Impl::delete_{{classVarName}}_ports_by_id(
@@ -156,7 +156,7 @@ void {{classname}}Impl::read_{{classVarName}}_ports_peer_by_id(
 void {{classname}}Impl::read_{{classVarName}}_ports_status_by_id(
     const std::string &name, const std::string &portsName,
   HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented\n");
+  response.send(Http::Code::Not_Implemented, "Method not implemented");
 }
 
 void {{classname}}Impl::read_{{classVarName}}_ports_uuid_by_id(
@@ -179,7 +179,7 @@ void {{classname}}Impl::update_{{classVarName}}_ports_peer_by_id(
 void {{classname}}Impl::update_{{classVarName}}_ports_status_by_id(
     const std::string &name, const std::string &portsName,
     const std::string &status, HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented\n");
+  response.send(Http::Code::Not_Implemented, "Method not implemented");
 }
 
 /*
@@ -207,7 +207,7 @@ void {{classname}}Impl::update_{{classVarName}}_ports_status_by_id(
 {{/responses}}
 */
 void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}, {{/allParams}} HttpHandleResponse &response) {
-    response.send(Http::Code::Not_Implemented, "Method not implemented\n");
+    response.send(Http::Code::Not_Implemented, "Method not implemented");
 }
 
 {{#vendorExtensions.x-is-list}}
