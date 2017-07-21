@@ -1,0 +1,44 @@
+{{>licenseInfo}}
+
+#include "{{serviceNameLowerCase}}.h"
+#include "{{serviceNameLowerCase}}_dp.h"
+
+{{serviceNameCamelCase}}::{{serviceNameCamelCase}}(const std::string &name)
+    : IOModule(name, {{serviceNameLowerCase}}_code) {
+  /*
+   * Perform the initialization of the instance here, probably you want to
+   * write some values in the maps.
+   */
+}
+
+{{serviceNameCamelCase}}::~{{serviceNameCamelCase}}() {}
+
+/*
+ * this function is called by the framework when a request for adding a port
+ * is received.  The user should call the IOModule::add_port() function to
+ * add the port in the iomodule.  If an error is found an exeption should be
+ * raised.
+ */
+Port {{serviceNameCamelCase}}::add_port(const std::string &port_name) {
+  // Implement here the controls before adding the port
+
+  // This call adds the port to the iomodule
+  auto p = IOModule::add_port(port_name);
+
+  // Implement the logic after the port has been added, p could have some
+  // useful information for you as the port index.
+
+  // Finally return the created port
+  return p;
+}
+
+void {{serviceNameCamelCase}}::remove_port(const std::string &port_name) {
+  // Implement here the logic before removing the port
+  IOModule::remove_port(port_name);
+  // Implement the here logic after the port has been removed
+}
+
+void {{serviceNameCamelCase}}::packet_in(Port &port, PacketInMetadata &md, const std::vector<uint8_t> &packet) {
+  // Implement here the logic for handling a packet in the slow path, if
+  // the service does not implement a slowpath then leave this function emtpy
+}

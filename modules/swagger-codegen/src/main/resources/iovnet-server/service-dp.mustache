@@ -1,0 +1,17 @@
+{{>licenseInfo}}
+
+#pragma once
+
+#include <string>
+
+const std::string {{serviceNameLowerCase}}_code = R"(
+/*
+ * This function is called each time a packet arrives to the iomodule.
+ * skb contains the packet and md some additional metadata for the packet.
+ * Please look at the libiovnet documentation for more details.
+ */
+static int handle_rx(struct __sk_buff *skb, struct metadata *md) {
+  // Put your eBPF datapth code here
+  bpf_trace_printk("Hello\n");
+  return RX_DROP;
+)";

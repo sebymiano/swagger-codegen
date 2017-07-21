@@ -1,0 +1,21 @@
+{{>licenseInfo}}
+
+#pragma once
+
+// TODO: add comment
+#include "iovnet/services/iomodule.h"
+
+// TODO: add comment
+using namespace iovnet::service;
+
+class {{serviceNameCamelCase}} : public iovnet::service::IOModule {
+ public:
+  {{serviceNameCamelCase}}(const std::string &name);
+  ~{{serviceNameCamelCase}}();
+
+  Port add_port(const std::string &port_name) override;
+  void remove_port(const std::string &port_name) override;
+
+  void packet_in(Port &port, PacketInMetadata &md,
+                 const std::vector<uint8_t> &packet) override;
+};
