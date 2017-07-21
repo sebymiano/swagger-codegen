@@ -12,6 +12,9 @@ import java.util.*;
 
 public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig {
     protected String implFolder = "impl";
+    public static final String IOVNET_SERVER_UPDATE = "update";
+
+    protected Boolean iovnetServerUpdate = Boolean.FALSE;
 
     @Override
     public CodegenType getTag() {
@@ -39,12 +42,8 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
 
         apiTemplateFiles.put("api-header.mustache", ".h");
         apiTemplateFiles.put("api-source.mustache", ".cpp");
-        apiTemplateFiles.put("api-impl-header.mustache", ".h");
-        apiTemplateFiles.put("api-impl-source.mustache", ".cpp");
 
         embeddedTemplateDir = templateDir = "iovnet-server";
-
-        cliOptions.clear();
 
         reservedWords = new HashSet<>();
 
@@ -75,11 +74,28 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         importMapping.put("std::map", "#include <map>");
         importMapping.put("std::string", "#include <string>");
         importMapping.put("Object", "#include \"Object.h\"");
+
+        cliOptions.clear();
+        cliOptions.add(new CliOption(IOVNET_SERVER_UPDATE, "If set to TRUE the generator will not " +
+                "override the implementation files", "boolean").defaultValue("false"));
     }
 
     @Override
     public void processOpts() {
         super.processOpts();
+
+        if (additionalProperties.containsKey(IOVNET_SERVER_UPDATE)) {
+            if(additionalProperties.get(IOVNET_SERVER_UPDATE) instanceof String){
+                this.iovnetServerUpdate = Boolean.parseBoolean((String)additionalProperties.get(IOVNET_SERVER_UPDATE));
+            }
+        }
+
+        additionalProperties.put(IOVNET_SERVER_UPDATE, this.iovnetServerUpdate);
+
+        if (!this.iovnetServerUpdate) {
+            apiTemplateFiles.put("api-impl-header.mustache", ".h");
+            apiTemplateFiles.put("api-impl-source.mustache", ".cpp");
+        }
 
         additionalProperties.put("modelNamespaceDeclarations", modelPackage.split("\\."));
         additionalProperties.put("modelNamespace", modelPackage.replaceAll("\\.", "::"));
@@ -90,7 +106,7 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
     /**
      * Escapes a reserved word as defined in the `reservedWords` array. Handle
      * escaping those terms here. This logic is only called if a variable
-     * matches the reseved words
+     * matches the reserved words
      *
      * @return the escaped term
      */
