@@ -6,11 +6,15 @@ import io.swagger.models.Model;
 import io.swagger.models.Operation;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.*;
+import io.swagger.codegen.utils.ModelUtils;
 
 import java.util.*;
 
 public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig {
-    protected String implFolder = "impl";
+    protected String implFolder = "/control_api/impl";
+
+    public static final String IOVNET_SERVER_UPDATE = "update";
+    protected Boolean iovnetServerUpdate = Boolean.FALSE;
 
     @Override
     public CodegenType getTag() {
@@ -38,21 +42,18 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
 
         apiTemplateFiles.put("api-header.mustache", ".h");
         apiTemplateFiles.put("api-source.mustache", ".cpp");
-        apiTemplateFiles.put("api-impl-header.mustache", ".h");
-        apiTemplateFiles.put("api-impl-source.mustache", ".cpp");
 
         embeddedTemplateDir = templateDir = "iovnet-server";
 
-        cliOptions.clear();
-
         reservedWords = new HashSet<>();
 
-        supportingFiles.add(new SupportingFile("modelbase-header.mustache", "model", "ModelBase.h"));
-        supportingFiles.add(new SupportingFile("modelbase-source.mustache", "model", "ModelBase.cpp"));
-        supportingFiles.add(new SupportingFile("cmake.mustache", "", "CMakeLists.txt"));
+        supportingFiles.add(new SupportingFile("modelbase-header.mustache", "control_api/model", "ModelBase.h"));
+        supportingFiles.add(new SupportingFile("modelbase-source.mustache", "control_api/model", "ModelBase.cpp"));
+        supportingFiles.add(new SupportingFile("cmake.mustache", "control_api", "CMakeLists.txt"));
+        supportingFiles.add(new SupportingFile("service-cmake.mustache", "", "CMakeLists.txt"));
 
         languageSpecificPrimitives = new HashSet<String>(
-                Arrays.asList("int", "char", "bool", "long", "float", "double", "int32_t", "int64_t"));
+                Arrays.asList("int", "char", "bool", "long", "float", "double", "int32_t", "int64_t", "std::string"));
 
         typeMapping = new HashMap<String, String>();
         typeMapping.put("date", "std::string");
@@ -74,11 +75,28 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         importMapping.put("std::map", "#include <map>");
         importMapping.put("std::string", "#include <string>");
         importMapping.put("Object", "#include \"Object.h\"");
+
+        cliOptions.clear();
+        cliOptions.add(new CliOption(IOVNET_SERVER_UPDATE, "If set to TRUE the generator will not " +
+                "override the implementation files", "boolean").defaultValue("false"));
     }
 
     @Override
     public void processOpts() {
         super.processOpts();
+
+        if (additionalProperties.containsKey(IOVNET_SERVER_UPDATE)) {
+            if(additionalProperties.get(IOVNET_SERVER_UPDATE) instanceof String){
+                this.iovnetServerUpdate = Boolean.parseBoolean((String)additionalProperties.get(IOVNET_SERVER_UPDATE));
+            }
+        }
+
+        additionalProperties.put(IOVNET_SERVER_UPDATE, this.iovnetServerUpdate);
+
+        if (!this.iovnetServerUpdate) {
+            apiTemplateFiles.put("api-impl-header.mustache", ".h");
+            apiTemplateFiles.put("api-impl-source.mustache", ".cpp");
+        }
 
         additionalProperties.put("modelNamespaceDeclarations", modelPackage.split("\\."));
         additionalProperties.put("modelNamespace", modelPackage.replaceAll("\\.", "::"));
@@ -89,7 +107,7 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
     /**
      * Escapes a reserved word as defined in the `reservedWords` array. Handle
      * escaping those terms here. This logic is only called if a variable
-     * matches the reseved words
+     * matches the reserved words
      *
      * @return the escaped term
      */
@@ -110,7 +128,6 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
     @Override
     public CodegenModel fromModel(String name, Model model, Map<String, Model> allDefinitions) {
         CodegenModel codegenModel = super.fromModel(name, model, allDefinitions);
-
         Set<String> oldImports = codegenModel.imports;
         codegenModel.imports = new HashSet<>();
         for (String imp : oldImports) {
@@ -127,6 +144,10 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
     public CodegenOperation fromOperation(String path, String httpMethod, Operation operation,
                                           Map<String, Model> definitions, Swagger swagger) {
         CodegenOperation op = super.fromOperation(path, httpMethod, operation, definitions, swagger);
+
+        if (op.operationId.contains("List")) {
+          op.vendorExtensions.put("x-is-list", true);
+        }
 
         String pathForRouter = path.replaceAll("\\{(.*?)}", ":$1");
         op.vendorExtensions.put("x-codegen-iovnet-router-path", pathForRouter);
@@ -155,9 +176,24 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
     public Map<String, Object> postProcessSupportingFileData(Map<String, Object> objs){
         Map<String, Object> apiInfo = (Map<String, Object>) objs.get("apiInfo");
         List<Map<String, Object>> apis = (List<Map<String, Object>>)apiInfo.get("apis");
-        String classname = (String) apis.get(0).get("classname");
 
-        objs.put("firstClassnameSnakeLowerCase", DefaultCodegen.underscore(classname).toLowerCase());
+        String api_classname = (String) apis.get(0).get("classname");
+        objs.put("apiClassnameCamelCase", api_classname);
+        objs.put("firstClassnameSnakeLowerCase", DefaultCodegen.underscore(api_classname).toLowerCase());
+
+        String service_name = (String) apis.get(0).get("classVarName");
+        service_name = service_name.toLowerCase();
+        objs.put("serviceNameLowerCase", service_name);
+        objs.put("serviceNameCamelCase", service_name.substring(0, 1).toUpperCase() + service_name.substring(1));
+
+        // Files that are use to generate a server stub
+        if(!this.iovnetServerUpdate) {
+          supportingFiles.add(new SupportingFile("service-source.mustache", "src", service_name + ".cpp"));
+          supportingFiles.add(new SupportingFile("service-header.mustache", "src", service_name + ".h"));
+          supportingFiles.add(new SupportingFile("service-dp.mustache", "src", service_name + "_dp.h"));
+          supportingFiles.add(new SupportingFile("service-lib.mustache", "src", service_name + "-lib.cpp"));
+          supportingFiles.add(new SupportingFile("service-src-cmake.mustache", "src", "CMakeLists.txt"));
+        }
 
         return objs;
     }
@@ -275,7 +311,7 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
      * when the class is instantiated
      */
     public String modelFileFolder() {
-        return outputFolder + "/model";
+        return outputFolder + "/control_api/model";
     }
 
     /**
@@ -284,7 +320,7 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
      */
     @Override
     public String apiFileFolder() {
-        return outputFolder + "/api";
+        return outputFolder + "/control_api/api";
     }
 
     private String implFileFolder() {
