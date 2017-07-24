@@ -25,9 +25,8 @@ using namespace {{modelNamespace}};
   }
 }
 
-void {{classname}}Impl::create_{{classVarName}}_by_id(
-    const std::string &name, const {{baseName}}Schema &schema,
-    HttpHandleResponse &response) {
+{{baseName}}Schema {{classname}}Impl::create_{{classVarName}}_by_id(
+    const std::string &name, const {{baseName}}Schema &schema) {
   if (iomodules.count(name) != 0) {
     throw std::runtime_error("There is already an IOModule with name " + name);
   }
@@ -41,26 +40,24 @@ void {{classname}}Impl::create_{{classVarName}}_by_id(
   {{baseName}} &m = iter->second;
   {{baseName}}Schema reply(schema);
   reply.setUuid(m.get_uuid().str());
-  response.send(Http::Code::Ok, reply.toJson().dump(4));
+  return reply;
 }
 
-void {{classname}}Impl::delete_{{classVarName}}_by_id(
-    const std::string &name, HttpHandleResponse &response) {
+void {{classname}}Impl::delete_{{classVarName}}_by_id(const std::string &name) {
   if (iomodules.count(name) == 0) {
     throw std::runtime_error("IOModule " + name + " does not exist");
   }
   iomodules.erase(name);
-  response.send(Http::Code::Ok);
 }
 
-void {{classname}}Impl::read_{{classVarName}}_uuid_by_id(
-    const std::string &name, HttpHandleResponse &response) {
+std::string {{classname}}Impl::read_{{classVarName}}_uuid_by_id(
+    const std::string &name) {
   {{baseName}} &m = get_iomodule(name);
-  response.send(Http::Code::Ok, nlohmann::json(m.get_uuid().str()).dump(4));
+  return m.get_uuid().str();
 }
 
-void {{classname}}Impl::read_{{classVarName}}_list_by_id(HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented");
+{{baseName}}Schema {{classname}}Impl::read_{{classVarName}}_list_by_id() {
+  throw std::runtime_error("Method not implemented");
 }
 
 std::vector<std::string> {{classname}}Impl::read_{{classVarName}}_list_by_id_get_list() {
@@ -74,26 +71,24 @@ std::vector<std::string> {{classname}}Impl::read_{{classVarName}}_list_by_id_get
 /*
  * Ports list related functions
  */
-void {{classname}}Impl::create_{{classVarName}}_ports_list_by_id(
-    const std::string &name, const PortsSchema &ports,
-    HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented");
+PortsSchema {{classname}}Impl::create_{{classVarName}}_ports_list_by_id(
+    const std::string &name, const PortsSchema &ports) {
+  throw std::runtime_error("Method not implemented");
 }
 
-void {{classname}}Impl::read_{{classVarName}}_ports_list_by_id(
-    const std::string &name, HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented");
+PortsSchema {{classname}}Impl::read_{{classVarName}}_ports_list_by_id(
+    const std::string &name) {
+  throw std::runtime_error("Method not implemented");
 }
 
 void {{classname}}Impl::update_{{classVarName}}_ports_list_by_id(
-    const std::string &name, const PortsSchema &ports,
-    HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented");
+    const std::string &name, const PortsSchema &ports) {
+  throw std::runtime_error("Method not implemented");
 }
 
 void {{classname}}Impl::delete_{{classVarName}}_ports_list_by_id(
-    const std::string &name, HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented");
+    const std::string &name) {
+  throw std::runtime_error("Method not implemented");
 }
 
 std::vector<std::string> {{classname}}Impl::read_{{classVarName}}_ports_list_by_id_get_list() {
@@ -103,9 +98,9 @@ std::vector<std::string> {{classname}}Impl::read_{{classVarName}}_ports_list_by_
 /*
  * Ports related functions
  */
-void {{classname}}Impl::create_{{classVarName}}_ports_by_id(
+PortsSchema {{classname}}Impl::create_{{classVarName}}_ports_by_id(
     const std::string &name, const std::string &portsName,
-    const PortsSchema &ports, HttpHandleResponse &response) {
+    const PortsSchema &ports) {
   {{baseName}} &m = get_iomodule(name);
   auto p = m.add_port(portsName);
 
@@ -115,64 +110,57 @@ void {{classname}}Impl::create_{{classVarName}}_ports_by_id(
   // TODO: fill reply with parameters
   reply.setName(p.name());
   reply.setUuid(p.uuid().str());
-  response.send(Http::Code::Ok, reply.toJson().dump(4));
+  return reply;
 }
 
-void {{classname}}Impl::read_{{classVarName}}_ports_by_id(
-    const std::string &name, const std::string &portsName,
-  HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented");
+PortsSchema {{classname}}Impl::read_{{classVarName}}_ports_by_id(
+    const std::string &name, const std::string &portsName) {
+  throw std::runtime_error("Method not implemented");
 }
 
 void {{classname}}Impl::update_{{classVarName}}_ports_by_id(
     const std::string &name, const std::string &portsName,
-    const PortsSchema &ports, HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented");
+    const PortsSchema &ports) {
+  throw std::runtime_error("Method not implemented");
 }
 
 void {{classname}}Impl::delete_{{classVarName}}_ports_by_id(
-    const std::string &name, const std::string &portsName,
-    HttpHandleResponse &response) {
+    const std::string &name, const std::string &portsName) {
   {{baseName}} &m = get_iomodule(name);
   m.remove_port(portsName);
-  response.send(Http::Code::Ok);
 }
 
-void {{classname}}Impl::read_{{classVarName}}_ports_peer_by_id(
-    const std::string &name, const std::string &portsName,
-    HttpHandleResponse &response) {
+std::string {{classname}}Impl::read_{{classVarName}}_ports_peer_by_id(
+    const std::string &name, const std::string &portsName) {
   {{baseName}} &m = get_iomodule(name);
   auto p = m.get_port(portsName);
-  response.send(Http::Code::Ok, nlohmann::json(p.peer()).dump(4));
+  return p.peer();
 }
 
-void {{classname}}Impl::read_{{classVarName}}_ports_status_by_id(
-    const std::string &name, const std::string &portsName,
-  HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented");
+std::string {{classname}}Impl::read_{{classVarName}}_ports_status_by_id(
+    const std::string &name, const std::string &portsName) {
+  throw std::runtime_error("Method not implemented");
 }
 
-void {{classname}}Impl::read_{{classVarName}}_ports_uuid_by_id(
-    const std::string &name, const std::string &portsName,
-    HttpHandleResponse &response) {
+std::string {{classname}}Impl::read_{{classVarName}}_ports_uuid_by_id(
+    const std::string &name, const std::string &portsName) {
   {{baseName}} &m = get_iomodule(name);
   auto p = m.get_port(portsName);
-  response.send(Http::Code::Ok, nlohmann::json(p.uuid().str()).dump(4));
+  return p.uuid().str();
 }
 
 void {{classname}}Impl::update_{{classVarName}}_ports_peer_by_id(
     const std::string &name, const std::string &portsName,
-    const std::string &peer, HttpHandleResponse &response) {
+    const std::string &peer) {
   {{baseName}} &m = get_iomodule(name);
   auto p = m.get_port(portsName);
   p.set_peer(peer);
-  response.send(Http::Code::Ok);
 }
 
 void {{classname}}Impl::update_{{classVarName}}_ports_status_by_id(
     const std::string &name, const std::string &portsName,
-    const std::string &status, HttpHandleResponse &response) {
-  response.send(Http::Code::Not_Implemented, "Method not implemented");
+    const std::string &status) {
+  throw std::runtime_error("Method not implemented");
 }
 
 /*
@@ -199,8 +187,13 @@ void {{classname}}Impl::update_{{classVarName}}_ports_status_by_id(
 * {{code}} {{message}}{{#baseType}} -> Return type: {{baseType}}{{/baseType}}
 {{/responses}}
 */
-void {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}, {{/allParams}} HttpHandleResponse &response) {
-    response.send(Http::Code::Not_Implemented, "Method not implemented");
+{{#returnBaseType}}
+{{{returnBaseType}}} {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) {
+{{/returnBaseType}}
+{{^returnBaseType}}
+void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) {
+{{/returnBaseType}}
+    throw std::runtime_error("Method not implemented");
 }
 
 {{#vendorExtensions.x-is-list}}

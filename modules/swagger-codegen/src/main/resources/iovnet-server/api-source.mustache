@@ -132,7 +132,20 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     {{/isPrimitiveType}}
     {{/bodyParam}}
     {{/hasBodyParam}}
-    {{operationIdSnakeCase}}({{#allParams}}{{paramName}}, {{/allParams}} response);
+    {{#returnBaseType}}
+    {{#returnTypeIsPrimitive}}
+    auto x = {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
+    nlohmann::json r(x);
+    response.send(iovnet::service::Http::Code::Ok, r.dump(4));
+    {{/returnTypeIsPrimitive}}
+    {{^returnTypeIsPrimitive}}
+    auto x = {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
+    response.send(iovnet::service::Http::Code::Ok, x.toJson().dump(4));
+    {{/returnTypeIsPrimitive}}
+    {{/returnBaseType}}
+    {{^returnBaseType}}
+    {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
+    {{/returnBaseType}}
 }
 
 {{/operation}}

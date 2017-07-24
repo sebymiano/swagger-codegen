@@ -30,7 +30,12 @@ public:
     ~{{classname}}Impl() { };
 
     {{#operation}}
-    void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}},{{/allParams}} HttpHandleResponse &response);
+    {{#returnBaseType}}
+    {{{returnBaseType}}} {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
+    {{/returnBaseType}}
+    {{^returnBaseType}}
+    void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
+    {{/returnBaseType}}
     {{#vendorExtensions.x-is-list}}
     {{#responses}}
     {{^primitiveType}}

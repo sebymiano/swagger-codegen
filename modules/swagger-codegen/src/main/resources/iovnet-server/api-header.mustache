@@ -49,7 +49,12 @@ protected:
     {{#allParams}}
     /// <param name="{{paramName}}">{{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}</param>
     {{/allParams}}
-    virtual void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}, {{/allParams}} iovnet::service::HttpHandleResponse &response) = 0;
+    {{#returnBaseType}}
+    virtual {{{returnBaseType}}} {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) = 0;
+    {{/returnBaseType}}
+    {{^returnBaseType}}
+    virtual void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) = 0;
+    {{/returnBaseType}}
     {{#vendorExtensions.x-is-list}}
     {{#responses}}
     {{^primitiveType}}
