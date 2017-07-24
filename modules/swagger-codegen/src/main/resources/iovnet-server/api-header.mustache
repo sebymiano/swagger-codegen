@@ -5,8 +5,7 @@
 {{!! * {{description}}
  */
 
-#ifndef {{classname}}_H_
-#define {{classname}}_H_
+#pragma once
 
 {{{defaultInclude}}}
 #include <iovnet/services/http_router.h>
@@ -61,7 +60,5 @@ protected:
 {{#apiNamespaceDeclarations}}
 }
 {{/apiNamespaceDeclarations}}
-
-#endif /* {{classname}}_H_ */
 
 {{/operations}}
