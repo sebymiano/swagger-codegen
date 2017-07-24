@@ -11,13 +11,6 @@ using namespace {{modelNamespace}};
 
 {{classname}}Impl::{{classname}}Impl() {}
 
-void {{classname}}Impl::control_handler(const HttpHandleRequest &request, HttpHandleResponse &response) {
-    auto s = control_router.route(request, response);
-    if (s == Rest::Router::Status::NotFound) {
-      response.send(Http::Code::Not_Found);
-    }
-}
-
 /*
  * These functions include a default basic implementation.  The user could
  * extend adapt this implementation to his needs.
