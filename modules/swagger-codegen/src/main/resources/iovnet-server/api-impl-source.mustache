@@ -56,7 +56,7 @@ std::string {{classname}}Impl::read_{{classVarName}}_uuid_by_id(
   return m.get_uuid().str();
 }
 
-{{baseName}}Schema {{classname}}Impl::read_{{classVarName}}_list_by_id() {
+std::vector<{{baseName}}Schema> {{classname}}Impl::read_{{classVarName}}_list_by_id() {
   throw std::runtime_error("Method not implemented");
 }
 
@@ -71,18 +71,18 @@ std::vector<std::string> {{classname}}Impl::read_{{classVarName}}_list_by_id_get
 /*
  * Ports list related functions
  */
-PortsSchema {{classname}}Impl::create_{{classVarName}}_ports_list_by_id(
-    const std::string &name, const PortsSchema &ports) {
+std::vector<PortsSchema> {{classname}}Impl::create_{{classVarName}}_ports_list_by_id(
+    const std::string &name, const std::vector<PortsSchema> &ports) {
   throw std::runtime_error("Method not implemented");
 }
 
-PortsSchema {{classname}}Impl::read_{{classVarName}}_ports_list_by_id(
+std::vector<PortsSchema> {{classname}}Impl::read_{{classVarName}}_ports_list_by_id(
     const std::string &name) {
   throw std::runtime_error("Method not implemented");
 }
 
 void {{classname}}Impl::update_{{classVarName}}_ports_list_by_id(
-    const std::string &name, const PortsSchema &ports) {
+    const std::string &name, const std::vector<PortsSchema> &ports) {
   throw std::runtime_error("Method not implemented");
 }
 
@@ -187,12 +187,8 @@ void {{classname}}Impl::update_{{classVarName}}_ports_status_by_id(
 * {{code}} {{message}}{{#baseType}} -> Return type: {{baseType}}{{/baseType}}
 {{/responses}}
 */
-{{#returnBaseType}}
-{{{returnBaseType}}} {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) {
-{{/returnBaseType}}
-{{^returnBaseType}}
-void {{operationIdSnakeCase}}({{#allParams}}const {{#isPrimitiveType}}{{{dataType}}}{{/isPrimitiveType}}{{^isPrimitiveType}}{{{baseType}}}{{/isPrimitiveType}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) {
-{{/returnBaseType}}
+{{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}
+{{operationIdSnakeCase}}({{#allParams}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) {
     throw std::runtime_error("Method not implemented");
 }
 

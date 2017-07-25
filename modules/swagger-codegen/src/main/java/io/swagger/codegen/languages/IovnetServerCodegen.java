@@ -252,7 +252,7 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
             return toModelName(swaggerType);
         }
 
-        return "std::shared_ptr<" + swaggerType + ">";
+        return swaggerType;
     }
 
     @Override
@@ -282,28 +282,12 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         } else if (p instanceof ArrayProperty) {
             ArrayProperty ap = (ArrayProperty) p;
             String inner = getSwaggerType(ap.getItems());
-            if (!languageSpecificPrimitives.contains(inner)) {
-                inner = "std::shared_ptr<" + inner + ">";
-            }
             return "std::vector<" + inner + ">()";
         } else if (p instanceof RefProperty) {
             RefProperty rp = (RefProperty) p;
-            return "new " + toModelName(rp.getSimpleRef()) + "()";
+            return toModelName(rp.getSimpleRef());
         }
         return "nullptr";
-    }
-
-    @Override
-    public void postProcessParameter(CodegenParameter parameter) {
-        super.postProcessParameter(parameter);
-
-        boolean isPrimitiveType = parameter.isPrimitiveType == Boolean.TRUE;
-        boolean isListContainer = parameter.isListContainer == Boolean.TRUE;
-        boolean isString = parameter.isString == Boolean.TRUE;
-
-        if (!isPrimitiveType && !isListContainer && !isString && !parameter.dataType.startsWith("std::shared_ptr")) {
-            parameter.dataType = "std::shared_ptr<" + parameter.dataType + ">";
-        }
     }
 
     /**

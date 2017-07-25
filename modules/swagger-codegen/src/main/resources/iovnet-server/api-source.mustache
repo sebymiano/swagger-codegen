@@ -40,19 +40,15 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     auto {{paramName}} = request.param(":{{baseName}}").as<{{dataType}}>();
     {{/pathParams}}
     {{/hasPathParams}}
+
     {{#hasBodyParam}}
     // Getting the body param
     {{#bodyParam}}
-    {{^isPrimitiveType}}
-    {{baseType}} {{paramName}};
-    {{/isPrimitiveType}}
-    {{#isPrimitiveType}}
-    {{dataType}} {{paramName}};
-    {{/isPrimitiveType}}
+    {{{dataType}}} {{paramName}};
     {{/bodyParam}}
     {{/hasBodyParam}}
-    {{#vendorExtensions.x-is-list}}
 
+    {{#vendorExtensions.x-is-list}}
     #define NODE_IS_LIST_CONTAINER
     {{/vendorExtensions.x-is-list}}
     {{#responses}}
@@ -124,7 +120,16 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     {{#bodyParam}}
     nlohmann::json request_body = nlohmann::json::parse(request.body());
     {{^isPrimitiveType}}
+    {{#isListContainer}}
+    for (auto &j : request_body) {
+      {{baseType}} a;
+      a.fromJson(j);
+      {{paramName}}.push_back(a);
+    }
+    {{/isListContainer}}
+    {{^isListContainer}}
     {{paramName}}.fromJson(request_body);
+    {{/isListContainer}}
     {{/isPrimitiveType}}
     {{#isPrimitiveType}}
     // The conversion is done automatically by the json library
@@ -132,20 +137,27 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     {{/isPrimitiveType}}
     {{/bodyParam}}
     {{/hasBodyParam}}
-    {{#returnBaseType}}
-    {{#returnTypeIsPrimitive}}
+    {{#returnType}}
     auto x = {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
-    nlohmann::json r(x);
-    response.send(iovnet::service::Http::Code::Ok, r.dump(4));
+    nlohmann::json response_body;
+    {{#returnTypeIsPrimitive}}
+    response_body = x;
     {{/returnTypeIsPrimitive}}
     {{^returnTypeIsPrimitive}}
-    auto x = {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
-    response.send(iovnet::service::Http::Code::Ok, x.toJson().dump(4));
+    {{#isListContainer}}
+    for (auto &i : x) {
+      response_body += i.toJson();
+    }
+    {{/isListContainer}}
+    {{^isListContainer}}
+    response_body = x.toJson();
+    {{/isListContainer}}
     {{/returnTypeIsPrimitive}}
-    {{/returnBaseType}}
-    {{^returnBaseType}}
+    response.send(iovnet::service::Http::Code::Ok, response_body.dump(4));
+    {{/returnType}}
+    {{^returnType}}
     {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
-    {{/returnBaseType}}
+    {{/returnType}}
 }
 
 {{/operation}}

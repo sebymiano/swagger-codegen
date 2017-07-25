@@ -52,48 +52,46 @@ nlohmann::json {{classname}}::toJson() const {
 }
 
 void {{classname}}::fromJson(nlohmann::json& val) {
-    {{#vars}}{{#isPrimitiveType}}{{^isListContainer}}{{^required}}if(val.find("{{baseName}}") != val.end()) {
+    {{#vars}}
+    {{#isPrimitiveType}}{{^isListContainer}}
+    {{^required}}
+    if (val.find("{{baseName}}") != val.end()) {
         {{setter}}(val.at("{{baseName}}"));
     }
-
-    {{/required}}{{#required}}{{setter}}(val.at("{{baseName}}"));
-    {{/required}}{{/isListContainer}}{{/isPrimitiveType}}{{#isListContainer}}
-    {
-      m_{{name}}.clear();
-        nlohmann::json jsonArray;
-        {{^required}}if(val.find("{{baseName}}") != val.end()) {
-          {{/required}}
-          for (auto& item : val["{{baseName}}"]) {
-            {{#isPrimitiveType}}m_{{name}}.push_back(item);
-            {{/isPrimitiveType}}{{^isPrimitiveType}}{{#items.isString}}m_{{name}}.push_back(item);
-            {{/items.isString}}{{^items.isString}}{{#items.isDateTime}}m_{{name}}.push_back(item);
-            {{/items.isDateTime}}{{^items.isDateTime}}
-                if (item.is_null()) {
-                    m_{{name}}.push_back( {{{items.datatype}}}(nullptr) );
-                } else {
-                  {{{items.datatype}}} newItem({{{items.defaultValue}}});
-                    newItem->fromJson(item);
-                    m_{{name}}.push_back(newItem);
-                }
-                {{/items.isDateTime}}{{/items.isString}}{{/isPrimitiveType}}
-            }
-    {{^required}}
-        }
     {{/required}}
+    {{#required}}
+    {{setter}}(val.at("{{baseName}}"));
+    {{/required}}{{/isListContainer}}
+    {{/isPrimitiveType}}
+    {{#isListContainer}}
+    m_{{name}}.clear();
+    for (auto& item : val["{{baseName}}"]) {
+        {{#isPrimitiveType}}m_{{name}}.push_back(item);
+        {{/isPrimitiveType}}{{^isPrimitiveType}}{{#items.isString}}m_{{name}}.push_back(item);
+        {{/items.isString}}{{^items.isString}}{{#items.isDateTime}}m_{{name}}.push_back(item);
+        {{/items.isDateTime}}{{^items.isDateTime}}
+        {{{items.datatype}}} newItem;
+        newItem.fromJson(item);
+        m_{{name}}.push_back(newItem);
+        {{/items.isDateTime}}{{/items.isString}}{{/isPrimitiveType}}
     }
-    {{/isListContainer}}{{^isListContainer}}{{^isPrimitiveType}}{{^required}}if(val.find("{{baseName}}") != val.end()) {
+    {{/isListContainer}}
+    {{^isListContainer}}{{^isPrimitiveType}}{{^required}}
+    if (val.find("{{baseName}}") != val.end()) {
         {{#isString}}{{setter}}(val.at("{{baseName}}"));
         {{/isString}}{{^isString}}{{#isDateTime}}{{setter}}(val.at("{{baseName}}"));
-        {{/isDateTime}}{{^isDateTime}}if(!val["{{baseName}}"].is_null()) {
-            {{{datatype}}} newItem({{{defaultValue}}});
-            newItem->fromJson(val["{{baseName}}"]);
-            {{setter}}( newItem );
+        {{/isDateTime}}{{^isDateTime}}
+        if (!val["{{baseName}}"].is_null()) {
+            {{{datatype}}} newItem;
+            newItem.fromJson(val["{{baseName}}"]);
+            {{setter}}(newItem);
         }
         {{/isDateTime}}{{/isString}}
     }
     {{/required}}{{#required}}{{#isString}}{{setter}}(val.at("{{baseName}}"));
     {{/isString}}{{^isString}}{{#isDateTime}}{{setter}}(val.at("{{baseName}}"));
-    {{/isDateTime}}{{/isString}}{{/required}}{{/isPrimitiveType}}{{/isListContainer}}{{/vars}}
+    {{/isDateTime}}{{/isString}}{{/required}}{{/isPrimitiveType}}{{/isListContainer}}
+    {{/vars}}
 }
 
 nlohmann::json {{classname}}::getKeys() {
