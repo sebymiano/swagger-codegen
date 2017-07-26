@@ -51,11 +51,13 @@ protected:
     {{/allParams}}
     virtual {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}} {{operationIdSnakeCase}}({{#allParams}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) = 0;
     {{#vendorExtensions.x-is-list}}
+    {{^bodyParams}}
     {{#responses}}
     {{^primitiveType}}
     virtual std::vector<std::string> {{operationIdSnakeCase}}_get_list() = 0;
     {{/primitiveType}}
     {{/responses}}
+    {{/bodyParams}}
     {{/vendorExtensions.x-is-list}}
     {{/operation}}
 };

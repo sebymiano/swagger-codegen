@@ -31,15 +31,16 @@ using namespace {{modelNamespace}};
     throw std::runtime_error("There is already an IOModule with name " + name);
   }
 
+  {{baseName}}Schema localSchema(schema);
   std::unordered_map<std::string, {{baseName}}>::iterator iter;
   bool inserted;
 
   std::tie(iter, inserted) = iomodules.emplace(std::piecewise_construct,
                                                std::forward_as_tuple(name),
-                                               std::forward_as_tuple(name, schema));
+                                               std::forward_as_tuple(name, localSchema));
   {{baseName}} &m = iter->second;
-  schema.setUuid(m.get_uuid().str());
-  return schema;
+  localSchema.setUuid(m.get_uuid().str());
+  return localSchema;
 }
 
 void {{classname}}Impl::delete_{{classVarName}}_by_id(const std::string &name) {
@@ -186,6 +187,7 @@ void {{classname}}Impl::update_{{classVarName}}_ports_status_by_id(
 }
 
 {{#vendorExtensions.x-is-list}}
+{{^bodyParams}}
 {{#responses}}
 {{^primitiveType}}
 std::vector<std::string> {{classname}}Impl::{{operationIdSnakeCase}}_get_list() {
@@ -193,6 +195,7 @@ std::vector<std::string> {{classname}}Impl::{{operationIdSnakeCase}}_get_list() 
 }
 {{/primitiveType}}
 {{/responses}}
+{{/bodyParams}}
 {{/vendorExtensions.x-is-list}}
 {{/vendorExtensions.x-has-default-impl}}
 {{/operation}}

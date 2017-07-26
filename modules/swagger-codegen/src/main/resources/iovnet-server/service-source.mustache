@@ -26,7 +26,7 @@
  * The port parameter contains the initial configuration that should be applied
  * the port
  */
-PortsSchema {{serviceNameCamelCase}}::add_port(const std::string &port_name, PortsSchema &port) {
+PortsSchema {{serviceNameCamelCase}}::add_port(const std::string &port_name, const PortsSchema &port) {
   // Implement here the controls before adding the port
 
   // This call adds the port to the iomodule

@@ -32,11 +32,13 @@ public:
     {{#operation}}
     {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}} {{operationIdSnakeCase}}({{#allParams}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
     {{#vendorExtensions.x-is-list}}
+    {{^bodyParams}}
     {{#responses}}
     {{^primitiveType}}
     std::vector<std::string> {{operationIdSnakeCase}}_get_list();
     {{/primitiveType}}
     {{/responses}}
+    {{/bodyParams}}
     {{/vendorExtensions.x-is-list}}
     {{/operation}}
 

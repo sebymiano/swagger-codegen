@@ -18,7 +18,7 @@ class {{baseName}} : public iovnet::service::IOModule {
   {{baseName}}(const std::string &name, {{baseName}}Schema &conf);
   ~{{baseName}}();
 
-  PortsSchema add_port(const std::string &port_name, PortsSchema &port);
+  PortsSchema add_port(const std::string &port_name, const PortsSchema &port);
   void remove_port(const std::string &port_name);
 
   void packet_in(Port &port, PacketInMetadata &md,

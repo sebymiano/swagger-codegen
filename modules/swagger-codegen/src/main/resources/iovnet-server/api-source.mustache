@@ -51,6 +51,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     {{#vendorExtensions.x-is-list}}
     #define NODE_IS_LIST_CONTAINER
     {{/vendorExtensions.x-is-list}}
+    {{^bodyParams}}
     {{#responses}}
     {{^primitiveType}}
     using iovnet::service::HelpType;
@@ -112,6 +113,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     }
     {{/primitiveType}}
     {{/responses}}
+    {{/bodyParams}}
     {{#vendorExtensions.x-is-list}}
     #undef NODE_IS_LIST_CONTAINER
     {{/vendorExtensions.x-is-list}}
