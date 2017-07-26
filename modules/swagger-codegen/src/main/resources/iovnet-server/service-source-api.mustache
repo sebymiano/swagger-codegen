@@ -1,0 +1,40 @@
+{{>licenseInfo}}
+{{#operations}}
+
+#include "{{baseName}}.h"
+
+using namespace {{modelNamespace}};
+
+/*
+ * These functions do not include a default implementation and should be
+ * implemented by the user
+ */
+
+{{#operation}}
+{{^vendorExtensions.x-has-default-impl}}
+/**
+* @name    {{operationId}}
+* @brief   {{summary}}
+*
+* {{notes}}
+*
+* URL: {{httpMethod}} {{path}}
+*
+{{#allParams}}
+* @param[in] {{paramName}} {{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}
+{{/allParams}}
+*
+* Responses:
+{{#responses}}
+* {{code}} {{message}}{{#baseType}} -> Return type: {{baseType}}{{/baseType}}
+{{/responses}}
+*/
+{{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}
+{{baseName}}::{{operationIdSnakeCase}}({{#allParams}}{{#secondaryParam}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/secondaryParam}}{{/allParams}}) {
+    throw std::runtime_error("Method not implemented");
+}
+
+{{/vendorExtensions.x-has-default-impl}}
+{{/operation}}
+
+{{/operations}}
