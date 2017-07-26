@@ -36,11 +36,10 @@ using namespace {{modelNamespace}};
 
   std::tie(iter, inserted) = iomodules.emplace(std::piecewise_construct,
                                                std::forward_as_tuple(name),
-                                               std::forward_as_tuple(name));
+                                               std::forward_as_tuple(name, schema));
   {{baseName}} &m = iter->second;
-  {{baseName}}Schema reply(schema);
-  reply.setUuid(m.get_uuid().str());
-  return reply;
+  schema.setUuid(m.get_uuid().str());
+  return schema;
 }
 
 void {{classname}}Impl::delete_{{classVarName}}_by_id(const std::string &name) {
@@ -102,15 +101,7 @@ PortsSchema {{classname}}Impl::create_{{classVarName}}_ports_by_id(
     const std::string &name, const std::string &portsName,
     const PortsSchema &ports) {
   {{baseName}} &m = get_iomodule(name);
-  auto p = m.add_port(portsName);
-
-  // TODO: configure port
-
-  PortsSchema reply(ports);
-  // TODO: fill reply with parameters
-  reply.setName(p.name());
-  reply.setUuid(p.uuid().str());
-  return reply;
+  return m.add_port(portsName, ports);
 }
 
 PortsSchema {{classname}}Impl::read_{{classVarName}}_ports_by_id(
@@ -188,8 +179,10 @@ void {{classname}}Impl::update_{{classVarName}}_ports_status_by_id(
 {{/responses}}
 */
 {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}
-{{operationIdSnakeCase}}({{#allParams}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) {
-    throw std::runtime_error("Method not implemented");
+{{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) {
+    //throw std::runtime_error("Method not implemented");
+    auto &m = get_iomodule({{#allParams}}{{^secondaryParam}}{{paramName}}{{/secondaryParam}}{{/allParams}});
+    return m.{{operationIdSnakeCase}}({{#allParams}}{{#secondaryParam}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/secondaryParam}}{{/allParams}});
 }
 
 {{#vendorExtensions.x-is-list}}

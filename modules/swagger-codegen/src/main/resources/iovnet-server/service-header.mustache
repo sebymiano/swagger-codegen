@@ -1,6 +1,11 @@
 {{>licenseInfo}}
+{{#operations}}
 
 #pragma once
+
+#include "api/{{baseName}}Api.h"
+
+using namespace io::swagger::server::model;
 
 // TODO: add comment
 #include "iovnet/services/iomodule.h"
@@ -8,14 +13,20 @@
 // TODO: add comment
 using namespace iovnet::service;
 
-class {{serviceNameCamelCase}} : public iovnet::service::IOModule {
+class {{baseName}} : public iovnet::service::IOModule {
  public:
-  {{serviceNameCamelCase}}(const std::string &name);
-  ~{{serviceNameCamelCase}}();
+  {{baseName}}(const std::string &name, {{baseName}}Schema &conf);
+  ~{{baseName}}();
 
-  Port add_port(const std::string &port_name) override;
-  void remove_port(const std::string &port_name) override;
+  PortsSchema add_port(const std::string &port_name, PortsSchema &port);
+  void remove_port(const std::string &port_name);
 
   void packet_in(Port &port, PacketInMetadata &md,
                  const std::vector<uint8_t> &packet) override;
+
+  // TODO: comment about these functions
+  {{#operation}}
+  {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{operationIdSnakeCase}}({{#allParams}}{{#secondaryParam}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/secondaryParam}}{{/allParams}});
+  {{/operation}}
 };
+{{/operations}}

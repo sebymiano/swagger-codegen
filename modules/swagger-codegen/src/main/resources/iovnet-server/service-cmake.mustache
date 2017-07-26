@@ -2,10 +2,4 @@ cmake_minimum_required (VERSION 3.2)
 
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
 
-include_directories(control_api/api)
-include_directories(control_api/impl)
-include_directories(control_api/model)
-include_directories(src)
-
-add_subdirectory(control_api)
 add_subdirectory(src)

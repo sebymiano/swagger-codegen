@@ -1,29 +1,22 @@
-if(ENABLE_GRPC)
-  add_executable(iov-{{serviceNameLowerCase}}-daemon
-    {{serviceNameLowerCase}}-grpc.cpp
-    {{serviceNameLowerCase}}.cpp)
+aux_source_directory(model MODEL_SOURCES)
+aux_source_directory(api API_SOURCES)
 
-  target_link_libraries(iov-{{serviceNameLowerCase}}-daemon
-    crossguid # locally compiled
-    uuid
-    iovnet_grpc # locally compiled
-    net_static
-    pthread
-    grpc++ grpc grpc++_reflection
-    protobuf dl
-    iovnet_dev
-    {{serviceNameLowerCase}}_api)
-endif(ENABLE_GRPC)
+include_directories(model)
+
+set(SERVER_SOURCES
+  ${MODEL_SOURCES}
+  ${API_SOURCES})
 
 add_library(iov-{{serviceNameLowerCase}} SHARED
-  {{serviceNameLowerCase}}.cpp
-  {{serviceNameLowerCase}}-lib.cpp)
+  ${MODEL_SOURCES}
+  {{serviceNameCamelCase}}.cpp
+  {{serviceNameCamelCase}}Api.cpp
+  {{serviceNameCamelCase}}-lib.cpp)
 
 target_link_libraries(iov-{{serviceNameLowerCase}}
   iovnet_dev
   crossguid
-  uuid
-  {{serviceNameLowerCase}}_api)
+  uuid)
 
 # Specify shared library install directory
 
