@@ -14,4 +14,5 @@ static int handle_rx(struct __sk_buff *skb, struct pkt_metadata *md) {
   // Put your eBPF datapth code here
   bpf_trace_printk("Hello\n");
   return RX_DROP;
+}
 )";
