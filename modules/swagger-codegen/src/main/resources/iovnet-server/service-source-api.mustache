@@ -13,21 +13,14 @@ using namespace {{modelNamespace}};
 {{#operation}}
 {{^vendorExtensions.x-has-default-impl}}
 /**
-* @name    {{operationId}}
 * @brief   {{summary}}
 *
-* {{notes}}
-*
-* URL: {{httpMethod}} {{path}}
-*
-{{#allParams}}
-* @param[in] {{paramName}} {{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}
-{{/allParams}}
+* {{notes}}*
+* {{#allParams}}{{#secondaryParam}}
+* @param[in] {{paramName}} {{description}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}{{/secondaryParam}}{{/allParams}}
 *
 * Responses:
-{{#responses}}
-* {{code}} {{message}}{{#baseType}} -> Return type: {{baseType}}{{/baseType}}
-{{/responses}}
+* {{#returnType}}{{{returnType}}}{{/returnType}}
 */
 {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}
 {{baseName}}::{{operationIdSnakeCase}}({{#allParams}}{{#secondaryParam}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/secondaryParam}}{{/allParams}}) {
