@@ -10,7 +10,7 @@ const std::string {{serviceNameLowerCase}}_code = R"(
  * skb contains the packet and md some additional metadata for the packet.
  * Please look at the libiovnet documentation for more details.
  */
-static int handle_rx(struct __sk_buff *skb, struct metadata *md) {
+static int handle_rx(struct __sk_buff *skb, struct pkt_metadata *md) {
   // Put your eBPF datapth code here
   bpf_trace_printk("Hello\n");
   return RX_DROP;
