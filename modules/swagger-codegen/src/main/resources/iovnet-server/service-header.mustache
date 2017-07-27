@@ -26,7 +26,9 @@ class {{baseName}} : public iovnet::service::IOModule {
 
   // TODO: comment about these functions
   {{#operation}}
+  {{^vendorExtensions.x-has-default-impl}}
   {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{operationIdSnakeCase}}({{#allParams}}{{#secondaryParam}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/secondaryParam}}{{/allParams}});
+  {{/vendorExtensions.x-has-default-impl}}
   {{/operation}}
 };
 {{/operations}}
