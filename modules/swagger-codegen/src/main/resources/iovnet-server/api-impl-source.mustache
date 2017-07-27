@@ -173,7 +173,6 @@ void {{classname}}Impl::update_{{classVarName}}_ports_status_by_id(
 */
 {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}
 {{classname}}Impl::{{operationIdSnakeCase}}({{#allParams}}const {{{dataType}}} &{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) {
-    //throw std::runtime_error("Method not implemented");
     auto &m = get_iomodule({{#allParams}}{{^secondaryParam}}{{paramName}}{{/secondaryParam}}{{/allParams}});
     return m.{{operationIdSnakeCase}}({{#allParams}}{{#secondaryParam}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/secondaryParam}}{{/allParams}});
 }
