@@ -162,6 +162,7 @@ void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest
     {{/returnType}}
     {{^returnType}}
     {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
+    response.send(iovnet::service::Http::Code::Ok);
     {{/returnType}}
 }
 
