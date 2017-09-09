@@ -11,7 +11,7 @@ add_library(iov-{{serviceNameLowerCase}} SHARED
   {{serviceNameCamelCase}}-lib.cpp)
 
 target_link_libraries(iov-{{serviceNameLowerCase}}
-  iovnet_dev
+  iovnet
   uuid)
 
 # Specify shared library install directory
