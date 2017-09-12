@@ -23,7 +23,6 @@ using namespace {{modelNamespace}};
   try {
     return iomodules.at(name);
   } catch (std::exception e) {
-    std::cout << e.what() << std::endl;
     throw std::runtime_error("IOModule " + name + " does not exist");
   }
 }
