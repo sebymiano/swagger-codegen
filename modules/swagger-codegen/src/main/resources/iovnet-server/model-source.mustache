@@ -201,21 +201,21 @@ nlohmann::json {{classname}}Schema::getComplexElements() {
     return m_{{name}};
 }
 
-{{/isNotContainer}}{{#isNotContainer}}{{{datatype}}} {{classname}}Schema::{{getter}}() const {
+{{/isNotContainer}}{{#isNotContainer}}{{{datatype}}}{{^isPrimitiveType}}Schema{{/isPrimitiveType}} {{classname}}Schema::{{getter}}() const {
     return m_{{name}};
 }
 
-void {{classname}}Schema::{{setter}}({{{datatype}}} value) {
+void {{classname}}Schema::{{setter}}({{{datatype}}}{{^isPrimitiveType}}Schema{{/isPrimitiveType}} value) {
     m_{{name}} = value;
     {{^required}}m_{{name}}IsSet = true;{{/required}}
 }
 {{/isNotContainer}}
 
-{{^required}}bool {{classname}}Schema::{{baseName}}IsSet() const {
+{{^required}}bool {{classname}}Schema::{{baseName}}_IsSet() const {
     return m_{{name}}IsSet;
 }
 
-void {{classname}}Schema::unset{{name}}() {
+void {{classname}}Schema::unset_{{name}}() {
     m_{{name}}IsSet = false;
 }
 {{/required}}

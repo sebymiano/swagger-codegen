@@ -52,8 +52,14 @@ public:
     std::vector<{{complexType}}Schema>& {{getter}}();
     {{/isNotContainer}}
     {{#isNotContainer}}
+    {{#isPrimitiveType}}
     {{{datatype}}} {{getter}}() const;
     void {{setter}}({{{datatype}}} value);
+    {{/isPrimitiveType}}
+    {{^isPrimitiveType}}
+    {{{datatype}}}Schema {{getter}}() const;
+    void {{setter}}({{{datatype}}}Schema value);
+    {{/isPrimitiveType}}
     {{/isNotContainer}}
     {{^required}}
     bool {{baseName}}_IsSet() const;
