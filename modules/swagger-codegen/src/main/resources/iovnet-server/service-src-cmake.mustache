@@ -1,0 +1,26 @@
+aux_source_directory(model MODEL_SOURCES)
+aux_source_directory(api API_SOURCES)
+
+include_directories(model)
+
+add_library(iov-{{serviceNameLowerCase}} SHARED
+  ${MODEL_SOURCES}
+  ${API_SOURCES}
+  {{serviceNameCamelCase}}.cpp
+  {{serviceNameCamelCase}}Api.cpp
+  {{serviceNameCamelCase}}-lib.cpp)
+
+target_link_libraries(iov-{{serviceNameLowerCase}}
+  iovnet
+  uuid)
+
+# Specify shared library install directory
+
+set(CMAKE_INSTALL_LIBDIR /usr/lib)
+
+install(
+    TARGETS
+    iov-{{serviceNameLowerCase}}
+    DESTINATION
+    "${CMAKE_INSTALL_LIBDIR}"
+)

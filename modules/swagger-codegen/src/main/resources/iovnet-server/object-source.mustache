@@ -1,0 +1,12 @@
+{{>licenseInfo}}
+
+{{#models}}{{#model}}
+#include "{{classname}}.h"
+{{^vendorExtensions.x-parent}}
+#include "{{classname}}_dp.h"
+
+{{classname}}::{{classname}}({{#vars}}{{#vendorExtensions.x-is-key}}const {{{datatype}}} {{{baseName}}}, {{/vendorExtensions.x-is-key}}{{/vars}}const {{classname}}Schema &schema): IOModule(name, generate_code(
+{{/vendorExtensions.x-parent}}
+{{#vendorExtensions.x-parent}}
+{{classname}}:{{classname}}({{{this}}} &parent, {{#vendorExtensions.x-classname-inherited}}{{this}} &p, {{/vendorExtensions.x-classname-inherited}}const {{classname}}Schema &schema);
+{{/vendorExtensions.x-parent}}
