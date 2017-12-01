@@ -44,7 +44,7 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         modelTemplateFiles.put("interface.mustache", "Interface.h");
         
         modelTemplateFiles.put("object-header.mustache", ".h");
-        //modelTemplateFiles.put("object-source.mustache", ".h");
+        modelTemplateFiles.put("object-source.mustache", ".cpp");
 
         apiTemplateFiles.put("api-header.mustache", ".h");
         apiTemplateFiles.put("api-source.mustache", ".cpp");
@@ -157,6 +157,7 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         	if(l != null){
 		    	l.get(l.size() - 1).put("lastKey", "true");
 		    	for(int i = 0; i < l.size(); i++){
+		    		l.get(i).put("varName", toVarName(l.get(i).get("name"))); //used in update method 
         			if(l.get(i).get("type").equals("integer"))
         				l.get(i).put("type", "int32_t");
         			if(l.get(i).get("type").equals("string"))
