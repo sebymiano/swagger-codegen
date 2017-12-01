@@ -9,6 +9,7 @@ import io.swagger.models.properties.*;
 import io.swagger.codegen.utils.ModelUtils;
 
 import java.util.*;
+import java.io.File;
 
 public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig {
     protected String implFolder = "/src/api";
@@ -536,7 +537,7 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
      * when the class is instantiatedolder
      */
     public String modelFileFolder() {
-        return outputFolder + "/src/model";
+        return outputFolder + "/src";
     }
 
     /**
@@ -605,10 +606,24 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         return name;
     }
 
-	/*@Override
-	public String toModelFilename(String name) {
-        return initialCaps(name);
-    }*/
+	//move files basing the name 
+	@Override
+	public void processSwagger(Swagger swagger) {
+    	File folder = new File(outputFolder + "/src");
+    	File[] listOfFiles = folder.listFiles();
+    	File interfaceFolder = new File(outputFolder + "/src/interface");
+    	interfaceFolder.mkdir();
+    	File modelFolder = new File(outputFolder + "/src/model");
+    	modelFolder.mkdir();
+    	for(File f : listOfFiles){
+    		if(f.getName().contains("Interface.h")){
+    			f.renameTo(new File(outputFolder + "/src/interface/" + f.getName()));
+    		}
+    		else if(f.getName().contains("Schema.h") || f.getName().contains("Schema.cpp")){
+    			f.renameTo(new File(outputFolder + "/src/model/" + f.getName()));
+    		}
+    	}
+    }
 
     @Override
     public String toApiName(String type) {
