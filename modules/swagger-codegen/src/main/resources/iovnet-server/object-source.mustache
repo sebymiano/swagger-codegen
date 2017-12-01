@@ -8,11 +8,12 @@
 {{classname}}::{{classname}}({{#vars}}{{#vendorExtensions.x-is-key}}const {{{datatype}}} {{{baseName}}}, {{/vendorExtensions.x-is-key}}{{/vars}}const {{classname}}Schema &schema): IOModule(name, generate_code()){
 
 	{{#vars}}
+	
 	{{^isNotContainer}}
 	for(auto &i : schema.{{getter}}())
 		add_{{name}}(i);
 	{{/isNotContainer}}
-	{{#isNotContainer}}
+	{{#isNotContainer}}	
 	{{^vendorExtensions.x-is-key}}
     {{^isReadOnly}}
     if(schema.{{baseName}}_IsSet())
@@ -31,7 +32,7 @@
 {{/vendorExtensions.x-parent}}
 
 {{#vendorExtensions.x-parent}}
-{{classname}}:{{classname}}({{{this}}} &parent, {{#vendorExtensions.x-classname-inherited}}{{this}} &p, {{/vendorExtensions.x-classname-inherited}}const {{classname}}Schema &schema): parent_(parent){{#vendorExtensions.x-classname-inherited}}, {{this}}(p){{/vendorExtensions.x-classname-inherited}} { }
+{{classname}}:{{classname}}({{{this}}} &parent, {{#vendorExtensions.x-classname-inherited}}{{this}} &p, {{/vendorExtensions.x-classname-inherited}}const {{classname}}Schema &schema): parent_(parent) { }
 {{/vendorExtensions.x-parent}}
 
 {{classname}}::~{{classname}}() { }
@@ -39,6 +40,7 @@
 void {{classname}}::update(const {{classname}}Schema &schema) { 
 	//throw std::runtime_error("Method not implemented");
 	{{#vars}}
+	
 	{{^isNotContainer}}
 	for(auto &i : schema.{{getter}}()){ 
 		{{#vendorExtensions.x-key-list}}
@@ -67,6 +69,7 @@ void {{classname}}::update(const {{classname}}Schema &schema) {
 
 {{classname}}Schema {{classname}}::toSchema(){
 	{{classname}}Schema schema;
+	
 	{{#vars}}
 	{{#isNotContainer}}
 	{{#isPrimitiveType}}
@@ -80,58 +83,86 @@ void {{classname}}::update(const {{classname}}Schema &schema) {
 	return schema;
 }
 
+{{#vendorExtensions.x-parent}}
+void {{classname}}::create({{{this}}} &parent, const {{classname}}Schema &schema){
+	throw std::runtime_error("Method not implemented");
+}
+
+std::shared_ptr<{{classname}}> {{classname}}::get({{{this}}} &parent{{#vars}}{{#vendorExtensions.x-is-key}}, const {{{datatype}}} &{{{baseName}}}{{/vendorExtensions.x-is-key}}{{/vars}}){
+	throw std::runtime_error("Method not implemented");
+}
+
+void {{classname}}::remove({{{this}}} &parent{{#vars}}{{#vendorExtensions.x-is-key}}, const {{{datatype}}} &{{{baseName}}}{{/vendorExtensions.x-is-key}}{{/vars}}){
+	throw std::runtime_error("Method not implemented");
+}
+
+{{#vendorExtensions.x-is-list}}
+std::vector<std::shared_ptr<{{classname}}>> {{classname}}::get({{vendorExtensions.x-parent}} &parent){
+	throw std::runtime_error("Method not implemented");
+}
+
+void {{classname}}::remove({{vendorExtensions.x-parent}} &parent){
+	throw std::runtime_error("Method not implemented");
+}
+{{/vendorExtensions.x-is-list}}
+{{/vendorExtensions.x-parent}}
+
+
 {{#vars}}
 {{^isNotContainer}}
 std::shared_ptr<{{complexType}}> {{classname}}::get_{{name}}({{#vendorExtensions.x-key-list}}const {{type}} &{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}}){
-	
+	return {{complexType}}::get(*this, {{#vendorExtensions.x-key-list}}{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}});
 }
 
 std::vector<std::shared_ptr<{{complexType}}>> {{classname}}::get_All_{{name}}(){
-
+	return {{complexType}}::get(*this);
 }
 
 void {{classname}}::add_{{name}}(const {{complexType}}Schema &conf){
-
+	{{complexType}}::create(*this, conf);
 }
 
 void {{classname}}::del_{{name}}({{#vendorExtensions.x-key-list}}const {{type}} &{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}}){
-
+	{{complexType}}::remove(*this, {{#vendorExtensions.x-key-list}}{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}});
 }
 
 void {{classname}}::del_All_{{name}}(){
-
+	{{complexType}}::remove(*this);
 }
+
 {{/isNotContainer}}
 {{#isNotContainer}}
 
 {{#isPrimitiveType}}
 {{{datatype}}} {{classname}}::{{getter}}(){
-
+	throw std::runtime_error("Method not implemented");
 }
 
 {{^vendorExtensions.x-is-key}}
 {{^isReadOnly}}
-void {{classname}}::{{setter}}({{{datatype}}} value){
-
+void {{classname}}::{{setter}}({{{datatype}}} &value){
+	throw std::runtime_error("Method not implemented");
 }
+
 {{/isReadOnly}}
 {{/vendorExtensions.x-is-key}}
 {{/isPrimitiveType}}
 
 {{^isPrimitiveType}}
 std::shared_ptr<{{complexType}}> {{classname}}::get_{{name}}(){
-
+	return {{complexType}}::get(*this);
 }
 
 {{^vendorExtensions.x-is-key}}
 {{^isReadOnly}}
-void {{classname}}::add_{{name}}(const {{complexType}}Schema value){
-
+void {{classname}}::add_{{name}}(const {{complexType}}Schema &value){
+	{{complexType}}::create(*this, value); 
 }
 
 void {{classname}}::del_{{name}}(){
-
+	{{complexType}}::remove(*this);
 }
+
 {{/isReadOnly}}
 {{/vendorExtensions.x-is-key}}
 {{/isPrimitiveType}}

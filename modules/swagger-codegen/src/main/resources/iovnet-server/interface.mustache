@@ -40,7 +40,7 @@ public:
     virtual {{{datatype}}} {{getter}}() = 0;
     {{^vendorExtensions.x-is-key}}
     {{^isReadOnly}}
-    virtual void {{setter}}({{{datatype}}} value) = 0;
+    virtual void {{setter}}({{{datatype}}} &value) = 0;
     {{/isReadOnly}}
     {{/vendorExtensions.x-is-key}}
     {{/isPrimitiveType}}
@@ -48,7 +48,7 @@ public:
     virtual std::shared_ptr<{{complexType}}> get_{{name}}() = 0;
     {{^vendorExtensions.x-is-key}}
     {{^isReadOnly}}
-    virtual void add_{{name}}(const {{complexType}}Schema value) = 0;
+    virtual void add_{{name}}(const {{complexType}}Schema &value) = 0;
     virtual void del_{{name}}() = 0;
     {{/isReadOnly}}
     {{/vendorExtensions.x-is-key}}
