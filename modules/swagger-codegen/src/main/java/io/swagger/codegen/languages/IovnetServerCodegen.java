@@ -606,7 +606,6 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
         return name;
     }
 
-	//move files basing the name 
 	@Override
 	public void processSwagger(Swagger swagger) {
     	File folder = new File(outputFolder + "/src");
