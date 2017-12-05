@@ -73,7 +73,7 @@ void {{classname}}::update(const {{classname}}Schema &schema) {
 	{{#vars}}
 	{{#isNotContainer}}
 	{{#isPrimitiveType}}
-	schema.{{setter}}({{getter}});
+	schema.{{setter}}({{getter}}());
 	{{/isPrimitiveType}}
 	{{/isNotContainer}}
 	{{/vars}}
@@ -167,6 +167,30 @@ void {{classname}}::del_{{name}}(){
 {{/vendorExtensions.x-is-key}}
 {{/isPrimitiveType}}
 {{/isNotContainer}}
+{{#isEnum}}
+
+std::string {{classname}}::{{baseName}}_to_string({{classname}}{{name}} value){
+	switch(value){
+		{{#allowableValues.values}}
+		case {{classname}}{{name}}::{{value}}:
+			return "{{stringValue}}";
+		{{/allowableValues.values}}
+		default:
+			throw std::runtime_error("Bad {{classname}} {{name}}");
+	}
+}
+
+{{classname}}{{name}} {{classname}}::string_to_{{baseName}}(const std::string &str){
+	switch(str){
+		{{#allowableValues.values}}
+		case "{{stringValue}}":
+			return {{classname}}{{name}}::{{value}};
+		{{/allowableValues.values}}
+		default:
+			throw std::runtime_error("{{classname}} {{name}} is invalid");
+	}
+}
+{{/isEnum}}
 {{/vars}}
 
 {{/model}}{{/models}}

@@ -355,8 +355,19 @@ public class IovnetServerCodegen extends DefaultCodegen implements CodegenConfig
 			for(CodegenProperty p : lp){
 				List<String> lenum = p._enum;
 				if(lenum != null){
-					for(int j = 0; j < lenum.size() - 1; j++)
-						lenum.set(j, lenum.get(j) + ",");
+					List<Map<String, String>> l = new ArrayList<Map<String, String>>(); 
+					for(int j = 0; j < lenum.size(); j++){
+						Map<String, String> mv = new HashMap<String, String>();
+						mv.put("value", lenum.get(j).toUpperCase());
+						mv.put("stringValue", lenum.get(j).toLowerCase());
+						l.add(mv);
+						if(j < lenum.size() - 1)
+							lenum.set(j, lenum.get(j).toUpperCase() + ",");
+						else
+							lenum.set(j, lenum.get(j).toUpperCase()); 
+					}
+					if(p.allowableValues != null)
+						p.allowableValues.put("values", l);
 				}
 			}
 				

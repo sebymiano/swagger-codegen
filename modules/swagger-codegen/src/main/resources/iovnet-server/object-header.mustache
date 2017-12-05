@@ -83,6 +83,11 @@ public:
     {{/vendorExtensions.x-is-key}}
     {{/isPrimitiveType}}
     {{/isNotContainer}}
+    {{#isEnum}}
+    
+    static std::string {{baseName}}_to_string({{classname}}{{name}} value);
+    static {{classname}}{{name}} string_to_{{baseName}}(const std::string &str);
+    {{/isEnum}}
     {{/vars}}
        
 	{{#vendorExtensions.x-parent}}
