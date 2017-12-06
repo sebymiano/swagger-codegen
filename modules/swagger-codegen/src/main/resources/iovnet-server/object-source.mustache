@@ -5,28 +5,28 @@
 {{^vendorExtensions.x-parent}}
 #include "{{classname}}_dp.h"
 
-{{classname}}::{{classname}}({{#vars}}{{#vendorExtensions.x-is-key}}const {{{datatype}}} {{{baseName}}}, {{/vendorExtensions.x-is-key}}{{/vars}}const {{classname}}Schema &schema): IOModule(name, generate_code()){
+{{classname}}::{{classname}}({{#vars}}{{#vendorExtensions.x-is-key}}const {{{datatype}}} {{{baseName}}}, {{/vendorExtensions.x-is-key}}{{/vars}}const {{classname}}Schema &schema, IOModuleType type): IOModule(name, generate_code(), type){
 
-	{{#vars}}
-	
-	{{^isNotContainer}}
-	for(auto &i : schema.{{getter}}())
-		add_{{name}}(i);
-	{{/isNotContainer}}
-	{{#isNotContainer}}	
-	{{^vendorExtensions.x-is-key}}
-    {{^isReadOnly}}
-    if(schema.{{baseName}}_IsSet())
-    {{#isPrimitiveType}}
-		{{setter}}(schema.{{getter}}());
-	{{/isPrimitiveType}}
-	{{^isPrimitiveType}}
-		add_{{name}}(schema.{{getter}}());
-	{{/isPrimitiveType}}
-    {{/isReadOnly}}
-   	{{/vendorExtensions.x-is-key}}
-	{{/isNotContainer}}
-	{{/vars}}	
+  {{#vars}}
+  
+  {{^isNotContainer}}
+  for(auto &i : schema.{{getter}}())
+      add_{{name}}(i);
+  {{/isNotContainer}}
+  {{#isNotContainer}} 
+  {{^vendorExtensions.x-is-key}}
+  {{^isReadOnly}}
+  if(schema.{{baseName}}_IsSet())
+  {{#isPrimitiveType}}
+      {{setter}}(schema.{{getter}}());
+  {{/isPrimitiveType}}
+  {{^isPrimitiveType}}
+      add_{{name}}(schema.{{getter}}());
+  {{/isPrimitiveType}}
+  {{/isReadOnly}}
+  {{/vendorExtensions.x-is-key}}
+  {{/isNotContainer}}
+  {{/vars}}   
 
 }
 {{/vendorExtensions.x-parent}}
@@ -38,71 +38,71 @@
 {{classname}}::~{{classname}}() { }
 
 void {{classname}}::update(const {{classname}}Schema &schema) { 
-	//throw std::runtime_error("Method not implemented");
-	{{#vars}}
-	
-	{{^isNotContainer}}
-	for(auto &i : schema.{{getter}}()){ 
-		{{#vendorExtensions.x-key-list}}
-		auto &{{name}} = i.get_{{varName}}();
-		{{/vendorExtensions.x-key-list}}
-		auto m = get_{{name}}({{#vendorExtensions.x-key-list}}{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}});
-		m->update(i);
-	}
-	{{/isNotContainer}}
-	{{#isNotContainer}}
-	{{^vendorExtensions.x-is-key}}
-    {{^isReadOnly}}
-    if(schema.{{baseName}}_IsSet())
-    {{#isPrimitiveType}}
-		{{setter}}(schema.{{getter}}());
-	{{/isPrimitiveType}}
-	{{^isPrimitiveType}}
-		auto &m = {{getter}}();
-		m->update(schema);
-	{{/isPrimitiveType}}
-    {{/isReadOnly}}
-    {{/vendorExtensions.x-is-key}}
-	{{/isNotContainer}}
-	{{/vars}}
+  //throw std::runtime_error("Method not implemented");
+  {{#vars}}
+  
+  {{^isNotContainer}}
+  for(auto &i : schema.{{getter}}()){ 
+      {{#vendorExtensions.x-key-list}}
+      auto &{{name}} = i.get_{{varName}}();
+      {{/vendorExtensions.x-key-list}}
+      auto m = get_{{name}}({{#vendorExtensions.x-key-list}}{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}});
+      m->update(i);
+  }
+  {{/isNotContainer}}
+  {{#isNotContainer}}
+  {{^vendorExtensions.x-is-key}}
+  {{^isReadOnly}}
+  if(schema.{{baseName}}_IsSet())
+  {{#isPrimitiveType}}
+      {{setter}}(schema.{{getter}}());
+  {{/isPrimitiveType}}
+  {{^isPrimitiveType}}
+      auto &m = {{getter}}();
+      m->update(schema);
+  {{/isPrimitiveType}}
+  {{/isReadOnly}}
+  {{/vendorExtensions.x-is-key}}
+  {{/isNotContainer}}
+  {{/vars}}
 }
 
 {{classname}}Schema {{classname}}::toSchema(){
-	{{classname}}Schema schema;
-	
-	{{#vars}}
-	{{#isNotContainer}}
-	{{#isPrimitiveType}}
-	schema.{{setter}}({{getter}}());
-	{{/isPrimitiveType}}
-	{{/isNotContainer}}
-	{{/vars}}
-	
-	//I don't know how to generate code to particular element (for example portsAccess and portsTrunk)
-	
-	return schema;
+  {{classname}}Schema schema;
+  
+  {{#vars}}
+  {{#isNotContainer}}
+  {{#isPrimitiveType}}
+  schema.{{setter}}({{getter}}());
+  {{/isPrimitiveType}}
+  {{/isNotContainer}}
+  {{/vars}}
+  
+  //I don't know how to generate code to particular element (for example portsAccess and portsTrunk)
+  
+  return schema;
 }
 
 {{#vendorExtensions.x-parent}}
 void {{classname}}::create({{{this}}} &parent, const {{classname}}Schema &schema){
-	throw std::runtime_error("Method not implemented");
+  throw std::runtime_error("Method not implemented");
 }
 
 std::shared_ptr<{{classname}}> {{classname}}::get({{{this}}} &parent{{#vars}}{{#vendorExtensions.x-is-key}}, const {{{datatype}}} &{{{baseName}}}{{/vendorExtensions.x-is-key}}{{/vars}}){
-	throw std::runtime_error("Method not implemented");
+  throw std::runtime_error("Method not implemented");
 }
 
 void {{classname}}::remove({{{this}}} &parent{{#vars}}{{#vendorExtensions.x-is-key}}, const {{{datatype}}} &{{{baseName}}}{{/vendorExtensions.x-is-key}}{{/vars}}){
-	throw std::runtime_error("Method not implemented");
+  throw std::runtime_error("Method not implemented");
 }
 
 {{#vendorExtensions.x-is-list}}
 std::vector<std::shared_ptr<{{classname}}>> {{classname}}::get({{vendorExtensions.x-parent}} &parent){
-	throw std::runtime_error("Method not implemented");
+  throw std::runtime_error("Method not implemented");
 }
 
 void {{classname}}::remove({{vendorExtensions.x-parent}} &parent){
-	throw std::runtime_error("Method not implemented");
+  throw std::runtime_error("Method not implemented");
 }
 {{/vendorExtensions.x-is-list}}
 {{/vendorExtensions.x-parent}}
@@ -111,23 +111,23 @@ void {{classname}}::remove({{vendorExtensions.x-parent}} &parent){
 {{#vars}}
 {{^isNotContainer}}
 std::shared_ptr<{{complexType}}> {{classname}}::get_{{name}}({{#vendorExtensions.x-key-list}}const {{type}} &{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}}){
-	return {{complexType}}::get(*this, {{#vendorExtensions.x-key-list}}{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}});
+  return {{complexType}}::get(*this, {{#vendorExtensions.x-key-list}}{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}});
 }
 
 std::vector<std::shared_ptr<{{complexType}}>> {{classname}}::get_All_{{name}}(){
-	return {{complexType}}::get(*this);
+  return {{complexType}}::get(*this);
 }
 
 void {{classname}}::add_{{name}}(const {{complexType}}Schema &conf){
-	{{complexType}}::create(*this, conf);
+  {{complexType}}::create(*this, conf);
 }
 
 void {{classname}}::del_{{name}}({{#vendorExtensions.x-key-list}}const {{type}} &{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}}){
-	{{complexType}}::remove(*this, {{#vendorExtensions.x-key-list}}{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}});
+  {{complexType}}::remove(*this, {{#vendorExtensions.x-key-list}}{{name}}{{^lastKey}}, {{/lastKey}}{{/vendorExtensions.x-key-list}});
 }
 
 void {{classname}}::del_All_{{name}}(){
-	{{complexType}}::remove(*this);
+  {{complexType}}::remove(*this);
 }
 
 {{/isNotContainer}}
@@ -135,13 +135,13 @@ void {{classname}}::del_All_{{name}}(){
 
 {{#isPrimitiveType}}
 {{{datatype}}} {{classname}}::{{getter}}(){
-	throw std::runtime_error("Method not implemented");
+  throw std::runtime_error("Method not implemented");
 }
 
 {{^vendorExtensions.x-is-key}}
 {{^isReadOnly}}
 void {{classname}}::{{setter}}({{{datatype}}} &value){
-	throw std::runtime_error("Method not implemented");
+  throw std::runtime_error("Method not implemented");
 }
 
 {{/isReadOnly}}
@@ -150,17 +150,17 @@ void {{classname}}::{{setter}}({{{datatype}}} &value){
 
 {{^isPrimitiveType}}
 std::shared_ptr<{{complexType}}> {{classname}}::get_{{name}}(){
-	return {{complexType}}::get(*this);
+  return {{complexType}}::get(*this);
 }
 
 {{^vendorExtensions.x-is-key}}
 {{^isReadOnly}}
 void {{classname}}::add_{{name}}(const {{complexType}}Schema &value){
-	{{complexType}}::create(*this, value); 
+  {{complexType}}::create(*this, value); 
 }
 
 void {{classname}}::del_{{name}}(){
-	{{complexType}}::remove(*this);
+  {{complexType}}::remove(*this);
 }
 
 {{/isReadOnly}}
@@ -170,25 +170,25 @@ void {{classname}}::del_{{name}}(){
 {{#isEnum}}
 
 std::string {{classname}}::{{baseName}}_to_string({{classname}}{{name}} value){
-	switch(value){
-		{{#allowableValues.values}}
-		case {{classname}}{{name}}::{{value}}:
-			return "{{stringValue}}";
-		{{/allowableValues.values}}
-		default:
-			throw std::runtime_error("Bad {{classname}} {{name}}");
-	}
+  switch(value){
+      {{#allowableValues.values}}
+      case {{classname}}{{name}}::{{value}}:
+          return "{{stringValue}}";
+      {{/allowableValues.values}}
+      default:
+          throw std::runtime_error("Bad {{classname}} {{name}}");
+  }
 }
 
 {{classname}}{{name}} {{classname}}::string_to_{{baseName}}(const std::string &str){
-	switch(str){
-		{{#allowableValues.values}}
-		case "{{stringValue}}":
-			return {{classname}}{{name}}::{{value}};
-		{{/allowableValues.values}}
-		default:
-			throw std::runtime_error("{{classname}} {{name}} is invalid");
-	}
+  switch(str){
+      {{#allowableValues.values}}
+      case "{{stringValue}}":
+          return {{classname}}{{name}}::{{value}};
+      {{/allowableValues.values}}
+      default:
+          throw std::runtime_error("{{classname}} {{name}} is invalid");
+  }
 }
 {{/isEnum}}
 {{/vars}}

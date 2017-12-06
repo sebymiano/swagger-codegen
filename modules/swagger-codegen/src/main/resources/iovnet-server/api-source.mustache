@@ -13,167 +13,167 @@ namespace {{this}} {
 using namespace {{modelNamespace}};
 
 {{classname}}::{{classname}}() {
-    setupRoutes();
+  setupRoutes();
 };
 
 void {{classname}}::control_handler(const HttpHandleRequest &request, HttpHandleResponse &response) {
-    try {
-        auto s = router.route(request, response);
-        if (s == Rest::Router::Status::NotFound) {
-          response.send(Http::Code::Not_Found);
-        }
-    } catch (std::runtime_error &e) {
-      response.send(iovnet::service::Http::Code::Bad_Request, e.what());
-    }
+  try {
+      auto s = router.route(request, response);
+      if (s == Rest::Router::Status::NotFound) {
+        response.send(Http::Code::Not_Found);
+      }
+  } catch (std::runtime_error &e) {
+    response.send(iovnet::service::Http::Code::Bad_Request, e.what());
+  }
 }
 
 void {{classname}}::setupRoutes() {
-    using namespace iovnet::service::Rest;
+  using namespace iovnet::service::Rest;
 
-    {{#operation}}
-    Routes::{{httpMethod}}(router, base + "{{{vendorExtensions.x-codegen-iovnet-router-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
-    {{/operation}}
+  {{#operation}}
+  Routes::{{httpMethod}}(router, base + "{{{vendorExtensions.x-codegen-iovnet-router-path}}}", Routes::bind(&{{classname}}::{{operationIdSnakeCase}}_handler, this));
+  {{/operation}}
 }
 
 {{#operation}}
 void {{classname}}::{{operationIdSnakeCase}}_handler(const iovnet::service::Rest::Request &request, iovnet::service::HttpHandleResponse &response) {
-    {{#hasPathParams}}
-    // Getting the path params
-    {{#pathParams}}
-    auto {{paramName}} = request.param(":{{baseName}}").as<{{dataType}}>();
-    {{/pathParams}}
-    {{/hasPathParams}}
+  {{#hasPathParams}}
+  // Getting the path params
+  {{#pathParams}}
+  auto {{paramName}} = request.param(":{{baseName}}").as<{{dataType}}>();
+  {{/pathParams}}
+  {{/hasPathParams}}
+
+  {{#hasBodyParam}}
+  // Getting the body param
+  {{#bodyParam}}
+  {{{dataType}}} {{paramName}};
+  {{/bodyParam}}
+  {{/hasBodyParam}}
+
+  try{
+    {{#vendorExtensions.x-is-list}}
+    #define NODE_IS_LIST_CONTAINER
+    {{/vendorExtensions.x-is-list}}
+    {{^bodyParams}}
+    {{#responses}}
+    {{^primitiveType}}
+    using iovnet::service::HelpType;
+    nlohmann::json val = nlohmann::json::object();
+    if (request.help_type() != HelpType::NO_HELP) {
+      switch (request.help_type()) {
+        case HelpType::SHOW:
+          #ifdef NODE_IS_LIST_CONTAINER
+          val["params"] = {{baseType}}::getKeys();
+          val["elements"] = {{operationIdSnakeCase}}_get_list();
+          #else // element is complex
+          val["params"] = {{baseType}}::getElements();
+          #endif
+        break;
+
+        case HelpType::ADD:
+          #ifdef NODE_IS_LIST_CONTAINER
+          val["params"] = {{baseType}}::getKeys();
+          #else
+          response.send(iovnet::service::Http::Code::Bad_Request);
+          return;
+          #endif
+        break;
+
+        case HelpType::SET:
+          #ifndef NODE_IS_LIST_CONTAINER
+          val["params"] = {{baseType}}::getWritableLeafs();
+          # else
+          response.send(iovnet::service::Http::Code::Bad_Request);
+          return;
+          #endif
+        break;
+
+        case HelpType::DEL:
+          #ifdef NODE_IS_LIST_CONTAINER
+          val["params"] = {{baseType}}::getKeys();
+          val["elements"] = {{operationIdSnakeCase}}_get_list();
+          #else
+          response.send(iovnet::service::Http::Code::Bad_Request);
+          return;
+          #endif
+        break;
+
+        case HelpType::NONE:
+          #ifdef NODE_IS_LIST_CONTAINER
+          auto cmds = {"add", "del", "show"};
+          val["commands"] = cmds;
+          val["params"] = {{baseType}}::getKeys();
+          val["elements"] = {{operationIdSnakeCase}}_get_list();
+          #else // complex type
+          auto cmds = {"set", "show"};
+          val["commands"] = cmds;
+          val["params"] = {{baseType}}::getComplexElements();
+          #endif
+        break;
+      }
+      response.send(iovnet::service::Http::Code::OK, val.dump(4));
+      return;
+    }
+    {{/primitiveType}}
+    {{/responses}}
+    {{/bodyParams}}
+    {{#vendorExtensions.x-is-list}}
+    #undef NODE_IS_LIST_CONTAINER
+    {{/vendorExtensions.x-is-list}}
 
     {{#hasBodyParam}}
-    // Getting the body param
     {{#bodyParam}}
-    {{{dataType}}} {{paramName}};
+    nlohmann::json request_body = nlohmann::json::parse(request.body());
+    {{^isPrimitiveType}}
+    {{#isListContainer}}
+    for (auto &j : request_body) {
+      {{baseType}} a;
+      a.fromJson(j);
+      {{paramName}}.push_back(a);
+    }
+    {{/isListContainer}}
+    {{^isListContainer}}
+    {{paramName}}.fromJson(request_body);
+    {{/isListContainer}}
+    {{/isPrimitiveType}}
+    {{#isPrimitiveType}}
+    // The conversion is done automatically by the json library
+    {{paramName}} = request_body;
+    {{/isPrimitiveType}}
     {{/bodyParam}}
     {{/hasBodyParam}}
+    {{#returnType}}
 
-	try{
-		{{#vendorExtensions.x-is-list}}
-		#define NODE_IS_LIST_CONTAINER
-		{{/vendorExtensions.x-is-list}}
-		{{^bodyParams}}
-		{{#responses}}
-		{{^primitiveType}}
-		using iovnet::service::HelpType;
-		nlohmann::json val = nlohmann::json::object();
-		if (request.help_type() != HelpType::NO_HELP) {
-		  switch (request.help_type()) {
-		    case HelpType::SHOW:
-		      #ifdef NODE_IS_LIST_CONTAINER
-		      val["params"] = {{baseType}}::getKeys();
-		      val["elements"] = {{operationIdSnakeCase}}_get_list();
-		      #else // element is complex
-		      val["params"] = {{baseType}}::getElements();
-		      #endif
-		    break;
-
-		    case HelpType::ADD:
-		      #ifdef NODE_IS_LIST_CONTAINER
-		      val["params"] = {{baseType}}::getKeys();
-		      #else
-		      response.send(iovnet::service::Http::Code::Bad_Request);
-		      return;
-		      #endif
-		    break;
-
-		    case HelpType::SET:
-		      #ifndef NODE_IS_LIST_CONTAINER
-		      val["params"] = {{baseType}}::getWritableLeafs();
-		      # else
-		      response.send(iovnet::service::Http::Code::Bad_Request);
-		      return;
-		      #endif
-		    break;
-
-		    case HelpType::DEL:
-		      #ifdef NODE_IS_LIST_CONTAINER
-		      val["params"] = {{baseType}}::getKeys();
-		      val["elements"] = {{operationIdSnakeCase}}_get_list();
-		      #else
-		      response.send(iovnet::service::Http::Code::Bad_Request);
-		      return;
-		      #endif
-		    break;
-
-		    case HelpType::NONE:
-		      #ifdef NODE_IS_LIST_CONTAINER
-		      auto cmds = {"add", "del", "show"};
-		      val["commands"] = cmds;
-		      val["params"] = {{baseType}}::getKeys();
-		      val["elements"] = {{operationIdSnakeCase}}_get_list();
-		      #else // complex type
-		      auto cmds = {"set", "show"};
-		      val["commands"] = cmds;
-		      val["params"] = {{baseType}}::getComplexElements();
-		      #endif
-		    break;
-		  }
-		  response.send(iovnet::service::Http::Code::OK, val.dump(4));
-		  return;
-		}
-		{{/primitiveType}}
-		{{/responses}}
-		{{/bodyParams}}
-		{{#vendorExtensions.x-is-list}}
-		#undef NODE_IS_LIST_CONTAINER
-		{{/vendorExtensions.x-is-list}}
-
-		{{#hasBodyParam}}
-		{{#bodyParam}}
-		nlohmann::json request_body = nlohmann::json::parse(request.body());
-		{{^isPrimitiveType}}
-		{{#isListContainer}}
-		for (auto &j : request_body) {
-		  {{baseType}} a;
-		  a.fromJson(j);
-		  {{paramName}}.push_back(a);
-		}
-		{{/isListContainer}}
-		{{^isListContainer}}
-		{{paramName}}.fromJson(request_body);
-		{{/isListContainer}}
-		{{/isPrimitiveType}}
-		{{#isPrimitiveType}}
-		// The conversion is done automatically by the json library
-		{{paramName}} = request_body;
-		{{/isPrimitiveType}}
-		{{/bodyParam}}
-		{{/hasBodyParam}}
-		{{#returnType}}
-
-    	auto x = {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
-    	nlohmann::json response_body;
-		{{#returnTypeIsPrimitive}}
-		response_body = x;
-		{{/returnTypeIsPrimitive}}
-		{{^returnTypeIsPrimitive}}
-		{{#isListContainer}}
-		for (auto &i : x) {
-		  response_body += i.toJson();
-		}
-		{{/isListContainer}}
-		{{^isListContainer}}
-		response_body = x.toJson();
-		{{/isListContainer}}
-		{{/returnTypeIsPrimitive}}
-		response.send(iovnet::service::Http::Code::{{vendorExtensions.x-response-code}}, response_body.dump(4));
-		
-    	{{/returnType}}
-    	{{^returnType}}
-
-    	{{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
-    	response.send(iovnet::service::Http::Code::{{vendorExtensions.x-response-code}});
-    	{{/returnType}}
+    auto x = {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
+    nlohmann::json response_body;
+    {{#returnTypeIsPrimitive}}
+    response_body = x;
+    {{/returnTypeIsPrimitive}}
+    {{^returnTypeIsPrimitive}}
+    {{#isListContainer}}
+    for (auto &i : x) {
+      response_body += i.toJson();
     }
-    catch(std::runtime_error &e)
-    {	
-    	response.send(iovnet::service::Http::Code::Internal_Server_Error, e.what());
-    }
+    {{/isListContainer}}
+    {{^isListContainer}}
+    response_body = x.toJson();
+    {{/isListContainer}}
+    {{/returnTypeIsPrimitive}}
+    response.send(iovnet::service::Http::Code::{{vendorExtensions.x-response-code}}, response_body.dump(4));
     
+    {{/returnType}}
+    {{^returnType}}
+
+    {{operationIdSnakeCase}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
+    response.send(iovnet::service::Http::Code::{{vendorExtensions.x-response-code}});
+    {{/returnType}}
+  }
+  catch(std::runtime_error &e)
+  {   
+      response.send(iovnet::service::Http::Code::Internal_Server_Error, e.what());
+  }
+  
 }
 
 {{/operation}}
